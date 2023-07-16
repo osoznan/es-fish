@@ -1,0 +1,168 @@
+<?php
+
+namespace App\Models;
+
+use App\Components\Translit;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
+use App\Components\Translation as t;
+
+class Product extends GeneralModel {
+
+    use HasFactory;
+    use HelperTrait;
+    use LocaleTrait;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'category_id',
+        'name',
+        'old_price',
+        'price',
+        'weight',
+        'image_id',
+        'image_urls',
+        'image_ids',
+        'description',
+        'properties',
+        'hidden',
+        'present',
+        'calc_type',
+        'alias',
+        'name_en', 'name_ua',
+        'description_en', 'description_ua',
+        'alias_en', 'alias_ua',
+        'rating',
+        'seo',
+        'seo_en',
+        'seo_ua',
+        'created_at',
+        'updated_at',
+        'recommended'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [];
+
+    protected $table = 'product';
+
+    protected static function boot() {
+        parent::boot();
+        static::saving(function ($model) {
+            $model->alias = Translit::process($model->name, 'ru');
+            $model->alias_ua = Translit::process($model->name_ua, 'ua');
+            $model->alias_en = Translit::process($model->name_en, 'en');
+        });
+    }
+
+    /** @return Builder */
+    public static function search() {
+        return Product::select([
+            'product.id as id',
+            'product.name as name',
+            'product.category_id as category_id',
+            'old_price',
+            'price',
+            'weight',
+            'product.image_id',
+            'main_image.url',
+            'product.description as description',
+            'properties',
+            'hidden',
+            'present',
+            'calc_type',
+            'product.alias as alias',
+            'product.name_en as name_en',
+            'product.name_ua as name_ua',
+            'product.description_en as description_en',
+            'product.description_ua as description_ua',
+            'product.alias_en as alias_en',
+            'product.alias_ua as alias_ua',
+            'properties_en',
+            'properties_ua',
+            'rating',
+            'seo', 'seo_en', 'seo_ua',
+            'menu_present',
+            'created_at',
+            'updated_at',
+            'recommended'
+        ])->leftJoin(DB::raw('image main_image'), 'image_id', '=', 'main_image.id');
+    }
+
+    public static function withCategory(Builder $query) {
+        return $query
+            ->leftJoin('product_category', 'product_category.id', '=', 'product.category_id');
+    }
+
+    public static function withProductImages($query) {
+        return $query
+            ->addSelect(DB::raw('GROUP_CONCAT(img.id) as image_ids, GROUP_CONCAT(img.url) as image_urls'))
+            // left join product_image p_i on p_i.product_id = product.id
+            // left join image i on p_i.image_id = i.id
+            ->leftJoin('product_image', 'product_id', '=', 'product.id')
+            ->leftJoin(DB::raw('image img'), 'img.id', '=', 'product_image.image_id');
+    }
+
+    public function getLocaleName() {
+        return t::getLocaleField($this, 'name');
+    }
+
+    public static function getValidators() {
+        return [
+            'product.name as name',
+            'category_id',
+            'old_price',
+            'price',
+            'weight',
+            'image_id',
+            'image.url',
+            'product.description as description',
+            'properties',
+            'hidden',
+            'present',
+            'calc_type',
+            'product.alias as alias',
+            'product.name_en as name_en',
+            'product.name_ua as name_ua',
+            'product.description_en as description_en',
+            'product.description_ua as description_ua',
+            'product.alias_en as alias_en',
+            'product.alias_ua as alias_ua',
+            'properties_en',
+            'properties_ua',
+            'seo_title',
+            'seo_keywords',
+            'seo_description',
+            'seo_title_en',
+            'seo_keywords_en',
+            'seo_description_en',
+            'seo_title_ua',
+            'seo_keywords_ua',
+            'seo_description_ua',
+            'created_at',
+            'updated_at'
+        ];
+    }
+
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function image() {
+        return $this->belongsTo(Image::class, 'image_id');
+    }
+
+    public function images() {
+        return $this->belongsToMany(Image::class, 'product_image');
+    }
+
+}

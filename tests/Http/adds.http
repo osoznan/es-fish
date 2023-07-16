@@ -1,0 +1,50 @@
+@host = {{$dotenv host}}
+@token = {{$dotenv token}}
+
+####
+POST http://{{host}}/api/category/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Рыба!"
+}
+
+
+####
+GET http://{{host}}/api/blog
+Accept: application/json
+Content-Type: application/json
+
+####
+GET http://{{host}}/api/blog/
+Accept: application/json
+Content-Type: application/json
+
+####
+DELETE http://{{host}}/api/image/42
+Content-Type: application/json
+Accept: application/json
+
+####
+GET http://{{host}}/api/order-status-history/status/24
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "status_id": 2
+}
+
+####
+GET http://{{host}}/api/hello
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "status_id": 2
+}
+
+####
+GET http://{{host}}/api/ru/news/47

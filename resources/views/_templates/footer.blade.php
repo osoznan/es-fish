@@ -1,0 +1,111 @@
+<?php
+
+use App\Models\Category;
+use App\Components\Translation as t;
+use App\Components\CategoryManager;
+use App\Widgets\ContactForm;
+use App\Components\ViewInserter;
+
+?>
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="footer row flex-column-reverse flex-lg-row text-center text-lg-left">
+            <div class="col-sm-12 col-lg">
+                @include('_templates/widgets/logo')
+
+                <div class="footer__copyright">© "Рыбный путь" - качественная рыба и морепродукты оптом и в розницу с доставкой по Украине. 2020 Все права защищены.</div>
+            </div>
+            <div class="col-sm-12 col-lg d-none d-xl-block">
+                <div class="footer__item-list-header">@lang('site.menu.products')</div>
+                <div class="footer__item-list">
+                    <?php
+                    $topCategories = Category::searchTopMost()->get();
+
+                    foreach ($topCategories as $category) {
+                        echo '<a href="' . CategoryManager::getUrl($category->id) . '" class="d-block">' . t::getLocaleField($category, 'name') . '</a>';
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg pb-3">
+                <div class="footer__item-list-header d-none d-lg-block">@lang('site.menu.fish-way')</div>
+                <div class="footer__item-list d-flex flex-column">
+                    <a href="<?= route('delivery-payment') ?>">@lang('site.menu.delivery+pay')</a>
+                    <a href="<?= route('guarantees') ?>">@lang('site.menu.guarantees')</a>
+                    <a href="<?= route('delivery-payment') ?>">@lang('site.menu.return')</a>
+                    <a href="<?= route('faq') ?>">@lang('site.menu.faq')</a>
+                    <a href="<?= route('delivery-payment') ?>">@lang('site.menu.price')</a>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg pb-3">
+                <div class="footer__item-list-header d-none d-lg-block">@lang('site.menu.about-company')</div>
+                <div class="footer__item-list d-flex flex-column">
+                    <a href="<?= route('about') ?>">@lang('site.menu.about')</a>
+                    <a href="<?= route('contacts') ?>">@lang('site.menu.contacts')</a>
+                    <a href="<?= route('feedback') ?>">@lang('site.menu.feedback')</a>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg pb-3">
+                @include('_templates/widgets/phone')
+                <a href="mailto:<?= config('user.email') ?>"><?= config('user.email') ?></a>
+                <div class="mt-3">
+                    <a href=""><img src="/img/telegram.svg" alt="telegram"></a>
+                    <a href=""><img src="/img/viber.svg" alt="viber"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="float-cart">
+    <a class="d-flex" href="<?= route('cart', ['locale' => t::getLocale()]) ?>">
+        <div><img src="/img/shopping-bag.svg" class="m-2" alt=basket></div>
+        <div>
+            <div><span class="float-cart__price"><?= INITIAL_TOTAL_COST ?></span> @lang('site.abbr.hrivnas')</div>
+            <span class="orange-color tiny-font">@lang("site.to-basket")</span>
+        </div>
+    </a>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><h3><?= trans('site.contact-form.title') ?></h3></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?= ContactForm::widget(['id' => 'modal-contact-form']) ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<button class="contact-form__float-invoker btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Заявка
+</button>
+
+
+<a id="scroll-to-top" href="#page-start" class="scroll-link" title="В начало страницы" style="opacity: 0.816369; display: block;"><img data-src="/images/slider-nav-button.png" src="/img/slider-nav-button.png" style="animation: 286.289ms ease-in 0s 1 normal none running fadein;"></a>
+
+<div class="progress-indicator" style="display: none">
+    <img src="/img/progress.gif">
+</div>
+
+<?php
+    ViewInserter::insertJs(<<< JS
+        activateContactForm = (context) => {
+            floatContactForm = get('#modal-contact-form').ContactForm;
+            floatContactForm.setContext(context)
+        }
+
+        get('.contact-form__float-invoker').addEventListener('click', function() {
+            activateContactForm('нажато на плавающую кнопку')
+        })
+
+JS
+    );
+?>

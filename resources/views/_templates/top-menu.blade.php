@@ -1,0 +1,130 @@
+<?php
+
+use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Support\Arr;
+use App\Components\ImageManager;
+use App\Components\Translation as t;
+use App\Components\CategoryManager;
+use App\Components\ProductManager;
+use App\Components\BlogManager;
+
+$categories = Category::searchActive()->get();
+
+$topCategories = $categories->where($categories, function ($value, $key) {
+    return $value['parent_category_id'] == null;
+});
+
+$subCategoriesSet = [];
+foreach ($topCategories as $top) {
+    $subCategoriesSet[$top['id']] = Arr::where($categories, function ($value, $key) use ($top) {
+        return $value['parent_category_id'] == $top['id'];
+    });
+}
+
+$menuProducts = Product::search()
+    ->where('menu_present', 1)
+    ->get();
+
+?>
+<section class="leftmenu container-fluid">
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <nav class="navbar navbar-light d-none d-lg-block">
+                <div class="container">
+                    <button class="navbar-toggler" onclick="landing.showMainMenu()">
+                    <span class="navbar-toggler-icon"></span></button>
+                </div>
+            </nav>
+
+            <ul class="main-menu__navbar navbar-nav mr-auto" id="leftMenu">
+                <div class="main-menu__top-space">
+                    <div class="main-menu__langs">
+                        <?php foreach (['ua', 'ru', 'en'] as $lang):
+                            if ($lang != t::getLocale()):
+                                echo '<span><a href="/' . $lang . '" class="dark-text-anchor">' . strtoupper($lang) . '</a></span> ';
+                            else:
+                                echo '<span class="orange-color">' . strtoupper($lang) . '</span> ';
+                            endif;
+                        endforeach; ?>
+                    </div>
+                    <div class="flex-grow-1"></div>
+                    <a class="main-menu__close" onclick="landing.hideMainMenu()">❌</a>
+                </div>
+
+                <a href="" class="main-menu__item fw-bold">@lang('site.menu.delivery+pay')</a>
+                <a href="/about" class="navigation-link main-menu__item fw-bold">@lang('site.menu.about')</a>
+
+                <div class="fw-bold main-menu__item">@lang('site.blog.materials')</div>
+                <ul class="">
+                    <a href="<?= BlogManager::getCategoryUrl(1) ?>" class="navigation-link main-menu__item"><?= BlogManager::getCategoryAlias(1, t::getLocale()) ?></a>
+                    <a href="<?= BlogManager::getCategoryUrl(2) ?>" class="navigation-link main-menu__item"><?= BlogManager::getCategoryAlias(2, t::getLocale()) ?></a>
+                    <a href="<?= BlogManager::getCategoryUrl(3) ?>" class="navigation-link main-menu__item"><?= BlogManager::getCategoryAlias(3, t::getLocale()) ?></a>
+                </ul>
+
+                <a href="<?= route('contacts', ['locale' => t::getLocale()]) ?>" class="navigation-link main-menu__item fw-bold">@lang('site.menu.contacts')</a>
+
+                <div class="d-block d-lg-none text-center">
+                    <a href=""><img src="/img/facebook.svg"></a>&nbsp;
+                    <a href="class="><img src="/img/linkedin.svg"></a>
+
+                    @include('_templates/widgets/phone')
+                    <span class="light-gray-color">@lang('site.index.cap.call-time')</span>
+                </div>
+            </ul>
+        </div>
+        <div class="col">
+            <nav class="mainmenu__categories navbar navbar-expand-md">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+                            @foreach ($topCategories as $category)
+                            <li class="nav-item text-center">
+                                <a class="mainmenu__categories__anchor nav-link active" href="#toggle<?= $category['id'] ?>" data-bs-toggle="collapse" aria-controls="#toggle<?= $category['id'] ?>" data-bs-target="#toggle<?= $category['id'] ?>" data-bs-toggle="dropdown" role="button">
+                                    <img class="mainmenu__categories__image" src="<?= ImageManager::getThumbsUrl() . $category->image->url ?>">
+                                    <div class="mainmenu__categories__title"><?= t::getLocaleField($category, 'name') ?></div>
+                                </a>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+</section>
+
+<div class="mainmenu__subcategories bg-dark">
+    <div class="container">
+        @foreach ($topCategories as $top)
+        <?php $subCategories = $subCategoriesSet[$top['id']] ?>
+
+        <div id="toggle<?= $top['id'] ?>" class="mainmenu__subcategories__toggle row collapse ignore-on-doc-click">
+
+            <?= !count($subCategories) ? trans('site.category.no-subcategory-products') : '' ?>
+
+            @foreach ($subCategories as $category)
+            <div class="col-12 col-lg-6 col-xl-3 d-flex">
+                <a href="<?= CategoryManager::getUrl($category['id']) ?>">
+                    <div class="mainmenu__subcategories__image m-2 div-image-thumb" data-src="<?= ImageManager::getPhotosUrl($category['url']) ?>"></div>
+                </a>
+                <div class="mainmenu__subcategories__text">
+                    <div class="mainmenu__subcategories__title">
+                        <a href="<?= CategoryManager::getUrl($category['id']) ?>" class="dark-text-anchor"><?= t::getLocaleField($category, 'name') ?></a>
+                    </div>
+                    <div class="mainmenu__subcategories__product-list">
+                        @foreach ($menuProducts as $menuProduct)
+                            @if ($menuProduct['category_id'] == $category['id'])
+                                <a href="<?= ProductManager::getUrl($menuProduct) ?>" class="dark-text-anchor"><?= $menuProduct->locale('name') ?></a>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @endforeach
+    </div>
+</div>
