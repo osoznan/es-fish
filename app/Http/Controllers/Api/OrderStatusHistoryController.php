@@ -43,11 +43,6 @@ class OrderStatusHistoryController extends Controller {
             : $this->error(__('Ошибка создания'));
     }
 
-    public function setStatus(OrderStatusHistory $orderStatusHistory, OrderStatusHistorySetStatusRequest $request): JsonResponse {
-        $result = $this->repository->setStatus($orderStatusHistory, $request->status_id);
-        return $result ? $this->success() : $this->error();
-    }
-
     public function hello() {
         $this->middleware('auth:sanctum');
 /*        $user = new User([

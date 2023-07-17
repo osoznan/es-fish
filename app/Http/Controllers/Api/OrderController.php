@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Facades\BasketManager;
 use App\Components\helpers\Telegram;
 use App\Facades\OrderManager;
+use App\Http\Requests\OrderChangeStatusRequest;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -42,6 +43,11 @@ class OrderController extends Controller {
         return $this->repository->remove($model) ?
             $this->success(__('Элемент обновлён успешно'))
             : $this->error(__('Ошибка обновления'));
+    }
+
+    public function changeStatus(Order $order, OrderChangeStatusRequest $request): JsonResponse {
+        return $this->repository->changeStatus($order, $request->status_id, $request->description) ?
+            $this->success() : $this->error();
     }
 
 }

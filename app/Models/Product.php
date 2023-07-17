@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use App\Components\Translation as t;
+use Illuminate\Support\Facades\Log;
 
 class Product extends GeneralModel {
 
@@ -27,7 +28,6 @@ class Product extends GeneralModel {
         'weight',
         'image_id',
         'image_urls',
-        'image_ids',
         'description',
         'properties',
         'hidden',
@@ -38,9 +38,9 @@ class Product extends GeneralModel {
         'description_en', 'description_ua',
         'alias_en', 'alias_ua',
         'rating',
-        'seo',
-        'seo_en',
-        'seo_ua',
+        'seo_title', 'seo_keywords', 'seo_description',
+        'seo_title_en', 'seo_keywords_en', 'seo_description_en',
+        'seo_title_ua', 'seo_keywords_ua', 'seo_description_ua',
         'created_at',
         'updated_at',
         'recommended'
@@ -57,10 +57,14 @@ class Product extends GeneralModel {
 
     protected static function boot() {
         parent::boot();
-        static::saving(function ($model) {
+        static::saving(function (Product $model) {
             $model->alias = Translit::process($model->name, 'ru');
             $model->alias_ua = Translit::process($model->name_ua, 'ua');
             $model->alias_en = Translit::process($model->name_en, 'en');
+
+            $model->imageIds ? $model->_saveImages($model) : null;
+
+            Log::info(json_encode($model->imageIds));
         });
     }
 
@@ -163,6 +167,19 @@ class Product extends GeneralModel {
 
     public function images() {
         return $this->belongsToMany(Image::class, 'product_image');
+    }
+
+    private function _saveImages($model) {
+        ProductImage::where('product_id', $model->id)->delete();
+
+        foreach (json_decode($model->imageIds) as $elem) {
+            $image = new ProductImage();
+            $image->product_id = $model->id;
+            $image->image_id = $elem['id'];
+            $image->save();
+        }
+
+        return true;
     }
 
 }

@@ -6,6 +6,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Class OrderStatusHistory
@@ -23,5 +24,13 @@ class OrderStatusHistory extends GeneralModel {
     const UPDATED_AT = null;
 
     protected $table = 'order_status_history';
+
+    public function order() {
+        return $this->hasOne(Order::class, 'id', 'order_id');
+    }
+
+    public function order_status() {
+        return $this->hasOne(OrderStatus::class, 'id', 'status_id');
+    }
 
 }

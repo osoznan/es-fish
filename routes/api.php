@@ -77,13 +77,15 @@ Route::prefix('gallery')->group(function () {
 
 Route::prefix('order')->group(function () {
     Route::put('', [OrderController::class, 'create']);
+    Route::middleware('auth:sanctum')->group(function() {
+        Route::post('/{order}/change-status', [OrderController::class, 'changeStatus']);
+    });
 });
 
 Route::prefix('order-status-history')->group(function () {
     Route::middleware('auth:sanctum')->group(function() {
         Route::put('', [OrderStatusHistoryController::class, 'create']);
         Route::get('', [OrderStatusHistoryController::class, 'list']);
-        Route::post('/status/{orderStatusHistory}', [OrderStatusHistoryController::class, 'setStatus']);
     });
 });
 

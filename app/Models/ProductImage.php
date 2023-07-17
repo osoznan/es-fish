@@ -21,7 +21,6 @@ class ProductImage extends GeneralModel {
     protected $fillable = [
         'product_id',
         'image_id',
-        'image_url'
     ];
 
     /**

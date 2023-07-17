@@ -7,16 +7,13 @@ use AdminColumnFilter;
 use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
-use App\Models\Order;
 use App\Models\OrderItem;
+use App\Widgets\Admin\OrderStatusHistoryEditor;
 use Illuminate\Database\Eloquent\Model;
 use SleepingOwl\Admin\Contracts\Display\DisplayInterface;
 use SleepingOwl\Admin\Contracts\Form\FormInterface;
 use SleepingOwl\Admin\Contracts\Initializable;
 use SleepingOwl\Admin\Form\Buttons\Cancel;
-use SleepingOwl\Admin\Form\Buttons\Save;
-use SleepingOwl\Admin\Form\Buttons\SaveAndClose;
-use SleepingOwl\Admin\Form\Buttons\SaveAndCreate;
 use SleepingOwl\Admin\Section;
 
 /**
@@ -36,7 +33,7 @@ class OrderSection extends Section implements Initializable
     /**
      * @var string
      */
-    protected $title;
+    protected $title = 'Заказы';
 
     /**
      * @var string
@@ -127,7 +124,9 @@ class OrderSection extends Section implements Initializable
 
             AdminFormElement::view('admin/order-items-list', [
                 'list' => OrderItem::with('product')->where('order_id', $id)->get()
-            ])
+            ]),
+
+            AdminFormElement::html(OrderStatusHistoryEditor::widget(['orderId'=> $id]))
         ]);
 
         $form->getButtons()->setButtons([

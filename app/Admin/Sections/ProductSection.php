@@ -64,19 +64,12 @@ class ProductSection extends Section implements Initializable
     public function onDisplay($payload = [])
     {
         $columns = [
-            AdminColumn::text('id', '#')->setWidth('50px')
-                ->setHtmlAttribute('class', 'text-center'),
+            AdminColumn::text('id', '#')->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
             AdminColumn::link('name', 'Name', 'description')
                 ->setSearchCallback(function($column, $query, $search){
                     return $query
-                        ->orWhere('name', 'like', '%'.$search.'%')
-                        ->orWhere('created_at', 'like', '%'.$search.'%')
-                    ;
-                })
-                ->setOrderable(function($query, $direction) {
-                    $query->orderBy('created_at', $direction);
-                })
-            ,
+                        ->orWhere('name', 'like', '%'.$search.'%');
+                }),
             AdminColumnEditable::checkbox('hidden', 'Hidden'),
             AdminColumn::custom('Image', function($model) {
                 return ImageColumn::widget(['filename' => $model->image->url]);
@@ -125,9 +118,9 @@ class ProductSection extends Section implements Initializable
                             </a>
                             <span style="cursor: pointer">'.$model->name.'</span>';
                     }),
-                AdminFormElement::multiselectajax('image_ids', 'Images')
+                AdminFormElement::multiselectajax('images', 'Image Gallery')
                     ->setModelForOptions(Image::class)
-                    ->setSearch('name')
+                    ->setSearch(['name' => 'contains'])
                     ->setDisplay(function ($model) {
                         return '<a href="'.ImageManager::getPhotosUrl($model->url).'" data-toggle="lightbox">
                                 <img src="'.ImageManager::getThumbsUrl($model->url).'" width="60" height="50">
