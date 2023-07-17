@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderStatusHistory;
 use App\Repositories\OrderRepository;
-use App\Repositories\OrderStatusHistoryRepository;
 
 class OrderStatusHistoryEditor extends \App\Components\Widget {
 

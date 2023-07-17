@@ -3,7 +3,7 @@
 namespace App\Admin\Sections;
 
 use AdminColumn;
-use AdminColumnFilter;
+use AdminColumnEditable;
 use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
@@ -26,6 +26,8 @@ use SleepingOwl\Admin\Section;
  */
 class PaymentTypeSection extends Section implements Initializable
 {
+    use TSectionValidator;
+
     /**
      * @var bool
      */
@@ -61,13 +63,9 @@ class PaymentTypeSection extends Section implements Initializable
             AdminColumn::link('name', 'Name', 'created_at')
                 ->setSearchCallback(function($column, $query, $search){
                     return $query
-                        ->orWhere('name', 'like', '%'.$search.'%')
-                    ;
-                })->setOrderable(function($query, $direction) {
-                    $query->orderBy('name', $direction);
-                })
-            ,
-            AdminColumn::boolean('name', 'On'),
+                        ->orWhere('name', 'like', '%'.$search.'%');
+                }),
+            AdminColumnEditable::checkbox('hidden', 'Hidden'),
         ];
 
         $display = AdminDisplay::datatables()
@@ -102,6 +100,13 @@ class PaymentTypeSection extends Section implements Initializable
             'save_and_close'  => new SaveAndClose(),
             'save_and_create'  => new SaveAndCreate(),
             'cancel'  => (new Cancel()),
+        ]);
+
+        $this->attachValidators($form, [
+            'name' => $validName = 'required|string|min:10|max:40',
+            'name_en' => $validName,
+            'name_ua' => $validName,
+            'hidden' => 'bool'
         ]);
 
         return $form;

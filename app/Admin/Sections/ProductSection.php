@@ -129,6 +129,7 @@ class ProductSection extends Section implements Initializable
                     }),
                 AdminFormElement::checkbox('hidden', 'Hidden'),
                 AdminFormElement::checkbox('present', 'Present'),
+                AdminFormElement::checkbox('recommended', 'Recommended'),
                 AdminFormElement::text('properties', 'Properties'),
             ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
 

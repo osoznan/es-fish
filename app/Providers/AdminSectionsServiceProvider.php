@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\DeliveryType;
 use App\Models\Image;
+use App\Models\MainGallery;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\PaymentType;
@@ -29,6 +30,7 @@ class AdminSectionsServiceProvider extends ServiceProvider
         DeliveryType::class => 'App\Admin\Sections\DeliveryTypeSection',
         OrderStatus::class => 'App\Admin\Sections\OrderStatusSection',
         PaymentType::class => 'App\Admin\Sections\PaymentTypeSection',
+        MainGallery::class => 'App\Admin\Sections\MainGallerySection',
     ];
 
     /**

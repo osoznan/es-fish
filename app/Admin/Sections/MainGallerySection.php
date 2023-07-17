@@ -3,11 +3,16 @@
 namespace App\Admin\Sections;
 
 use AdminColumn;
-use AdminColumnEditable;
+use AdminColumnFilter;
 use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
+use App\Components\ImageManager;
+use App\Http\Requests\CreateImageRequest;
+use App\Http\Requests\UpdateImageRequest;
+use App\Widgets\Admin\ImageColumn;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use SleepingOwl\Admin\Contracts\Display\DisplayInterface;
 use SleepingOwl\Admin\Contracts\Form\FormInterface;
 use SleepingOwl\Admin\Contracts\Initializable;
@@ -18,14 +23,16 @@ use SleepingOwl\Admin\Form\Buttons\SaveAndCreate;
 use SleepingOwl\Admin\Section;
 
 /**
- * Class DeliveryTypeSection
+ * Class ImageSection
  *
- * @property \App\Models\DeliveryType $model
+ * @property \App\Models\Image $model
  *
  * @see https://sleepingowladmin.ru/#/ru/model_configuration_section
  */
-class DeliveryTypeSection extends Section implements Initializable
+class MainGallerySection extends Section implements Initializable
 {
+    use TSectionValidator;
+
     /**
      * @var bool
      */
@@ -34,7 +41,7 @@ class DeliveryTypeSection extends Section implements Initializable
     /**
      * @var string
      */
-    protected $title = 'Типы доставки';
+    protected $title = 'Главная галерея';
 
     /**
      * @var string
@@ -58,17 +65,21 @@ class DeliveryTypeSection extends Section implements Initializable
     {
         $columns = [
             AdminColumn::text('id', '#')->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
-            AdminColumn::link('name', 'Name', 'created_at')
+            AdminColumn::link('title', 'Title')
                 ->setSearchCallback(function($column, $query, $search){
                     return $query
                         ->orWhere('name', 'like', '%'.$search.'%');
                 }),
-            AdminColumnEditable::checkbox('hidden', 'Hidden'),
+            AdminColumn::text('text', 'Text'),
+            AdminColumn::custom('link', function($model) {
+                return ImageColumn::widget(['filename' => $model->url]);
+            }),
         ];
 
         $display = AdminDisplay::datatables()
             ->setName('firstdatatables')
             ->setOrder([[0, 'asc']])
+            ->setDisplaySearch(true)
             ->paginate(25)
             ->setColumns($columns)
             ->setHtmlAttribute('class', 'table-primary table-hover th-center')
@@ -85,11 +96,34 @@ class DeliveryTypeSection extends Section implements Initializable
      */
     public function onEdit($id = null, $payload = [])
     {
+        $image = AdminFormElement::image('fullUrl', 'Image');
+        $image = $id ? $image->setReadonly(true) : $image;
+
         $form = AdminForm::card()->addBody([
-            AdminFormElement::text('name', 'Name'),
-            AdminFormElement::checkbox('hidden', 'Hidden'),
-            AdminFormElement::text('name_en', 'Name EN'),
-            AdminFormElement::text('name_ua', 'Name UA'),
+            AdminFormElement::columns()->addColumn([
+                AdminFormElement::text('title', 'Title'),
+                AdminFormElement::text('link', 'Link'),
+            ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
+                AdminFormElement::textarea('text', 'Text')->setRows(3),
+            ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
+
+            AdminFormElement::html('<hr>'),
+
+            AdminFormElement::columns()->addColumn([
+                AdminFormElement::text('title_en', 'Title EN'),
+            ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
+                AdminFormElement::textarea('text_en', 'Text EN')->setRows(3),
+            ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
+
+            AdminFormElement::html('<hr>'),
+
+            AdminFormElement::columns()->addColumn([
+                AdminFormElement::text('title_ua', 'Title UA'),
+            ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
+                AdminFormElement::textarea('text_ua', 'Text UA')->setRows(3),
+            ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
+
+
         ]);
 
         $form->getButtons()->setButtons([
@@ -97,6 +131,16 @@ class DeliveryTypeSection extends Section implements Initializable
             'save_and_close'  => new SaveAndClose(),
             'save_and_create'  => new SaveAndCreate(),
             'cancel'  => (new Cancel()),
+        ]);
+
+        $this->attachValidators($form, [
+            'title' => $validName = 'required|string|min:10|max:80',
+            'title_en' => $validName,
+            'title_ua' => $validName,
+            'text' => $validName = 'required|string|min:10|max:1000',
+            'text_en' => $validName,
+            'text_ua' => $validName,
+            'hidden' => 'bool'
         ]);
 
         return $form;
