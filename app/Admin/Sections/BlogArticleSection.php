@@ -7,6 +7,8 @@ use AdminColumnFilter;
 use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
+use App\Http\Requests\BlogArticleCreateRequest;
+use App\Http\Requests\BlogArticleUpdateRequest;
 use App\Widgets\Admin\ImageColumn;
 use Illuminate\Database\Eloquent\Model;
 use SleepingOwl\Admin\Contracts\Display\DisplayInterface;
@@ -27,6 +29,8 @@ use SleepingOwl\Admin\Section;
  */
 class BlogArticleSection extends Section implements Initializable
 {
+    use TSectionValidator;
+
     /**
      * @var bool
      */
@@ -131,7 +135,7 @@ class BlogArticleSection extends Section implements Initializable
             AdminFormElement::html('<hr>'),
 
             AdminFormElement::columns()->addColumn([
-                AdminFormElement::text('title_en', 'Name EN')
+                AdminFormElement::text('title_en', 'Title EN')
                     ->required()
                 ,
             ], 'col-xs-12 col-sm-4')->addColumn([
@@ -143,7 +147,7 @@ class BlogArticleSection extends Section implements Initializable
             AdminFormElement::html('<hr>'),
 
             AdminFormElement::columns()->addColumn([
-                AdminFormElement::text('title_ua', 'Name UA')
+                AdminFormElement::text('title_ua', 'Title UA')
                     ->required()
                 ,
             ], 'col-xs-12 col-sm-4')->addColumn([
@@ -159,6 +163,8 @@ class BlogArticleSection extends Section implements Initializable
             'save_and_create'  => new SaveAndCreate(),
             'cancel'  => (new Cancel()),
         ]);
+
+        $this->attachValidators($form, ($id > 0 ? (new BlogArticleUpdateRequest()) : (new BlogArticleCreateRequest()))->rules());
 
         return $form;
     }

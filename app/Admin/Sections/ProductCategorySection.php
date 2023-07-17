@@ -9,6 +9,8 @@ use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
 use App\Components\ImageManager;
+use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\Image;
 use App\Widgets\Admin\ImageColumn;
@@ -31,6 +33,7 @@ use SleepingOwl\Admin\Section;
  */
 class ProductCategorySection extends Section implements Initializable
 {
+    use TSectionValidator;
     /**
      * @var bool
      */
@@ -179,7 +182,7 @@ class ProductCategorySection extends Section implements Initializable
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
                 AdminFormElement::textarea('description', 'Description UA')
             ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
-        ])->addValidationRule();
+        ]);
 
         $form->getButtons()->setButtons([
             'save'  => new Save(),
@@ -187,6 +190,8 @@ class ProductCategorySection extends Section implements Initializable
             'save_and_create'  => new SaveAndCreate(),
             'cancel'  => (new Cancel()),
         ]);
+
+        $this->attachValidators($form, ($id > 0 ? (new UpdateCategoryRequest()) : (new CreateCategoryRequest()))->rules());
 
         return $form;
     }

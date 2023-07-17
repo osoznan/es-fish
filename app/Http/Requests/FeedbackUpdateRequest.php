@@ -11,19 +11,14 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string answer
  * @property int product_id
  */
-class FeedbackUpdateRequest extends FormRequest
+class FeedbackUpdateRequest extends FeedbackCreateRequest
 {
 
     public function rules(): array
     {
-        return [
-            'name' => 'nullable|min:2|max:50',
-            'text' => 'nullable|min:50|max:2000',
-            'rate' => 'nullable|min:1|max:5',
-            'answer' => 'nullable|min:50|max:2000',
-            'product_id' => 'required|exists:product',
-            'hidden' => 'boolean'
-        ];
+        return array_merge(parent::rules(), [
+            'answer' => 'min:30|max:2000',
+        ]);
 
     }
 }

@@ -3,11 +3,13 @@
 namespace App\Admin\Sections;
 
 use AdminColumn;
-use AdminColumnFilter;
+use AdminColumnEditable;
 use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
 use App\Components\ImageManager;
+use App\Http\Requests\ProductCreateRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Image;
 use App\Widgets\Admin\ImageColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +31,8 @@ use SleepingOwl\Admin\Section;
  */
 class ProductSection extends Section implements Initializable
 {
+    use TSectionValidator;
+
     /**
      * @var bool
      */
@@ -73,12 +77,11 @@ class ProductSection extends Section implements Initializable
                     $query->orderBy('created_at', $direction);
                 })
             ,
-            AdminColumn::boolean('hidden', 'Hidden'),
+            AdminColumnEditable::checkbox('hidden', 'Hidden'),
             AdminColumn::custom('Image', function($model) {
                 return ImageColumn::widget(['filename' => $model->image->url]);
             }),
-            AdminColumn::text('created_at', 'Created / updated', 'updated_at')
-            ,
+            AdminColumn::text('created_at', 'Created')
         ];
 
         $display = AdminDisplay::datatables()
@@ -168,6 +171,8 @@ class ProductSection extends Section implements Initializable
             'cancel'  => (new Cancel()),
         ]);
 
+        $this->attachValidators($form, ($id > 0 ? (new ProductUpdateRequest) : (new ProductCreateRequest()))->rules());
+
         return $form;
     }
 
@@ -184,7 +189,7 @@ class ProductSection extends Section implements Initializable
      */
     public function isDeletable(Model $model)
     {
-        return true;
+        return false;
     }
 
     /**

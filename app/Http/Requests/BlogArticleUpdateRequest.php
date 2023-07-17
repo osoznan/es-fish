@@ -12,21 +12,16 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property int text_en
  * @property int text_ua
  */
-class BlogArticleUpdateRequest extends FormRequest
+class BlogArticleUpdateRequest extends BlogArticleCreateRequest
 {
 
     public function rules(): array
     {
-        return [
-            'title' => 'nullable|min:3|max:50',
-            'title_ua' => 'nullable|min:3|max:20',
-            'title_en' => 'nullable|min:3|max:20',
-            'text' => 'nullable|min:|max:50000',
-            'text_ua' => 'nullable|min:3|max:50000',
-            'text_en' => 'nullable|min:3|max:50000',
-            'image_id' => 'integer|min:1|exists:image',
-            'category_id' => 'integer|min:1|exists:product_category'
-        ];
+        return array_merge(parent::rules(), [
+            'title' => $title = 'required|min:3|max:50',
+            'title_ua' => $title,
+            'title_en' => $title,
+        ]);
 
     }
 }

@@ -20,12 +20,12 @@ class BlogArticleCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:3|max:50',
-            'title_ua' => 'required|min:3|max:20',
-            'title_en' => 'required|min:3|max:20',
-            'text' => 'required|min:|max:50000',
-            'text_ua' => 'required|min:3|max:50000',
-            'text_en' => 'required|min:3|max:50000',
+            'title' => $title = 'required|min:3|max:50|unique:blog_article',
+            'title_ua' => $title,
+            'title_en' => $title,
+            'text' => $text = 'required|min:3|max:50000',
+            'text_ua' => $text,
+            'text_en' => $text,
             'image_id' => 'required|min:1|exists:image',
             'category_id' => 'required|min:1|exists:product_category'
         ];

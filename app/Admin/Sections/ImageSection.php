@@ -8,6 +8,8 @@ use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
 use App\Components\ImageManager;
+use App\Http\Requests\CreateImageRequest;
+use App\Http\Requests\UpdateImageRequest;
 use App\Widgets\Admin\ImageColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -29,6 +31,8 @@ use SleepingOwl\Admin\Section;
  */
 class ImageSection extends Section implements Initializable
 {
+    use TSectionValidator;
+
     /**
      * @var bool
      */
@@ -106,15 +110,14 @@ class ImageSection extends Section implements Initializable
 
         $form = AdminForm::card()->addBody([
             AdminFormElement::columns()->addColumn([
-                AdminFormElement::text('name', 'Name')
-                    ->required()
-                ,
+                AdminFormElement::text('name', 'Name'),
                 AdminFormElement::select('category_id', 'Category')
                     ->setOptions(ImageManager::getCategories()),
 /*                AdminFormElement::datetime('created_at')
                     ->setVisible(true)
                     ->setReadonly(false)
                 ,*/
+                AdminFormElement::text('description', 'Description'),
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
                 $image->setSaveCallback(function (UploadedFile $file) {
                     ImageManager::saveImageFile($file->path(), $filename = date('Y-m-d_H-i-s') . '.jpg');
@@ -129,6 +132,8 @@ class ImageSection extends Section implements Initializable
             'save_and_create'  => new SaveAndCreate(),
             'cancel'  => (new Cancel()),
         ]);
+
+        $this->attachValidators($form, ($id > 0 ? (new UpdateImageRequest()) : (new CreateImageRequest()))->rules());
 
         return $form;
     }

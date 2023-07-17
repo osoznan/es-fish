@@ -18,12 +18,19 @@ class ProductCreateRequest extends \Illuminate\Foundation\Http\FormRequest {
             'description_en' => $descriptionRule,
             'category_id' => 'required|exists:product_category',
             'price' => 'integer|min:1',
-            'seo' => $seoRule = 'string|min:3',
-            'seo_en' => $seoRule,
-            'seo_ua' => $seoRule,
+            'old_price' => 'nullable|integer|min:1',
+            'weight' => 'nullable|integer|min:1',
             'calc_type' => 'integer',
             'menu_present' => 'bool',
-            'rating' => 'integer|min:0|max:5'
+            'seo_title' => $seo = 'nullable|string|min:5',
+            'seo_keywords' => $seo,
+            'seo_description' => $seo,
+            'seo_title_en' => $seo,
+            'seo_keywords_en' => $seo,
+            'seo_description_en' => $seo,
+            'seo_title_ua' => $seo,
+            'seo_keywords_ua' => $seo,
+            'seo_description_ua' => $seo,
         ];
     }
 

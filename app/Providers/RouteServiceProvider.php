@@ -30,7 +30,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         // Specify available languages for routes.
-        Route::pattern('locale', \implode('|', ['ru', 'en', 'ua']));
+/*        Route::pattern('locale', \implode('|', ['ru', 'en', 'ua']));
 
         Route::matched(function (RouteMatched $event) {
 
@@ -42,7 +42,7 @@ class RouteServiceProvider extends ServiceProvider
 
             // Change application locale.
             app()->setLocale($locale);
-        });
+        });*/
 
         $this->routes(function () {
             Route::middleware('api')
@@ -50,7 +50,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
 
             Route::middleware('web')
-                ->prefix('{locale}')
+                //->prefix('{locale}')
                 ->group(base_path('routes/web.php'));
         });
     }

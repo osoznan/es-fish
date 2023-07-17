@@ -7,15 +7,16 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property int id
  */
-class UpdateCategoryRequest extends FormRequest
+class UpdateCategoryRequest extends CreateCategoryRequest
 {
 
     public function rules(): array
     {
-        return [
-            'name' => 'min:3|max:100|unique:product_category',
-            'description' => 'nullable|string|min:10|max:10000',
-        ];
+        return array_merge(parent::rules(), [
+            'name' => $name = 'required|min:3|max:100',
+            'name_ua' => $name,
+            'name_en' => $name,
+        ]);
 
     }
 }

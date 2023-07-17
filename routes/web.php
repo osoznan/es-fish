@@ -52,7 +52,7 @@ Route::prefix('order')->group(function() {
     Route::post('/order', [OrderController::class, 'order']);
 });
 
-//Route::group(['prefix' => '{locale?}', 'where' => ['locale' => 'ru|en|ua']], function() {
+Route::group(['prefix' => '{locale?}', 'where' => ['locale' => 'ru|en|ua']], function() {
 
     Route::prefix('/')->group(function () {
         Route::get('/', [SiteController::class, 'index']);
@@ -106,7 +106,7 @@ Route::prefix('order')->group(function() {
     Route::prefix('/{cat}/{subcat}/{product}')->group(function () {
         Route::get('/', [ProductController::class, 'product']);
     });
-//});
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

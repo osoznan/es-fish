@@ -7,6 +7,8 @@ use AdminColumnFilter;
 use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
+use App\Http\Requests\FeedbackCreateRequest;
+use App\Http\Requests\FeedbackUpdateRequest;
 use Illuminate\Database\Eloquent\Model;
 use SleepingOwl\Admin\Contracts\Display\DisplayInterface;
 use SleepingOwl\Admin\Contracts\Form\FormInterface;
@@ -26,6 +28,8 @@ use SleepingOwl\Admin\Section;
  */
 class FeedbackSection extends Section implements Initializable
 {
+    use TSectionValidator;
+
     /**
      * @var bool
      */
@@ -122,6 +126,8 @@ class FeedbackSection extends Section implements Initializable
             'save_and_create'  => new SaveAndCreate(),
             'cancel'  => (new Cancel()),
         ]);
+
+        $this->attachValidators($form, ($id > 0 ? (new FeedbackUpdateRequest()) : (new FeedbackCreateRequest()))->rules());
 
         return $form;
     }

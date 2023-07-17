@@ -10,16 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string description
  * @property int parent_category_id
  */
-class UpdateImageRequest extends FormRequest
+class UpdateImageRequest extends CreateImageRequest
 {
 
-    public function rules(): array
-    {
-        return [
-            'name' => 'nullable|min:3|max:20|unique:image',
-            'description' => 'nullable|min:10|max:10000',
-            'parent_category_id' => 'nullable|integer|min:1|max:3',
-        ];
-
-    }
 }

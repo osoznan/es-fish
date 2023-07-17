@@ -20,7 +20,6 @@ class FeedbackCreateRequest extends FormRequest
             'name' => 'required|min:2|max:50',
             'text' => 'required|min:50|max:2000',
             'rate' => 'required|min:1|max:5',
-            'answer' => 'min:50',
             'product_id' => 'required',
             'hidden' => 'boolean'
         ];
