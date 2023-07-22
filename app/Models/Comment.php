@@ -3,9 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property Product product
+ * @property string name
+ * @property string text
+ * @property int rate
+ * @property bool hidden
+ */
 class Comment extends GeneralModel
 {
     use HelperTrait;
@@ -31,12 +39,7 @@ class Comment extends GeneralModel
 
     protected $table = 'comment';
 
-    /** @return Builder */
-    public static function search() {
-        return Comment::select(DB::raw('*'));
-    }
-
-    public function product() {
+    public function product(): BelongsTo {
         return $this->belongsTo(Product::class, 'product_id');
     }
 

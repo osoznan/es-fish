@@ -28,7 +28,7 @@ class ProductItem extends Widget {
 
         <div class="product-thumb <?= $this->class ?>">
             <a href="<?= ProductManager::getUrl($product) ?>">
-                <div style="background-image:url(<?= ImageManager::getPhotosUrl($product->url) ?>)" class="product-thumb__image div-image-thumb">
+                <div style="background-image:url(<?= ImageManager::getPhotosUrl($product->image->url) ?>)" class="product-thumb__image div-image-thumb">
 
                 </div>
             </a>
@@ -46,7 +46,7 @@ class ProductItem extends Widget {
                 ajaxLoad(el.closest('.product-thumb__ajax-space'), '/ajax', 'ajaxRefresh', {product_id: productId, delta: delta}, function(res) {
                     triggerEvent(document, 'cart-changed', {totalCost: res.totalCost})
                 })
-                
+
             }
 JS, 'productAmountSelector');
     }
@@ -69,7 +69,7 @@ JS, 'productAmountSelector');
                 <div class="product-thumb__selector">
                     <button data-class="minus" onclick="productItemChange(this, <?= $product->id ?>, -1)" class="dark-text-anchor_bg">-</button>
                     <input data-class="amount" value="<?= $amountInBasket ?>" onchange="productItemChange(this, <?= $product->id ?>, 1)" class="dark-text-anchor_bg">
-                    <button data-class="plus", onclick="productItemChange(this, <?= $product->id ?>, 1)">+</button>
+                    <button data-class="plus" onclick="productItemChange(this, <?= $product->id ?>, 1)">+</button>
                 </div>
             <?php else: ?>
                 <button class="product-thumb__order button-orange" onclick="productItemChange(this, <?= $product->id ?>, 1)">

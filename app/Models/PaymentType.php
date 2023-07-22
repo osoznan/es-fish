@@ -30,7 +30,7 @@ class PaymentType extends GeneralModel {
         if (!Cache::has(static::CACHE_KEY)) {
             Cache::put(
                 static::CACHE_KEY,
-                PaymentType::where('hidden', 0)
+                PaymentType::searchActive()
                     ->get()->keyBy('id')->toArray(),
                 120
             );

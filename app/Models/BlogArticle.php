@@ -24,17 +24,13 @@ class BlogArticle extends GeneralModel {
         'text_ua',
         'title_en',
         'text_en',
-        'category_id',
-        'image.url'
+        'category_id'
     ];
 
     /**
      * The attributes that should be hidden for arrays.
      */
     protected $hidden = [];
-
-    public $timestamps = ["created_at"];
-    const UPDATED_AT = null;
 
     protected $casts = [
         'hidden' => 'integer',

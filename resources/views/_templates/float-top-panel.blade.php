@@ -38,7 +38,7 @@ define('INITIAL_TOTAL_COST', OrderManager::getProductsTotalCost());
         <div class="language-select d-none d-md-block">
             <?php foreach (['ua', 'ru', 'en'] as $lang):
                 if ($lang != t::getLocale()):
-                    echo '<span><a href="/' . $lang . '" class="dark-text-anchor">' . strtoupper($lang) . '</a></span> ';
+                    echo '<span><a href="/' . ($lang != 'ru' ? $lang : '') . '" class="dark-text-anchor">' . strtoupper($lang) . '</a></span> ';
                 else:
                     echo '<span class="orange-color">' . strtoupper($lang) . '</span> ';
                 endif;

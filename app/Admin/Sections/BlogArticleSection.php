@@ -7,6 +7,7 @@ use AdminColumnFilter;
 use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
+use App\Components\BlogManager;
 use App\Http\Requests\BlogArticleCreateRequest;
 use App\Http\Requests\BlogArticleUpdateRequest;
 use App\Widgets\Admin\ImageColumn;
@@ -121,27 +122,20 @@ class BlogArticleSection extends Section implements Initializable
     {
         $form = AdminForm::card()->addBody([
             AdminFormElement::columns()->addColumn([
-                AdminFormElement::text('title', 'Name')
-                    ->required()
-                ,
+                AdminFormElement::text('title', 'Name'),
+                AdminFormElement::select('category_id', 'Category Id', BlogManager::CATEGORY_ALIASES['ru']),
                 AdminFormElement::checkbox('hidden', 'Hidden'),
-                AdminFormElement::datetime('created_at', 'Created At')
-                    ->setReadonly(true)
-                ,
+                AdminFormElement::datetime('created_at', 'Created At')->setReadonly(true),
             ], 'col-xs-12 col-sm-4')->addColumn([
-                AdminFormElement::textarea('text', 'Text')->required(),
+                AdminFormElement::textarea('text', 'Text'),
             ], 'col-xs-12 col-sm-8'),
 
             AdminFormElement::html('<hr>'),
 
             AdminFormElement::columns()->addColumn([
-                AdminFormElement::text('title_en', 'Title EN')
-                    ->required()
-                ,
+                AdminFormElement::text('title_en', 'Title EN'),
             ], 'col-xs-12 col-sm-4')->addColumn([
-                AdminFormElement::textarea('text_en', 'Text EN')
-                    ->required()
-                ,
+                AdminFormElement::textarea('text_en', 'Text EN'),
             ], 'col-xs-12 col-sm-8'),
 
             AdminFormElement::html('<hr>'),

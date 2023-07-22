@@ -4,8 +4,10 @@ namespace App\Widgets;
 
 use App\Components\ProductManager;
 use App\Components\Widget;
+use App\Http\Requests\FeedbackCreateRequest;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FeedbackPanel extends Widget {
 
@@ -77,12 +79,9 @@ class FeedbackPanel extends Widget {
     }
 
     public static function addComment(Request $request, array $data) {
-        $request = Request::create('/', 'POST', $data);
+        $request = FeedbackCreateRequest::create('/', 'POST', $data);
 
-        $request->validate([
-            'name' => 'required|min:3|max:50',
-            'text' => 'required|min:3|max:20',
-        ]);
+        Validator::validate($data, (new FeedbackCreateRequest)->rules());
 
         $comment = new Comment();
         $comment->product_id = $data['product_id'];

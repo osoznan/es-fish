@@ -74,40 +74,40 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
         </div>
     </section>
 
-    <div class="sect-products container mb-5">
+    <div class="sect-products container mb-5 pt-4">
         <h2>@lang('site.index.fish-&-see-products')</h2>
 
-        <div class="row">
-            <?php foreach ([10, 12, 13, 11] as $categoryId): ?>
-                <?= (new CategoryItem([
-                'category' => $categories->get($categoryId),
-                'parentCategory' => $categories->get(1),
-                'class' => 'col-lg-3'
-            ]))->run() ?>
+        <div class="row mb-4">
+            <?php foreach ([329, 330, 331, 332] as $categoryId): ?>
+                <?= CategoryItem::widget([
+                    'category' => $categories->get($categoryId),
+                    'parentCategory' => $categories->get(1),
+                    'class' => 'col-lg-3'
+                ]) ?>
             <?php endforeach; ?>
 
-            <?php foreach ([14, 15] as $categoryId): ?>
+            <?php foreach ([331, 332] as $categoryId): ?>
                 <?= (new CategoryItem([
-                'category' => $categories->get($categoryId),
-                'parentCategory' => $categories->get(2),
-                'class' => 'col-lg-6'
-            ]))->run() ?>
+                    'category' => $categories->get($categoryId),
+                    'parentCategory' => $categories->get(2),
+                    'class' => 'col-lg-6'
+                ]))->run() ?>
             <?php endforeach; ?>
         </div>
 
         <?php
         $catData = [
-            ['main' => 3, 'list' => [20, 22]],
-            ['main' => 6, 'list' => [47, 48]],
-            ['main' => 7, 'list' => [68, 72]],
-            ['main' => 8, 'list' => [75, 76, 77]],
-            ['main' => 9, 'list' => [78, 79, 80, 81]],
+            ['main' => 2, 'list' => [335, 336]],
+            ['main' => 3, 'list' => [337, 338]],
+            ['main' => 4, 'list' => [339, 340]],
+            ['main' => 5, 'list' => [341, 342, 343]],
+            ['main' => 6, 'list' => [344, 345, 346, 347]],
         ]
         ?>
 
         <?php foreach ($catData as $category): ?>
-        <h2><!--<!?= $categories->get($category['main'])->localeFieldValue('name') ?>--></h2>
-        <div class="row">
+        <h2><?= $categories->get($category['main'])->localeFieldValue('name') ?></h2>
+        <div class="row mb-4">
             <?php foreach ($category['list'] as $categoryId): ?>
                     <?= (new CategoryItem([
                 'category' => $categories->get($categoryId),
@@ -119,7 +119,7 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
         <?php endforeach; ?>
     </div>
 
-    <section class="sect-work-scheme container-fluid lightest-gray-background text-center mb-4">
+    <section class="sect-work-scheme container-fluid lightest-gray-background text-center pt-5 pb-5 mb-4">
         <div class="container">
             <h2 class="text-uppercase">@lang('site.index.work-scheme.title')</h2>
             <div class="work-scheme">
@@ -166,7 +166,7 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
                             ->limit(3)->get();
 
                         foreach ($blogArticles as $article):
-                            echo (new BlogItem(['article' => $article]))->run();
+                            echo (BlogItem::widget(['article' => $article]));
                         endforeach; ?>
                     </div>
                 </div>

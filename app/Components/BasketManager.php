@@ -52,7 +52,7 @@ class BasketManager {
     }
 
     public static function get($id) {
-        return isset($_SESSION[static::SESSION_VAR][$id]) ? $_SESSION[static::SESSION_VAR][$id] : null;
+        return $_SESSION[static::SESSION_VAR][$id] ?? null;
     }
 
     public static function getAll() {

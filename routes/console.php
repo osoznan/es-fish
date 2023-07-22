@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('app:set-initial-db-data', function () {
+    $this->info("Setting initial data");
+
+    (new \App\Console\Commands\SetInitialDbData())->handle();
+});

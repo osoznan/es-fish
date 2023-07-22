@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Components\BasketManager;
+use App\Components\helpers\Telegram;
 use App\Components\OrderManager;
+use App\Http\Requests\OrderCreateRequest;
 use App\Models\Product;
 use App\Widgets\BigCart;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -15,22 +17,24 @@ class OrderController extends TopController {
     use ValidatesRequests;
 
     public function order(Request $request) {
-        $validatedData = $this->validate($request, [
-            'name' => 'required|min:3|max:50',
-            'phone' => 'required|min:3|max:20',
-            'payment_type_id' => 'required',
-            'delivery_type_id' => 'required',
-        ]);
-
+        // получаем данные по товарам заказа из сессии
         $ids = BasketManager::getAll();
 
-        $result = OrderManager::addOrder($request->post(), $ids);
+        Telegram::send(json_encode($request->all()));
+
+        $validatedData = $this->validate(
+            $request->merge(['products' => $ids]),
+            (new OrderCreateRequest())->rules(),
+            (new OrderCreateRequest())->messages()
+        );
+
+        $result = OrderManager::addOrder($request->all());
 
         if (isset($result['error'])) {
             return $this->jsonRender($result);
         }
 
-        BasketManager::removeAll();
+        // BasketManager::removeAll();
 
         return view('order.order-sent');
     }

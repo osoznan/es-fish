@@ -27,7 +27,7 @@ class BlogArticleCreateRequest extends FormRequest
             'text_ua' => $text,
             'text_en' => $text,
             'image_id' => 'required|min:1|exists:image',
-            'category_id' => 'required|min:1|exists:product_category'
+            'category_id' => 'required|min:1'
         ];
 
     }

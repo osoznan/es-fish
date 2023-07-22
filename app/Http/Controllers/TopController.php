@@ -16,6 +16,8 @@ class TopController extends \Illuminate\Routing\Controller {
             if (in_array($pref, ['ru', 'ua', 'en'])) {
                 t::setLocale($pref);
             }
+        } else {
+            t::setLocale('ru');
         }
 
         return parent::callAction($method, $parameters);

@@ -68,40 +68,6 @@ class Product extends GeneralModel {
         });
     }
 
-    /** @return Builder */
-    public static function search() {
-        return Product::select([
-            'product.id as id',
-            'product.name as name',
-            'product.category_id as category_id',
-            'old_price',
-            'price',
-            'weight',
-            'product.image_id',
-            'main_image.url',
-            'product.description as description',
-            'properties',
-            'hidden',
-            'present',
-            'calc_type',
-            'product.alias as alias',
-            'product.name_en as name_en',
-            'product.name_ua as name_ua',
-            'product.description_en as description_en',
-            'product.description_ua as description_ua',
-            'product.alias_en as alias_en',
-            'product.alias_ua as alias_ua',
-            'properties_en',
-            'properties_ua',
-            'rating',
-            'seo', 'seo_en', 'seo_ua',
-            'menu_present',
-            'created_at',
-            'updated_at',
-            'recommended'
-        ])->leftJoin(DB::raw('image main_image'), 'image_id', '=', 'main_image.id');
-    }
-
     public static function withCategory(Builder $query) {
         return $query
             ->leftJoin('product_category', 'product_category.id', '=', 'product.category_id');
@@ -118,43 +84,6 @@ class Product extends GeneralModel {
 
     public function getLocaleName() {
         return t::getLocaleField($this, 'name');
-    }
-
-    public static function getValidators() {
-        return [
-            'product.name as name',
-            'category_id',
-            'old_price',
-            'price',
-            'weight',
-            'image_id',
-            'image.url',
-            'product.description as description',
-            'properties',
-            'hidden',
-            'present',
-            'calc_type',
-            'product.alias as alias',
-            'product.name_en as name_en',
-            'product.name_ua as name_ua',
-            'product.description_en as description_en',
-            'product.description_ua as description_ua',
-            'product.alias_en as alias_en',
-            'product.alias_ua as alias_ua',
-            'properties_en',
-            'properties_ua',
-            'seo_title',
-            'seo_keywords',
-            'seo_description',
-            'seo_title_en',
-            'seo_keywords_en',
-            'seo_description_en',
-            'seo_title_ua',
-            'seo_keywords_ua',
-            'seo_description_ua',
-            'created_at',
-            'updated_at'
-        ];
     }
 
     public function category() {

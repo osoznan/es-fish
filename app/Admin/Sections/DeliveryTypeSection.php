@@ -26,6 +26,8 @@ use SleepingOwl\Admin\Section;
  */
 class DeliveryTypeSection extends Section implements Initializable
 {
+    use TSectionValidator;
+
     /**
      * @var bool
      */
@@ -71,8 +73,7 @@ class DeliveryTypeSection extends Section implements Initializable
             ->setOrder([[0, 'asc']])
             ->paginate(25)
             ->setColumns($columns)
-            ->setHtmlAttribute('class', 'table-primary table-hover th-center')
-        ;
+            ->setHtmlAttribute('class', 'table-primary table-hover th-center');
 
         return $display;
     }
@@ -97,6 +98,13 @@ class DeliveryTypeSection extends Section implements Initializable
             'save_and_close'  => new SaveAndClose(),
             'save_and_create'  => new SaveAndCreate(),
             'cancel'  => (new Cancel()),
+        ]);
+
+        $this->attachValidators($form, [
+            'name' => $validName = 'required|string|min:10|max:40',
+            'name_en' => $validName,
+            'name_ua' => $validName,
+            'hidden' => 'bool'
         ]);
 
         return $form;

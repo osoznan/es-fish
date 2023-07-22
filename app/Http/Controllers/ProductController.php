@@ -10,7 +10,9 @@ use App\Models\Product;
 use App\Widgets\FeedbackPanel;
 use App\Widgets\ProductAmountSelector;
 use App\Widgets\StarRating;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class ProductController extends TopController {
 
@@ -22,11 +24,10 @@ class ProductController extends TopController {
         return parent::callAction($method, $parameters);
     }
 
-    public function product(...$a) {
-
-        $categoryAlias = $a[1];
-        $subCategoryAlias = $a[2];
-        $productAlias = $a[3];
+    public function product() {
+        $categoryAlias = Route::current()->parameter('cat');
+        $subCategoryAlias = Route::current()->parameter('subcat');
+        $productAlias = Route::current()->parameter('product');
 
         $product = Product::searchActive()
             ->where([t::getLocaleFieldName('alias') => $productAlias])
@@ -41,7 +42,7 @@ class ProductController extends TopController {
             ->get();
 
         $blogArticles = BlogArticle::query()
-            ->where('blog_article.category_id', 2)
+            ->where('category_id', 2)
             ->limit(3)
             ->get();
 

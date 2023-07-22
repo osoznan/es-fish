@@ -6,7 +6,6 @@ use App\Components\BasketManager;
 use App\Components\ProductManager;
 use App\Components\ViewInserter;
 use App\Components\Widget;
-use App\Models\Product;
 use App\Components\Translation as t;
 use App\Components\ImageManager;
 use App\Components\OrderManager;
@@ -20,11 +19,11 @@ class BigCart extends Widget {
 
     public $mode;
     public $ids;
-    public $elements;
+    public \Countable $elements;
     public $deliveryType;
     public $paymentType;
-    public $products;
-    public $errors;
+    public \Countable $products;
+    public \Countable $errors;
 
     public static function getAjaxHandlers() {
         return ['ajaxCartRefresh'];
@@ -169,7 +168,7 @@ class BigCart extends Widget {
             const el = document.querySelector('.cart .container')
             const newEl = document.createElement('div')
 
-            ajax('/ru/ajax', {action: 'ajaxCartRefresh', data: data}, function(res) {
+            ajax('ajax', {action: 'ajaxCartRefresh', data: data}, function(res) {
                 const data = JSON.parse(res).original;
                 el.innerHTML = data.content
                 triggerEvent(document, 'cart-changed', {totalCost: data.totalCost})

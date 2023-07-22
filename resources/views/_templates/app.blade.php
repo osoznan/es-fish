@@ -1,10 +1,6 @@
 <?php
 
 use App\Components\ViewInserter;
-/*
-$p = \App\Models\Product::all()->get(0);
-
-dd($p->images);*/
 
 ?>
 <!DOCTYPE html>

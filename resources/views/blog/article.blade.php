@@ -2,14 +2,13 @@
 
 use App\Components\BlogManager;
 use App\Components\ImageManager;
+use App\Widgets\BreadCrumbs;
 
 /** @var  $article \App\Models\BlogArticle */
 
 $title = $article->locale("title");
 
 \App\Components\helpers\Telegram::send('Вы открыли статью ' . $title);
-
-
 
 ?>
 
@@ -34,7 +33,7 @@ $title = $article->locale("title");
 
     <div class="container">
         <div>
-            <?= Widget::run('BreadCrumbs', ['items' => [
+            <?= BreadCrumbs::widget(['items' => [
                 ['url' => BlogManager::getCategoryUrl($article->category_id), 'title' => trans('site.blog.' . BlogManager::getCategoryAlias($article->category_id))],
                 ['url' => BlogManager::getUrl($article), 'title' => $article->locale('title')]
             ]]) ?>

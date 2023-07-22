@@ -72,7 +72,6 @@ class Category extends GeneralModel {
                 'description_ua as description_ua',
                 'parent_category_id',
                 'image_id',
-                'seo', 'seo_en', 'seo_ua',
                 'hidden',
                 'alias', 'alias_en', 'alias_ua',
                 'image.url as image_url',
@@ -84,25 +83,6 @@ class Category extends GeneralModel {
     public static function searchTopMost() {
         return static::search()
             ->where('parent_category_id', null);
-    }
-
-    public static function getValidators() {
-        return [
-            'name' => 'required|max:100',
-            'name_en' => 'required|max:100',
-            'name_ua' => 'required|max:100',
-            'description' => 'required|max:1000',
-            'description_en' => 'required|max:1000',
-            'description_ua' => 'required|max:1000',
-            'alias' => 'required|max:200',
-            'alias_en' => 'required|max:200',
-            'alias_ua' => 'required|max:200',
-            'seo' => 'required|max:1000',
-            'seo_en' => 'required|max:1000',
-            'seo_ua' => 'required|max:1000',
-            'image_id' => 'required|integer',
-            'parent_category_id' => 'nullable|integer',
-        ];
     }
 
     public function products() {

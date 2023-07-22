@@ -18,7 +18,7 @@ class CategoryItem extends Widget {
 
     public function run() {
 
-        return view('widgets.category_item', [
+        echo view('widgets.category_item', [
             'parentCategory' => $this->parentCategory,
             'category' => $this->category,
             'class' => $this->class

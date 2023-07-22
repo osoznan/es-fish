@@ -2,6 +2,7 @@
 
 namespace App\Widgets;
 
+use App\Components\helpers\Telegram;
 use App\Components\OrderManager;
 use App\Components\ViewInserter;
 use App\Components\Widget;
@@ -54,7 +55,8 @@ class ProductAmountSelector extends Widget {
 
         ViewInserter::insertJs(<<< JS
             productAmountSelectorChange = function(productId, delta) {
-                let data = ajaxLoad(get('.product-thumb__holder').parentElement, '/ru/product/ajax', 'productAmountSelectorRefresh', {product_id: productId, delta: delta}, function(res) {
+                let data = ajaxLoad(get('.product-thumb__holder').parentElement, '/product/ajax', 'productAmountSelectorRefresh', {product_id: productId, delta: delta}, function(res) {
+                    console.log(res)
                     triggerEvent(document, 'cart-changed', {totalCost: res.totalCost})
                 })
 
@@ -81,7 +83,8 @@ JS, 'productAmountSelectorChange');
             'content' => ProductAmountSelector::widget([
                 'product' => $product
             ]),
-            'totalCost' => OrderManager::getProductsTotalCost()
+            'totalCost' => OrderManager::getProductsTotalCost(),
+            'count' => BasketManager::get((int)$data['product_id'])
         ]);
     }
 }

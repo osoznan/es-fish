@@ -5,6 +5,7 @@ use App\Components\Translation as t;
 use App\Components\CategoryManager;
 use App\Models\Product;
 use App\Widgets\ProductItemList;
+use App\Widgets\Pager;
 
 /** @var $category Category */
 
@@ -73,7 +74,7 @@ use App\Widgets\ProductItemList;
             $query = DB::select('select count(*) as count from product where product.category_id in (' . join(',', $categoryIds) . ')');
             $productCount = $query[0]->count;
 
-            $productList = Product::search()
+            $productList = Product::searchActive()
                 ->whereRaw('hidden = 0 AND product.category_id in (' . join(',', $categoryIds) . ')')
                 ->offset(PER_PAGE * $curPage)
                 ->take(PER_PAGE)
@@ -85,7 +86,7 @@ use App\Widgets\ProductItemList;
             ?>
         </div>
 
-        <?= Widget::run('Pager', [
+        <?= Pager::widget([
             'totalCount' => $productCount,
             'perPage' => PER_PAGE,
             'curPage' => $curPage

@@ -63,7 +63,7 @@ use App\Widgets\BreadCrumbs;
 
                 <div class="sect-product__feedback">
                     <span class="mr-2"><?= $feedbacks->count() ?>&nbsp;<?= t::inPlace('отзывов|вiдгукiв|feedbacks') ?></span>
-                    <div class="w-100"><?= (new StarRating(['product_id' => $product->id, 'amount' => $product->rating ]))->run() ?></div>
+                    <div class="w-100"><?= StarRating::widget(['product_id' => $product->id, 'amount' => $product->rating ]) ?></div>
                     <a class="sect-product__add-feedback scroll-link" href="#nav-feedback-tab" onclick="activateFeedback(<?= $product->id ?>)">@lang('site.product.feedback.add')</a>
                 </div>
 
@@ -122,7 +122,7 @@ use App\Widgets\BreadCrumbs;
         <div class="row pt-4 mb-5">
             <?php
             foreach ($recommendedProducts as $product):
-                echo (new ProductItem(['product' => $product, 'class' => 'col-4']))->run();
+                echo ProductItem::widget(['product' => $product, 'class' => 'col-4']);
             endforeach;
             ?>
         </div>
@@ -132,7 +132,7 @@ use App\Widgets\BreadCrumbs;
         <div class="row pt-4">
             <?php
             foreach ($blogArticles as $article):
-                echo (new BlogItem(['article' => $article]))->run();
+                echo BlogItem::widget(['article' => $article]);
             endforeach;
             ?>
         </div>

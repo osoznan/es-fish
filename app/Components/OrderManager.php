@@ -4,6 +4,7 @@ namespace App\Components;
 
 use App\Components\helpers\Telegram;
 use App\Facades\BasketManager;
+use App\Http\Requests\OrderCreateRequest;
 use App\Mail\OrderShipped;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -22,16 +23,16 @@ class OrderManager {
      * @param $cartData[] Array|Collection where keys are ids of added element, values are quantity
      * @return int|array
      */
-    public static function addOrder(array $orderData, array $cartData) {
-        $idValues = array_keys($cartData);
+    public static function addOrder(array $orderData) {
+        $idValues = array_keys($cartData = $orderData['products']);
 
-        if (!count($idValues) || !count($orderData)) {
-            throw new \Exception('неверные вхолные данные', 100);
-        }
+        \Validator::validate($orderData, (new OrderCreateRequest())->rules());
 
         $products = Product::searchActive()
-            ->whereIn('product.id', $idValues)
+            ->whereIn('id', $idValues)
             ->get()->keyBy('id');
+
+        // Telegram::send(json_encode($products[38]));
 
         // try {
             DB::beginTransaction();
@@ -42,40 +43,39 @@ class OrderManager {
 
             $model->total = static::getFinalCost($cartData, $model);
 
-
             if (!$model->save()) {
                 throw new \Exception('ошибка сохранения заказа');
             }
 
-
             foreach ($cartData as $id => $amount) {
-                $orderItem = [
-                    'order_id' => $model->id,
-                    'product_id' => $id,
-                    'amount' => $amount,
-                    'data' => str_replace('\\', '\\\\', json_encode([
-                        'type' => $products->get($id)->category_id,
-                        'name' => $products[$id]->name,
-                        'description' => $products[$id]->description,
-                        'price' => $products[$id]->price,
-                        'weight' => $products[$id]->weight,
-                        'calc_type' => $products[$id]->calc_type
-                    ], JSON_UNESCAPED_UNICODE))
-                ];
+                if (isset($products[$id])) {
+                    $orderItem = [
+                        'order_id' => $model->id,
+                        'product_id' => $id,
+                        'amount' => $amount,
+                        'data' => str_replace('\\', '\\\\', json_encode([
+                            'category_id' => $products->get($id)->category_id ?? null,
+                            'name' => $products[$id]->name,
+                            'description' => $products[$id]->description,
+                            'price' => $products[$id]->price,
+                            'weight' => $products[$id]->weight,
+                            'calc_type' => $products[$id]->calc_type
+                        ], JSON_UNESCAPED_UNICODE))
+                    ];
 
-                $orderItem = new OrderItem($orderItem);
-                $orderItem->save();
+                    $orderItem = new OrderItem($orderItem);
+                    if (!$orderItem->save()) {
+                        Telegram::send('error');
+                    }
+                }
             }
-
-            // OrderManager::sendOrderMailToVendor($model);
 
             OrderManager::addOrderStatus($model, OrderStatus::PROCESSING);
 
             DB::commit();
 
-            Telegram::send('Заказ с ИД #' . $model->id . ' успешно к нам несётся!');
-
-            BasketManager::removeAll();
+            OrderManager::sendTelegramSuccessOrderMessage($model);
+            // OrderManager::sendOrderMailToVendor($model);
 
             return $model->id;
 
@@ -124,7 +124,7 @@ class OrderManager {
      * Свыше 5000 грн. — доставка по Украине БЕСПЛАТНО.
      * gets a final cost having summary cost of items
      */
-    public static function getDeliveryCost(float $itemsCost, array $data): int {
+    public static function getDeliveryCost(float $itemsCost, Order|array $data): int {
         $sumRanges = config('user.delivery-cost-ranges');
 
         $delivery = $data['delivery_type_id'];
@@ -137,6 +137,11 @@ class OrderManager {
         }
 
         return 0;
+    }
+
+    public static function sendTelegramSuccessOrderMessage(Order $order): void {
+        Telegram::send("Произведён заказ товара. Клиент: $order->name ($order->phone). "
+            . "Ссылка заказа: " . env('APP_URL') . "/admin/orders/$order->id/edit");
     }
 
     public static function sendOrderMailToVendor(Order $order) {

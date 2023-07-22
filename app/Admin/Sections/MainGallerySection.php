@@ -71,9 +71,7 @@ class MainGallerySection extends Section implements Initializable
                         ->orWhere('name', 'like', '%'.$search.'%');
                 }),
             AdminColumn::text('text', 'Text'),
-            AdminColumn::custom('link', function($model) {
-                return ImageColumn::widget(['filename' => $model->url]);
-            }),
+            AdminColumn::text('link', 'Link'),
         ];
 
         $display = AdminDisplay::datatables()
@@ -140,6 +138,7 @@ class MainGallerySection extends Section implements Initializable
             'text' => $validName = 'required|string|min:10|max:1000',
             'text_en' => $validName,
             'text_ua' => $validName,
+            'link' => 'url',
             'hidden' => 'bool'
         ]);
 

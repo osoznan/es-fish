@@ -37,14 +37,14 @@ class CategoryManager {
      * @param int $categoryId id of category or subcategory
      * @return string
      */
-    public static function getUrl($categoryId) {
+    public static function getUrl(int $categoryId): string {
         $subCategoryAlias = t::getLocaleField($category = static::getCategory($categoryId), 'alias');
         $categoryAlias = $category->parent_category_id ? t::getLocaleField(static::getCategory($category->parent_category_id), 'alias') : '';
 
-        return '/' . t::getLocale() . ($categoryAlias  ? ('/' . $categoryAlias) : '') . ($subCategoryAlias ? ('/' .$subCategoryAlias) : '');
+        return (t::getLocale() != 'ru' ? ('/' . t::getLocale()) : null) . ($categoryAlias  ? ('/' . $categoryAlias) : '') . ($subCategoryAlias ? ('/' .$subCategoryAlias) : '');
     }
 
-    public static function getCategoryInfo($catAlias, $subCatAlias) {
+    public static function getCategoryInfo(string $catAlias, string $subCatAlias): array {
 
         $category = Category::search()
             ->where([t::getLocaleFieldName('alias') => $catAlias, 'hidden' => 0])

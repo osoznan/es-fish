@@ -76,9 +76,9 @@ class ProductCategorySection extends Section implements Initializable
             AdminColumnEditable::text('description', 'Text'),
             AdminColumn::text('parent.name', 'Parent'),
             AdminColumn::custom('Image', function($model) {
-                return ImageColumn::widget(['filename' => $model->image->url]);
+                return ImageColumn::widget(['filename' => $model->image->url ?? '']);
             }),
-            AdminColumnEditable::checkbox('name', 'On'),
+            AdminColumnEditable::checkbox('hidden', 'Hidden'),
         ];
 
         $display = AdminDisplay::datatables()

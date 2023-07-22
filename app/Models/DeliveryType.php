@@ -35,7 +35,7 @@ class DeliveryType extends GeneralModel {
         if (!Cache::has(static::CACHE_KEY)) {
             Cache::put(
                 static::CACHE_KEY,
-                DeliveryType::where('hidden', 0)->get(),
+                DeliveryType::searchActive()->get(),
                 120
             );
         }

@@ -28,7 +28,5 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('order.service', function ($app) {
             return new OrderManager();
         });
-
-        Builder::useVite();
     }
 }

@@ -58,16 +58,17 @@ use App\Components\ViewInserter;
     </div>
 </div>
 
-<div class="float-cart">
-    <a class="d-flex" href="<?= route('cart', ['locale' => t::getLocale()]) ?>">
-        <div><img src="/img/shopping-bag.svg" class="m-2" alt=basket></div>
-        <div>
-            <div><span class="float-cart__price"><?= INITIAL_TOTAL_COST ?></span> @lang('site.abbr.hrivnas')</div>
-            <span class="orange-color tiny-font">@lang("site.to-basket")</span>
-        </div>
-    </a>
-</div>
-
+@if (defined('INITIAL_TOTAL_COST'))
+    <div class="float-cart">
+        <a class="d-flex" href="<?= route('cart', ['locale' => t::getLocale()]) ?>">
+            <div><img src="/img/shopping-bag.svg" class="m-2" alt=basket></div>
+            <div>
+                <div><span class="float-cart__price"><?= INITIAL_TOTAL_COST ?></span> @lang('site.abbr.hrivnas')</div>
+                <span class="orange-color tiny-font">@lang("site.to-basket")</span>
+            </div>
+        </a>
+    </div>
+@endif
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

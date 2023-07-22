@@ -2,6 +2,7 @@
 
 namespace App\Components;
 
+use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 
 class ProductManager {
@@ -11,7 +12,7 @@ class ProductManager {
     }
 
     public static function calculateRate($productId) {
-        $comments = DB::table('comment')
+        $comments = Comment::query()
             ->selectRaw("sum(rate) as `rate`, count(*) as `count`")
             ->whereRaw("product_id = $productId and hidden = 0")
             ->first();

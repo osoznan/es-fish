@@ -24,7 +24,16 @@ class OrderCreateRequest extends FormRequest
             'phone' => 'required|min:3|max:20',
             'payment_type_id' => 'required',
             'delivery_type_id' => 'required',
+            'products' => 'required|array',
+            'products.*' => 'required|int'
         ];
 
+    }
+
+    public function messages()
+    {
+        return [
+            'products.required' => 'Нет товаров в корзине'
+        ];
     }
 }

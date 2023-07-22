@@ -2,29 +2,23 @@
 
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Support\Arr;
 use App\Components\ImageManager;
 use App\Components\Translation as t;
 use App\Components\CategoryManager;
 use App\Components\ProductManager;
 use App\Components\BlogManager;
 
-$categories = Category::searchActive()->get();
+$categories = Category::searchActive()->with('image')->get();
 
-$topCategories = $categories->where($categories, function ($value, $key) {
-    return $value['parent_category_id'] == null;
-});
+$topCategories = $categories->where('parent_category_id', null);
 
 $subCategoriesSet = [];
 foreach ($topCategories as $top) {
-    $subCategoriesSet[$top['id']] = Arr::where($categories, function ($value, $key) use ($top) {
-        return $value['parent_category_id'] == $top['id'];
-    });
+    $subCategoriesSet[$top['id']] = $categories->where('parent_category_id', $top['id']);
 }
 
-$menuProducts = Product::search()
-    ->where('menu_present', 1)
-    ->get();
+$menuProducts = Product::searchActive()
+    ->where('menu_present', 1)->get();
 
 ?>
 <section class="leftmenu container-fluid">
@@ -38,6 +32,8 @@ $menuProducts = Product::search()
                 </div>
             </nav>
 
+            <a class="main-menu__close" onclick="landing.hideMainMenu()">&#215;</a>
+
             <ul class="main-menu__navbar navbar-nav mr-auto" id="leftMenu">
                 <div class="main-menu__top-space">
                     <div class="main-menu__langs">
@@ -50,7 +46,6 @@ $menuProducts = Product::search()
                         endforeach; ?>
                     </div>
                     <div class="flex-grow-1"></div>
-                    <a class="main-menu__close" onclick="landing.hideMainMenu()">❌</a>
                 </div>
 
                 <a href="" class="main-menu__item fw-bold">@lang('site.menu.delivery+pay')</a>
@@ -80,7 +75,7 @@ $menuProducts = Product::search()
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
                             @foreach ($topCategories as $category)
-                            <li class="nav-item text-center">
+                            <li class="mainmenu__categories__item nav-item text-center">
                                 <a class="mainmenu__categories__anchor nav-link active" href="#toggle<?= $category['id'] ?>" data-bs-toggle="collapse" aria-controls="#toggle<?= $category['id'] ?>" data-bs-target="#toggle<?= $category['id'] ?>" data-bs-toggle="dropdown" role="button">
                                     <img class="mainmenu__categories__image" src="<?= ImageManager::getThumbsUrl() . $category->image->url ?>">
                                     <div class="mainmenu__categories__title"><?= t::getLocaleField($category, 'name') ?></div>
@@ -107,8 +102,8 @@ $menuProducts = Product::search()
 
             @foreach ($subCategories as $category)
             <div class="col-12 col-lg-6 col-xl-3 d-flex">
-                <a href="<?= CategoryManager::getUrl($category['id']) ?>">
-                    <div class="mainmenu__subcategories__image m-2 div-image-thumb" data-src="<?= ImageManager::getPhotosUrl($category['url']) ?>"></div>
+                <a href="<?= CategoryManager::getUrl($category['id']) ?>" style="display: contents">
+                    <div class="mainmenu__subcategories__image m-2 div-image-thumb" data-src="<?= ImageManager::getPhotosUrl($category->image->url) ?>"></div>
                 </a>
                 <div class="mainmenu__subcategories__text">
                     <div class="mainmenu__subcategories__title">
@@ -128,3 +123,4 @@ $menuProducts = Product::search()
         @endforeach
     </div>
 </div>
+
