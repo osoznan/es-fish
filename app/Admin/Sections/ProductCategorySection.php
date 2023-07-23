@@ -15,6 +15,7 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Widgets\Admin\ImageColumn;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use SleepingOwl\Admin\Contracts\Display\DisplayInterface;
 use SleepingOwl\Admin\Contracts\Form\FormInterface;
 use SleepingOwl\Admin\Contracts\Initializable;
@@ -67,13 +68,12 @@ class ProductCategorySection extends Section implements Initializable
         $columns = [
             AdminColumn::text('id', '#')
                 ->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
-            AdminColumn::link('name', 'Name', 'created_at')
+            AdminColumn::link('name', 'Name', 'descriptionShort')
                 ->setSearchCallback(function($column, $query, $search){
                     return $query
                         ->orWhere('name', 'like', '%'.$search.'%');
                 })
             ,
-            AdminColumnEditable::text('description', 'Text'),
             AdminColumn::text('parent.name', 'Parent'),
             AdminColumn::custom('Image', function($model) {
                 return ImageColumn::widget(['filename' => $model->image->url ?? '']);
@@ -123,30 +123,11 @@ class ProductCategorySection extends Section implements Initializable
                     ->setSearch('name')
                     ->setDisplay(function ($model) {
                         return $model->name;
-                    })->nullable(),
+                    }),
                 AdminFormElement::text('seo_title', 'Seo Title'),
                 AdminFormElement::text('seo_keywords', 'Seo Keywords'),
                 AdminFormElement::text('seo_description', 'Seo Description'),
 
-/*                AdminFormElement::dependentselect('category_id', 'Parent')
-                    ->setModelForOptions(Category::class, 'title')
-                    ->setDataDepends(['category_id'])
-                    ->setLoadOptionsQueryPreparer(function($item, $query) {
-                        return $query->where(['hidden' => 0]); }),*/
-
-/*                AdminFormElement::custom(function($model) {
-                    $model->image_id = ImageSelector::getValue();
-                })->setDisplay(function ($model) {
-                    $model = $this->getModelValue();
-
-                    return ImageSelector::widget([
-                        'title' => 'Picture',
-                        'value' => $model->image->toArray()
-                    ]);
-                }),*/
-
-/*                AdminFormElement::datetime('created_at', 'Created At')
-                    ->setVisible(true),*/
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
                 AdminFormElement::textarea('description', 'Description'),
                 AdminFormElement::selectajax('image_id', 'Image')

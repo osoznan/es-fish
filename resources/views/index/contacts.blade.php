@@ -1,10 +1,6 @@
 <?php
 
 use App\Models\Category;
-use App\Components\Translation as t;
-use App\Components\CategoryManager;
-use App\Models\Product;
-use App\Widgets\BigCart;
 use App\Widgets\ContactForm;
 
 /** @var $category Category */
@@ -20,8 +16,6 @@ use App\Widgets\ContactForm;
 @endsection
 
 @section('top')
-
-@section('top')
     @include('_templates/top')
 
     <section class="sect-cart mb-4">
@@ -33,19 +27,17 @@ use App\Widgets\ContactForm;
     </section>
 @endsection
 
-@endsection
-
 @section('content')
 
     <div class="container">
-        <div class="display-5">
-            <a href="tel:<?= config('user.phone.full') ?>" class="p-2"><?= config('user.phone.full') ?></a>
+        <div class="display-5 contacts-pane">
+            <a href="tel:<?= config('user.phone.full') ?>" class="contacts-pane__link"><?= config('user.phone.full') ?></a>
             <P></P>
-            <a href="mailto:<?= config('user.email') ?>" class="p-2"><?= config('user.email') ?></a>
+            <a href="mailto:<?= config('user.email') ?>" class="contacts-pane__link"><?= config('user.email') ?></a>
             <P></P>
-            <a href="" class="p-2"><img src="/img/facebook.svg" width="50"></a>
+            <a href="{{ config('user.facebook') }}" class="contacts-pane__link"><img src="/img/facebook.svg" width="30" alt="facebook"></a>
             <P></P>
-            <a href="" class="p-2"><img src="/img/linkedin.svg" width="50"></a>
+            <a href="{{ config('user.linkedin') }}" class="contacts-pane__link"><img src="/img/linkedin.svg" width="50" alt="LinkedIn"></a>
             <P></P>
         </div>
 

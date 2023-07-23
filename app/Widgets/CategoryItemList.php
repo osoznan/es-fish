@@ -14,14 +14,15 @@ class CategoryItemList extends Widget {
 
     public function run() {
         $topMostCategory = Category::searchTopMost()
+            ->with('image')
             ->where('product_category.id', $this->categoryId)
             ->where('main_page_present', 1)
             ->first();
 
-        $categoryList = Category::search()
-            ->where(['hidden' => '0', 'parent_category_id' => $this->categoryId])
-            ->limit($this->limit)
-            ->get();
+        $categoryList = Category::searchActive()
+            ->with('image')
+            ->where('parent_category_id', $this->categoryId)
+            ->limit($this->limit)->get();
         ?>
 
         <h2 class="category-list__title"><?= t::getLocaleField($topMostCategory, 'name') ?></h2>

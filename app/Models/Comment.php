@@ -29,6 +29,7 @@ class Comment extends GeneralModel
         'answer',
         'product_id',
         'rate',
+        'answer_created_at',
         'hidden'
    ];
 

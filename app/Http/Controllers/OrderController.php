@@ -6,8 +6,6 @@ use App\Components\BasketManager;
 use App\Components\helpers\Telegram;
 use App\Components\OrderManager;
 use App\Http\Requests\OrderCreateRequest;
-use App\Models\Product;
-use App\Widgets\BigCart;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

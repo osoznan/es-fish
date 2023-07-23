@@ -5,7 +5,7 @@ use App\Components\Translation as t;
 
 /** @var $category Category */
 
-$title = trans('site.menu.faq')
+$title = trans('site.menu.about')
 
 ?>
 
@@ -32,7 +32,7 @@ $title = trans('site.menu.faq')
 @section('content')
 
     <div class="container">
-        {{ $a = 'text' }}
+        <?= t::inPlace('123||') ?>
     </div>
 
 @endsection

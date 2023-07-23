@@ -19,7 +19,6 @@ class BigCart extends Widget {
 
     public $mode;
     public $ids;
-    public \Countable $elements;
     public $deliveryType;
     public $paymentType;
     public \Countable $products;
@@ -32,7 +31,6 @@ class BigCart extends Widget {
     public function run() {
         if (BasketManager::isBasketEmpty()) { ?>
             <div class="container"><?= trans('site.cart.empty-text') ?></div><?php
-
             return;
         }
 
@@ -100,6 +98,10 @@ class BigCart extends Widget {
 
         $this->ids = BasketManager::getAll();
 
+        if (BasketManager::isBasketEmpty()) {
+            return ['content' => '<div class="container">'.trans('site.cart.empty-text').'</div>'];
+        }
+
         $emptyBasketContent = '<div class="display-3 text-center">' . trans('site.cart.basket-empty') . '</div>';
 
         if (is_array($this->ids) && count($this->ids)) {
@@ -118,7 +120,7 @@ class BigCart extends Widget {
             <?php foreach ($this->products as $elem): ?>
                 <tr>
                     <td>
-                        <div class="cart-table__image" style="background-image:url(<?= ImageManager::getPhotosUrl($elem->url) ?>)"></div>
+                        <div class="cart-table__image" style="background-image:url(<?= ImageManager::getPhotosUrl($elem->image->url) ?>)"></div>
                     </td>
                     <td>
                         <a class="cart-table__title" href="<?= ProductManager::getUrl($elem) ?>"><?= $elem->locale('name') ?></a>
@@ -168,9 +170,13 @@ class BigCart extends Widget {
             const el = document.querySelector('.cart .container')
             const newEl = document.createElement('div')
 
-            ajax('ajax', {action: 'ajaxCartRefresh', data: data}, function(res) {
+            ajax('/ajax', {action: 'ajaxCartRefresh', data: data}, function(res) {
                 const data = JSON.parse(res).original;
                 el.innerHTML = data.content
+                if (!data.totalCost) {
+                    document.querySelector('.cart__form').innerHTML = '';
+                }
+
                 triggerEvent(document, 'cart-changed', {totalCost: data.totalCost})
             })
         }
@@ -185,7 +191,7 @@ class BigCart extends Widget {
                 payment_type_id: el.querySelector('#payment_type_id').value
             }
 
-            ajax('/ru/order/order', data, function(res) {
+            ajax('order/order', data, function(res) {
                 document.querySelector('.cart>.container').innerHTML = ''
                 el.innerHTML = res
 
@@ -222,8 +228,8 @@ JS, static::class);
         ]))->displayCartTable();
 
         return response()->json([
-            'content' => $data['content'],
-            'totalCost' => $data['totalCost']
+            'content' => $data['content'] ?? ' ',
+            'totalCost' => $data['totalCost'] ?? 0
         ]);
     }
 }

@@ -38,7 +38,7 @@ use App\Components\Translation as t;
 
     <h2><?= t::inPlace('ПОЧЕМУ ИМЕННО МЫ?||') ?></h2>
     <ul>
-        <li><?= t::inPlace('Крупно- и мелкооптовые цены на всю продукцию в зависимости от уровня заказа||') ?>.</li>
+        <li><?= t::inPlace('Крупно- и мелкооптовые цены на всю продукцию в зависимости от уровня заказа||Large and small wholesale prices for all products, depending on the level of the order') ?>.</li>
         <li><?= t::inPlace('Гарантия качества от производителя||') ?>.</li>
         <li><?= t::inPlace('Сезонные скидки и постоянно действующие акции||') ?>.</li>
         <li><?= t::inPlace('Прибыль от 100% (при реализации в розничных сетях)||') ?>.</li>

@@ -64,13 +64,13 @@ use App\Widgets\BreadCrumbs;
                 <div class="sect-product__feedback">
                     <span class="mr-2"><?= $feedbacks->count() ?>&nbsp;<?= t::inPlace('отзывов|вiдгукiв|feedbacks') ?></span>
                     <div class="w-100"><?= StarRating::widget(['product_id' => $product->id, 'amount' => $product->rating ]) ?></div>
-                    <a class="sect-product__add-feedback scroll-link" href="#nav-feedback-tab" onclick="activateFeedback(<?= $product->id ?>)">@lang('site.product.feedback.add')</a>
+                    <a class="sect-product__add-feedback dark-text-anchor scroll-link" href="#nav-feedback-tab" onclick="activateFeedback({{ $product->id }})">
+                        @lang('site.product.feedback.add')
+                    </a>
                 </div>
 
                 <div>
-                    <?= (new ProductAmountSelector([
-                        'product' => $product
-                    ]))->run() ?>
+                    <?= ProductAmountSelector::widget(['product' => $product]) ?>
                 </div>
             </div>
 

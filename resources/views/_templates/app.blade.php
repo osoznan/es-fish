@@ -34,7 +34,7 @@ use App\Components\ViewInserter;
         @yield('head-js')
 
     </head>
-    <body class="antialiased">
+    <body class="antialiased @yield('body-class')">
         <a id="page-start"></a>
         @section('top')
             <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">

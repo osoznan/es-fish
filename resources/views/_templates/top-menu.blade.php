@@ -49,7 +49,7 @@ $menuProducts = Product::searchActive()
                 </div>
 
                 <a href="" class="main-menu__item fw-bold">@lang('site.menu.delivery+pay')</a>
-                <a href="/about" class="navigation-link main-menu__item fw-bold">@lang('site.menu.about')</a>
+                <a href="{{ fishLink('/about') }}" class="navigation-link main-menu__item fw-bold">@lang('site.menu.about')</a>
 
                 <div class="fw-bold main-menu__item">@lang('site.blog.materials')</div>
                 <ul class="">
@@ -58,11 +58,11 @@ $menuProducts = Product::searchActive()
                     <a href="<?= BlogManager::getCategoryUrl(3) ?>" class="navigation-link main-menu__item"><?= BlogManager::getCategoryAlias(3, t::getLocale()) ?></a>
                 </ul>
 
-                <a href="<?= route('contacts', ['locale' => t::getLocale()]) ?>" class="navigation-link main-menu__item fw-bold">@lang('site.menu.contacts')</a>
+                <a href="<?= fishLink('/contacts') ?>" class="navigation-link main-menu__item fw-bold">@lang('site.menu.contacts')</a>
 
                 <div class="d-block d-lg-none text-center">
                     <a href=""><img src="/img/facebook.svg"></a>&nbsp;
-                    <a href="class="><img src="/img/linkedin.svg"></a>
+                    <a href=""><img src="/img/linkedin.svg"></a>
 
                     @include('_templates/widgets/phone')
                     <span class="light-gray-color">@lang('site.index.cap.call-time')</span>
@@ -76,8 +76,10 @@ $menuProducts = Product::searchActive()
                         <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
                             @foreach ($topCategories as $category)
                             <li class="mainmenu__categories__item nav-item text-center">
-                                <a class="mainmenu__categories__anchor nav-link active" href="#toggle<?= $category['id'] ?>" data-bs-toggle="collapse" aria-controls="#toggle<?= $category['id'] ?>" data-bs-target="#toggle<?= $category['id'] ?>" data-bs-toggle="dropdown" role="button">
-                                    <img class="mainmenu__categories__image" src="<?= ImageManager::getThumbsUrl() . $category->image->url ?>">
+                                <a class="mainmenu__categories__anchor nav-link active" href="#toggle{{ $category['id'] }} ?>"
+                                        data-bs-toggle="collapse" aria-controls="#toggle<?= $category['id'] ?>"
+                                        data-bs-target="#toggle{{ $category['id'] }}" data-bs-toggle="dropdown" role="button">
+                                    <img class="mainmenu__categories__image" src="{{ config('user.top-category-pictures')[$category['id']] ?? '' }}">
                                     <div class="mainmenu__categories__title"><?= t::getLocaleField($category, 'name') ?></div>
                                 </a>
                             </li>

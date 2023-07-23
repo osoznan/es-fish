@@ -10,7 +10,6 @@ use App\Models\Product;
 use App\Widgets\FeedbackPanel;
 use App\Widgets\ProductAmountSelector;
 use App\Widgets\StarRating;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

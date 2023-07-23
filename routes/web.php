@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
+use Illuminate\Support\Facades\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,32 +145,27 @@ Route::name('feedback')->prefix('/feedback')->group(function () {
     Route::get('/', [SiteController::class, 'feedback']);
 });
 
-Route::prefix('/admin')->withoutMiddleware('auth')->group(function () {
-    Route::get('/', [AdminController::class, 'index']);
 
-    Route::as('admin/login')->any('login', [AdminController::class, 'login']);
+if (!Request::is('admin/*')) {
+    Route::prefix('/blog/{cat}/')->group(function () {
+        Route::get('/', [BlogController::class, 'category']);
+    });
 
-    Route::as('admin/logout')->any('logout', [AdminController::class, 'logout']);
-});
+    Route::prefix('/blog/{cat}/{article}')->group(function () {
+        Route::get('/', [BlogController::class, 'article']);
+    });
 
-Route::prefix('/blog/{cat}/')->group(function () {
-    Route::get('/', [BlogController::class, 'category']);
-});
+    Route::prefix('/{category}/{subcategory?}')->group(function () {
+        Route::get('/', [CategoryController::class, 'category'])
+            ->name('category');
+    });
 
-Route::prefix('/blog/{cat}/{article}')->group(function () {
-    Route::get('/', [BlogController::class, 'article']);
-});
+    Route::prefix('/{cat}/{subcat}/{product}')->group(function () {
+        Route::get('/', [ProductController::class, 'product']);
+    });
 
-Route::prefix('/{category}/{subcategory?}')->group(function () {
-    Route::get('/', [CategoryController::class, 'category'])
-        ->name('category');
-});
-
-Route::prefix('/{cat}/{subcat}/{product}')->group(function () {
-    Route::get('/', [ProductController::class, 'product']);
-});
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
+    });
+}
 

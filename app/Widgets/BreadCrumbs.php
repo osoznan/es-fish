@@ -14,7 +14,7 @@ class BreadCrumbs extends Widget {
             $items[] = '<a href="' . $item['url'] . '" class="dark-text-anchor">' . $item['title'] . '</a>';
         }
 
-        return $s . join('&nbsp;/&nbsp;', $items) . '</div>';
+        echo $s . join('&nbsp;/&nbsp;', $items) . '</div>';
     }
 
 }

@@ -46,7 +46,7 @@ class Form {
     }
 
     public static function errorLabel($name) {
-        return '<div class="form__error-label bg-danger" data-name="' . $name . '"></div>';
+        return '<div class="form__error-label bg-danger text-white" data-name="' . $name . '"></div>';
     }
 
     public static function attributesFromArray($attrs) {

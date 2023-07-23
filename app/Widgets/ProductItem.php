@@ -26,7 +26,7 @@ class ProductItem extends Widget {
         $product = $this->product;
         ?>
 
-        <div class="product-thumb <?= $this->class ?>">
+        <div class="product-thumb p-3 <?= $this->class ?>">
             <a href="<?= ProductManager::getUrl($product) ?>">
                 <div style="background-image:url(<?= ImageManager::getPhotosUrl($product->image->url) ?>)" class="product-thumb__image div-image-thumb">
 

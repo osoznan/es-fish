@@ -29,29 +29,17 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-        // Specify available languages for routes.
-/*        Route::pattern('locale', \implode('|', ['ru', 'en', 'ua']));
-
-        Route::matched(function (RouteMatched $event) {
-
-            // Get language from route.
-            $locale = $event->route->parameter('locale');
-
-            // Ensure, that all built urls would have "_locale" parameter set from url.
-            url()->defaults(array('locale' => $locale));
-
-            // Change application locale.
-            app()->setLocale($locale);
-        });*/
-
         $this->routes(function () {
+            Route::middleware('auth')
+                ->prefix('admin')
+                ->group(base_path('app/Admin/routes.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
+
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
-
-            Route::middleware('web')
-                //->prefix('{locale}')
-                ->group(base_path('routes/web.php'));
         });
     }
 }

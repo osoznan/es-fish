@@ -52,22 +52,22 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
 
         <div class="row">
             <div class="col-12 col-md-6 col-xl-3 p-4">
-                <img src="/img/wide-choice.svg" class="p-2">
+                <div class="sect-advantages__image" data-src="/img/wide-choice.svg"></div>
                 <div class="fw-bold text-uppercase p-1">@lang('site.index.advantages.big-choice1')</div>
                 <div class="p-2">@lang('site.index.advantages.big-choice-info1')</div>
             </div>
             <div class="col-12 col-md-6 col-xl-3 p-4">
-                <img src="/img/wide-choice.svg" class="p-2">
+                <div class="sect-advantages__image" data-src="/img/quality-guarantee.svg"></div>
                 <div class="fw-bold text-uppercase p-1">@lang('site.index.advantages.big-choice2')</div>
                 <div class="p-2">@lang('site.index.advantages.big-choice-info2')</div>
             </div>
             <div class="col-12 col-md-6 col-xl-3 p-4">
-                <img src="/img/wide-choice.svg" class="p-2">
+                <div class="sect-advantages__image" data-src="/img/regular-deliver.svg"></div>
                 <div class="fw-bold text-uppercase p-1">@lang('site.index.advantages.big-choice3')</div>
                 <div class="p-2">@lang('site.index.advantages.big-choice-info3')</div>
             </div>
             <div class="col-12 col-md-6 col-xl-3 p-4">
-                <img src="/img/wide-choice.svg" class="p-2">
+                <div class="sect-advantages__image" data-src="/img/good-prices.svg"></div>
                 <div class="fw-bold text-uppercase p-1">@lang('site.index.advantages.big-choice4')</div>
                 <div class="p-2">@lang('site.index.advantages.big-choice-info4')</div>
             </div>
@@ -75,7 +75,7 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
     </section>
 
     <div class="sect-products container mb-5 pt-4">
-        <h2>@lang('site.index.fish-&-see-products')</h2>
+        <h2>@lang('site.index.fish-&-sea-products')</h2>
 
         <div class="row mb-4">
             <?php foreach ([329, 330, 331, 332] as $categoryId): ?>
@@ -109,11 +109,11 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
         <h2><?= $categories->get($category['main'])->localeFieldValue('name') ?></h2>
         <div class="row mb-4">
             <?php foreach ($category['list'] as $categoryId): ?>
-                    <?= (new CategoryItem([
-                'category' => $categories->get($categoryId),
-                'parentCategory' => $categories->get($category['main']),
-                'class' => 'col-lg-' . (12 / count($category['list']))
-            ]))->run() ?>
+                <?= CategoryItem::widget([
+                    'category' => $categories->get($categoryId),
+                    'parentCategory' => $categories->get($category['main']),
+                    'class' => 'col-lg-' . (12 / count($category['list']))
+            ])  ?>
                 <?php endforeach; ?>
         </div>
         <?php endforeach; ?>
@@ -171,7 +171,6 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
                     </div>
                 </div>
             <?php endforeach; ?>
-            </div>
         </div>
     </section>
 

@@ -8,11 +8,12 @@ use App\Models\BlogArticle;
 use App\Models\Category;
 use App\Components\Translation as t;
 use App\Models\Product;
+use Illuminate\Support\Facades\Route;
 
 class BlogController extends TopController {
 
-    public function category(...$a) {
-        $categoryAlias = $a[1];
+    public function category() {
+        $categoryAlias = Route::current()->parameter('cat');
 
         $PER_PAGE = 4;
 
@@ -42,12 +43,12 @@ class BlogController extends TopController {
         ]);
     }
 
-    public function article(...$a) {
-        $categoryAlias = $a[1];
-        $articleAlias = $a[2];
+    public function article() {
+        $categoryAlias = Route::current()->parameter('cat');
+        $articleAlias = Route::current()->parameter('article');
 
         if (!in_array($categoryAlias, BlogManager::CATEGORY_ALIASES[t::getLocale()])) {
-            throw \Exception('wrong blog category:' . $categoryAlias);
+            throw new \Exception('wrong blog category:' . $categoryAlias);
         }
 
         $article = BlogArticle::searchActive()

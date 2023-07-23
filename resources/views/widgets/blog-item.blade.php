@@ -9,7 +9,7 @@ use App\Components\Translation as t;
 
 <div class="blog-thumb col-6 col-lg-4 p-3 bordered-child-cells">
     <div>
-        <a href="{{ $url }}?>">
+        <a href="{{ $url }}">
             <div data-src="/img/photos/<?= $article->image->url ?>" class="blog-thumb__image">
 
             </div>

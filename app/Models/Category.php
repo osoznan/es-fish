@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Components\Translit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 /**
  * Class Category
@@ -63,37 +65,24 @@ class Category extends GeneralModel {
 
     public $timestamps = false;
 
-    public static function search() {
-        return Category::select([
-                'product_category.id as id',
-                'product_category.name as name', 'name_en', 'name_ua',
-                'product_category.description as description',
-                'description_en as description_en',
-                'description_ua as description_ua',
-                'parent_category_id',
-                'image_id',
-                'hidden',
-                'alias', 'alias_en', 'alias_ua',
-                'image.url as image_url',
-                'url',
-                'main_page_present'
-            ])->leftJoin('image', 'image_id', '=', 'image.id');
-    }
-
-    public static function searchTopMost() {
-        return static::search()
+    public static function searchTopMost(): Builder {
+        return static::searchActive()
             ->where('parent_category_id', null);
     }
 
-    public function products() {
+    public function getDescriptionShortAttribute() {
+        return Str::of($this->description)->limit(150);
+    }
+
+    public function products(): HasMany {
         return $this->hasMany(Product::class, 'category_id');
     }
 
-    public function parent() {
+    public function parent(): BelongsTo {
         return $this->belongsTo(static::class, 'parent_category_id');
     }
 
-    public function image() {
+    public function image(): HasOne {
         return $this->hasOne(Image::class, 'id', 'image_id');
     }
 

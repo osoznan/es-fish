@@ -14,7 +14,7 @@ class CategoryManager {
         if (!Cache::has(static::CACHE_KEY)) {
             Cache::put(
                 static::CACHE_KEY,
-                Category::search()
+                Category::searchActive()->with('image')
                     ->get()->keyBy('id'),
                 120
             );
@@ -31,6 +31,8 @@ class CategoryManager {
         if (isset($all[$id])) {
             return $all[$id];
         }
+
+        return null;
     }
 
     /**
@@ -44,19 +46,16 @@ class CategoryManager {
         return (t::getLocale() != 'ru' ? ('/' . t::getLocale()) : null) . ($categoryAlias  ? ('/' . $categoryAlias) : '') . ($subCategoryAlias ? ('/' .$subCategoryAlias) : '');
     }
 
-    public static function getCategoryInfo(string $catAlias, string $subCatAlias): array {
-
-        $category = Category::search()
-            ->where([t::getLocaleFieldName('alias') => $catAlias, 'hidden' => 0])
+    public static function getCategoryInfo(string $catAlias, ?string $subCatAlias): array {
+        $category = Category::searchActive()
+            ->where(t::getLocaleFieldName('alias'), $catAlias)
             ->first();
 
         if ($subCatAlias) {
-            $subCategory = Category::search()
-                ->where([
-                    t::getLocaleFieldName('alias') => $subCatAlias,
-                    'parent_category_id' => $category->id,
-                    'hidden' => 0
-                ])->first();
+            $subCategory = Category::searchActive()->where([
+                t::getLocaleFieldName('alias') => $subCatAlias,
+                'parent_category_id' => $category->id
+            ])->first();
         }
 
         return [$category, $subCategory ?? null];

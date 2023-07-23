@@ -3,20 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Components\CategoryManager;
-use App\Models\Category;
-use App\Components\Translation as t;
-use App\Models\Product;
+use Illuminate\Support\Facades\Route;
 
 class CategoryController extends TopController {
 
-    public function category(...$a) {
-        $categoryAlias = $a[1];
-        $subCategoryAlias = $a[2] ?? null;
+    public function category() {
+        $categoryAlias = Route::current()->parameter('category');
+        $subCategoryAlias = Route::current()->parameter('subcategory');
 
         $catInfo = CategoryManager::getCategoryInfo($categoryAlias, $subCategoryAlias);
 
         return view('category.index', [
-            'category' => $catInfo[0] ?? null,
+            'category' => $catInfo[0],
             'subCategory' => $catInfo[1]
         ]);
     }

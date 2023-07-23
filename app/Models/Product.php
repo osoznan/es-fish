@@ -8,6 +8,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use App\Components\Translation as t;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class Product extends GeneralModel {
 
@@ -84,6 +85,10 @@ class Product extends GeneralModel {
 
     public function getLocaleName() {
         return t::getLocaleField($this, 'name');
+    }
+
+    public function getDescriptionShortAttribute() {
+        return Str::of($this->description)->limit(150);
     }
 
     public function category() {

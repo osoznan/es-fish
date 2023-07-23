@@ -14,11 +14,13 @@ class BlogManager {
     ];
 
     public static function getUrl(BlogArticle $article) {
-        return '/' . Translation::getLocale() . '/blog/' . static::getCategoryAlias($article->category_id) . '/' . $article->getLocaleAlias();
+        $locale = Translation::getLocale();
+        return ($locale != 'ru' ? ('/' . $locale) : '') . '/blog/' . static::getCategoryAlias($article->category_id) . '/' . $article->getLocaleAlias();
     }
 
     public static function getCategoryUrl($id) {
-        return '/' . Translation::getLocale() . '/blog/' . static::getCategoryAlias($id);
+        $locale = Translation::getLocale();
+        return ($locale != 'ru' ? ('/' . $locale) : '') . '/blog/' . static::getCategoryAlias($id);
     }
 
     public static function getCategoryAlias($id, $lang = null) {
@@ -33,5 +35,7 @@ class BlogManager {
         foreach (static::CATEGORY_ALIASES as $aliases) {
             return array_search($alias, $aliases);
         }
+
+        return null;
     }
 }

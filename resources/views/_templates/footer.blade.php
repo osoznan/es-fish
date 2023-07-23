@@ -5,12 +5,13 @@ use App\Components\Translation as t;
 use App\Components\CategoryManager;
 use App\Widgets\ContactForm;
 use App\Components\ViewInserter;
+use App\Components\BasketManager;
 
 ?>
 
 <div class="container-fluid">
     <div class="container">
-        <div class="footer row flex-column-reverse flex-lg-row text-center text-lg-left">
+        <div class="footer row flex-column-reverse flex-lg-row text-left text-lg-left">
             <div class="col-sm-12 col-lg">
                 @include('_templates/widgets/logo')
 
@@ -31,27 +32,27 @@ use App\Components\ViewInserter;
             <div class="col-sm-12 col-lg pb-3">
                 <div class="footer__item-list-header d-none d-lg-block">@lang('site.menu.fish-way')</div>
                 <div class="footer__item-list d-flex flex-column">
-                    <a href="<?= route('delivery-payment') ?>">@lang('site.menu.delivery+pay')</a>
-                    <a href="<?= route('guarantees') ?>">@lang('site.menu.guarantees')</a>
-                    <a href="<?= route('delivery-payment') ?>">@lang('site.menu.return')</a>
-                    <a href="<?= route('faq') ?>">@lang('site.menu.faq')</a>
-                    <a href="<?= route('delivery-payment') ?>">@lang('site.menu.price')</a>
+                    <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.delivery+pay')</a>
+                    <a href="<?= fishLink('guarantees') ?>">@lang('site.menu.guarantees')</a>
+                    <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.return')</a>
+                    <a href="<?= fishLink('faq') ?>">@lang('site.menu.faq')</a>
+                    <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.price')</a>
                 </div>
             </div>
             <div class="col-sm-12 col-lg pb-3">
                 <div class="footer__item-list-header d-none d-lg-block">@lang('site.menu.about-company')</div>
                 <div class="footer__item-list d-flex flex-column">
-                    <a href="<?= route('about') ?>">@lang('site.menu.about')</a>
-                    <a href="<?= route('contacts') ?>">@lang('site.menu.contacts')</a>
-                    <a href="<?= route('feedback') ?>">@lang('site.menu.feedback')</a>
+                    <a href="<?= fishLink('about') ?>">@lang('site.menu.about')</a>
+                    <a href="<?= fishLink('contacts') ?>">@lang('site.menu.contacts')</a>
+                    <a href="<?= fishLink('feedback') ?>">@lang('site.menu.feedback')</a>
                 </div>
             </div>
             <div class="col-sm-12 col-lg pb-3">
                 @include('_templates/widgets/phone')
                 <a href="mailto:<?= config('user.email') ?>"><?= config('user.email') ?></a>
                 <div class="mt-3">
-                    <a href=""><img src="/img/telegram.svg" alt="telegram"></a>
-                    <a href=""><img src="/img/viber.svg" alt="viber"></a>
+                    <a href="{{ config('user.viber') }}"><img src="/img/telegram.svg" alt="telegram"></a>
+                    <a href="{{ config('user.instagram') }}"><img src="/img/viber.svg" alt="viber"></a>
                 </div>
             </div>
         </div>
@@ -59,8 +60,8 @@ use App\Components\ViewInserter;
 </div>
 
 @if (defined('INITIAL_TOTAL_COST'))
-    <div class="float-cart">
-        <a class="d-flex" href="<?= route('cart', ['locale' => t::getLocale()]) ?>">
+    <div class="float-cart {{ BasketManager::isBasketEmpty() ? 'd-none' : '' }}">
+        <a class="d-flex" href="<?= fishLink('cart') ?>">
             <div><img src="/img/shopping-bag.svg" class="m-2" alt=basket></div>
             <div>
                 <div><span class="float-cart__price"><?= INITIAL_TOTAL_COST ?></span> @lang('site.abbr.hrivnas')</div>
@@ -86,7 +87,7 @@ use App\Components\ViewInserter;
 
 <!-- Button trigger modal -->
 <button class="contact-form__float-invoker btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Заявка
+    @lang('site.contact-form.contact-us')
 </button>
 
 

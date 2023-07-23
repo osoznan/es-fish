@@ -19,6 +19,7 @@ class Translation {
 
     public static function setLocale($locale) {
         App::setLocale($locale);
+        $_SESSION['last-locale'] = $locale;
         self::$locale = App::getLocale();
     }
 
@@ -103,7 +104,7 @@ class Translation {
         $translations = explode('|', $str);
         $langIdx = ['ru' => 0, 'ua' => 1, 'en' => 2];
 
-        return $translations[$langIdx[static::getLocale()]];
+        return $translations[$langIdx[static::getLocale()]] ?? $translations['ru'];
     }
 
 }

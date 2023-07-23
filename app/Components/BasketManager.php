@@ -67,6 +67,7 @@ class BasketManager {
         $idValues = $idValues ?? BasketManager::getAll();
 
         return Product::searchActive()
+            ->with('image')
             ->whereIn('product.id', $idValues)
             ->get();
     }

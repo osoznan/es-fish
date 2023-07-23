@@ -2,6 +2,12 @@
 
 use App\Http\Controllers\Admin\AdminController;
 
+Route::withoutMiddleware('auth')
+    ->as('admin/login')->any('login', [AdminController::class, 'login']);
+
+Route::withoutMiddleware('auth')
+    ->as('admin/logout')->any('logout', [AdminController::class, 'logout']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('', ['as' => 'admin.dashboard', function () {
         $content = 'Define your dashboard here.';

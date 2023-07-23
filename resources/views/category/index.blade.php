@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Widgets\CategoryInfo;
 use App\Components\Translation as t;
 use App\Components\CategoryManager;
 use App\Models\Product;
@@ -20,6 +21,8 @@ use App\Widgets\Pager;
     <link rel="stylesheet" href="/css/site/category/index.css">
 @endsection
 
+@section('body-class', 'body-class-category')
+
 @section('top')
 
     @include('_templates/top')
@@ -33,8 +36,8 @@ use App\Widgets\Pager;
             <div class="container">
                 <div class="sect-category-pane__menu flex-wrap flex-md-nowrap">
                     <?php
-                    $categories = Category::search()
-                        ->where(['parent_category_id' => $category->id, 'hidden' => 0])
+                    $categories = Category::searchActive()
+                        ->where('parent_category_id', $category->id)
                         ->get();
                     ?>
 
@@ -86,13 +89,15 @@ use App\Widgets\Pager;
             ?>
         </div>
 
-        <?= Pager::widget([
+        {{ Pager::widget([
             'totalCount' => $productCount,
             'perPage' => PER_PAGE,
             'curPage' => $curPage
-        ]) ?>
+        ]) }}
     </section>
 
-    @include('_templates/seo-text')
+    {!! CategoryInfo::widget([
+        'category' => $category
+    ]) !!}
 
 @endsection
