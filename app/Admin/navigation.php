@@ -21,6 +21,8 @@ use SleepingOwl\Admin\Navigation\Page;
 //
 // AdminSection::addMenuPage(\App\User::class)
 
+AdminNavigation::setFromArray([]);
+
 return [
     [
         'title' => 'Dashboard',

@@ -7,6 +7,9 @@ use App\Components\BlogManager;
 use App\Models\BlogArticle;
 use App\Widgets\BlogItem;
 use Illuminate\Support\Collection;
+use App\Models\ModuleData;
+use App\Components\ImageManager;
+use App\Models\Image;
 
 /** @var $categories Collection */
 
@@ -173,6 +176,12 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
             <?php endforeach; ?>
         </div>
     </section>
+
+    <?php
+    $seo = ModuleData::where('name', 'seo-mainpage-module')->first();
+    $image = Image::find($seo->image);
+    $seoImage = ImageManager::getPhotosUrl($image->url)
+    ?>
 
     @include('_templates/seo-text')
 

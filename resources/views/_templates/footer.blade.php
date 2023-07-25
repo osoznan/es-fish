@@ -34,7 +34,7 @@ use App\Components\BasketManager;
                 <div class="footer__item-list d-flex flex-column">
                     <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.delivery+pay')</a>
                     <a href="<?= fishLink('guarantees') ?>">@lang('site.menu.guarantees')</a>
-                    <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.return')</a>
+                    <a href="<?= fishLink('product-return') ?>">@lang('site.menu.return')</a>
                     <a href="<?= fishLink('faq') ?>">@lang('site.menu.faq')</a>
                     <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.price')</a>
                 </div>

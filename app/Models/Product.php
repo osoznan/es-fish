@@ -69,20 +69,6 @@ class Product extends GeneralModel {
         });
     }
 
-    public static function withCategory(Builder $query) {
-        return $query
-            ->leftJoin('product_category', 'product_category.id', '=', 'product.category_id');
-    }
-
-    public static function withProductImages($query) {
-        return $query
-            ->addSelect(DB::raw('GROUP_CONCAT(img.id) as image_ids, GROUP_CONCAT(img.url) as image_urls'))
-            // left join product_image p_i on p_i.product_id = product.id
-            // left join image i on p_i.image_id = i.id
-            ->leftJoin('product_image', 'product_id', '=', 'product.id')
-            ->leftJoin(DB::raw('image img'), 'img.id', '=', 'product_image.image_id');
-    }
-
     public function getLocaleName() {
         return t::getLocaleField($this, 'name');
     }

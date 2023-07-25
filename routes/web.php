@@ -35,35 +35,35 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'en|ua']], functio
         Route::get('/', [SiteController::class, 'index']);
     });
 
-    Route::name('cart')->prefix('/cart')->group(function () {
+    Route::prefix('/cart')->group(function () {
         Route::get('/', [SiteController::class, 'cart']);
     });
 
-    Route::name('contacts')->prefix('/contacts')->group(function () {
+    Route::prefix('/contacts')->group(function () {
         Route::get('/', [SiteController::class, 'contacts']);
     });
 
-    Route::name('cooperation')->prefix('/cooperation')->group(function () {
-        Route::get('/', [SiteController::class, 'cooperation']);
-    });
-
-    Route::name('delivery-payment')->prefix('/delivery-payment')->group(function () {
+    Route::prefix('/delivery-payment')->group(function () {
         Route::get('/', [SiteController::class, 'delivery']);
     });
 
-    Route::name('guarantees')->prefix('/guarantees')->group(function () {
+    Route::prefix('/guarantees')->group(function () {
         Route::get('/', [SiteController::class, 'guarantees']);
     });
 
-    Route::name('faq')->prefix('/faq')->group(function () {
+    Route::prefix('/faq')->group(function () {
         Route::get('/', [SiteController::class, 'faq']);
     });
 
-    Route::name('about')->prefix('/about')->group(function () {
+    Route::prefix('/cooperation')->group(function () {
+        Route::get('/', [SiteController::class, 'cooperation']);
+    });
+
+    Route::prefix('about')->group(function () {
         Route::get('/', [SiteController::class, 'about']);
     });
 
-    Route::name('feedback')->prefix('/feedback')->group(function () {
+    Route::prefix('/feedback')->group(function () {
         Route::get('/', [SiteController::class, 'feedback']);
     });
 
@@ -89,14 +89,6 @@ Route::prefix('/')->group(function () {
     Route::get('/', [SiteController::class, 'index']);
 });
 
-Route::group(['namespace' => 'Modules\Admin\Http\Controllers', 'as' => 'admin'], function() {
-    Route::get('/admin', ['AdminController@index']);
-});
-
-Route::prefix('/admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index']);
-});
-
 Route::prefix('/ajax')->group(function () {
     Route::post('/', [SiteController::class, 'actionAjax']);
 });
@@ -113,38 +105,21 @@ Route::prefix('/')->group(function () {
     Route::get('/', [SiteController::class, 'index']);
 });
 
-Route::name('cart')->prefix('/cart')->group(function () {
+Route::prefix('/cart')->group(function () {
     Route::get('/', [SiteController::class, 'cart']);
 });
 
-Route::name('contacts')->prefix('/contacts')->group(function () {
+Route::prefix('/contacts')->group(function () {
     Route::get('/', [SiteController::class, 'contacts']);
 });
 
-Route::name('cooperation')->prefix('/cooperation')->group(function () {
-    Route::get('/', [SiteController::class, 'cooperation']);
+Route::group(['prefix' => '{page}', 'where' => ['page' => 'guarantees|cooperation|faq|delivery-payment|about']], function () {
+    Route::get('', [SiteController::class, 'page']);
 });
 
-Route::name('delivery-payment')->prefix('/delivery-payment')->group(function () {
-    Route::get('/', [SiteController::class, 'delivery']);
-});
-
-Route::name('guarantees')->prefix('/guarantees')->group(function () {
-    Route::get('/', [SiteController::class, 'guarantees']);
-});
-
-Route::name('faq')->prefix('/faq')->group(function () {
-    Route::get('/', [SiteController::class, 'faq']);
-});
-
-Route::name('about')->prefix('/about')->group(function () {
-    Route::get('/', [SiteController::class, 'about']);
-});
-
-Route::name('feedback')->prefix('/feedback')->group(function () {
+Route::prefix('/feedback')->group(function () {
     Route::get('/', [SiteController::class, 'feedback']);
 });
-
 
 if (!Request::is('admin/*')) {
     Route::prefix('/blog/{cat}/')->group(function () {
@@ -156,16 +131,15 @@ if (!Request::is('admin/*')) {
     });
 
     Route::prefix('/{category}/{subcategory?}')->group(function () {
-        Route::get('/', [CategoryController::class, 'category'])
-            ->name('category');
+        Route::get('/', [CategoryController::class, 'category']);
     });
 
     Route::prefix('/{cat}/{subcat}/{product}')->group(function () {
         Route::get('/', [ProductController::class, 'product']);
     });
 
-    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/*    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         return $request->user();
-    });
+    });*/
 }
 

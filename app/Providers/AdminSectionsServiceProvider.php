@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Admin\Sections\SeoContentSection;
 use App\Models\BlogArticle;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\DeliveryType;
 use App\Models\Image;
 use App\Models\MainGallery;
+use App\Models\ModuleData;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\PaymentType;
@@ -31,6 +33,7 @@ class AdminSectionsServiceProvider extends ServiceProvider
         OrderStatus::class => 'App\Admin\Sections\OrderStatusSection',
         PaymentType::class => 'App\Admin\Sections\PaymentTypeSection',
         MainGallery::class => 'App\Admin\Sections\MainGallerySection',
+        ModuleData::class => 'App\Admin\Sections\SeoContentSection'
     ];
 
     /**

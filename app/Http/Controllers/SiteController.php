@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\ModuleData;
 use App\Widgets\BigCart;
 use App\Widgets\ContactForm;
 use App\Widgets\ProductItem;
@@ -29,8 +30,21 @@ class SiteController extends TopController {
         return view('index.cart');
     }
 
+    public function page($page) {
+        $model = ModuleData::where('name', $page)->first();
+        if (!$model) {
+            abort(404);
+        }
+        return view('simple-article-page', [
+            'model' => $model
+        ]);
+    }
+
     public function cooperation() {
-        return view('index.cooperation');
+        $model = ModuleData::where('name', 'cooperation')->first();
+        return view('simple-article-page', [
+            'model' => $model
+        ]);
     }
 
     public function contacts() {
@@ -38,19 +52,31 @@ class SiteController extends TopController {
     }
 
     public function delivery() {
-        return view('index.delivery-payment');
+        $model = ModuleData::where('name', 'delivery-payment')->first();
+        return view('simple-article-page', [
+            'model' => $model
+        ]);
     }
 
     public function guarantees() {
-        return view('index.guarantees');
+        $model = ModuleData::where('name', 'guarantees')->first();
+        return view('simple-article-page', [
+            'model' => $model
+        ]);
     }
 
     public function faq() {
-        return view('index.faq');
+        $model = ModuleData::where('name', 'faq')->first();
+        return view('simple-article-page', [
+            'model' => $model
+        ]);
     }
 
     public function about() {
-        return view('index.about');
+        $model = ModuleData::where('name', 'about')->first();
+        return view('simple-article-page', [
+            'model' => $model
+        ]);
     }
 
     public function feedback() {

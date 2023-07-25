@@ -37,11 +37,11 @@ $title = $article->locale("title");
         </div>
 
         <div class="blog__thumb">
-            <div class="d-flex justify-content-center">
-                <div class="blog__thumb__image p-2" data-src="{{ ImageManager::getPhotosUrl($article->image->url) }}" alt="картинка статьи"></div>
+            <div class="d-flex justify-content-center mb-4">
+                <div class="blog__thumb__image" data-src="{{ ImageManager::getPhotosUrl($article->image->url) }}" alt="картинка статьи"></div>
             </div>
             <div class="blog__thumb__text">
-                <div class="blog-thumb__description mb-3">{{ $article->locale('text') }}</div>
+                <div class="blog-thumb__description mb-3">{!! $article->locale('text') !!}</div>
             </div>
         </div>
         <div class="pb-5">&nbsp;</div>

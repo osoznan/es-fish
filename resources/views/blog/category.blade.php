@@ -4,6 +4,7 @@ use App\Components\BlogManager;
 use App\Components\ImageManager;
 use App\Widgets\BreadCrumbs;
 use App\Widgets\Pager;
+use Illuminate\Support\Str;
 
 /**
  * @var $categoryId int
@@ -55,13 +56,15 @@ $title = BlogManager::getCategoryAlias($categoryId);
                             <a href="<?= BlogManager::getUrl($article) ?>">{{ $article->locale('title') }}</a>
                         </h2>
 
-                        <div class="blog-category-thumb__description mb-3">{{ $article->locale('text') }}</div>
+                        <div class="blog-category-thumb__description mb-3">
+                            {!! Str::of($article->locale('text'))->limit(200) !!}
+                        </div>
 
                        <a class="button-orange mb-3" href="{{ $href }}">Подробнее</a>
                     </div>
                 </div>
             </div>
-            <? endforeach; ?>
+            <?php endforeach; ?>
 
             <?php if (!count($articles)): ?>
                 <h2>Отсутствуют статьи в данной категории</h2>

@@ -16,7 +16,7 @@ use App\Components\Translation as t;
         </a>
     </div>
     <div class="blog-thumb__date">
-        {{ $article->created_at }}
+        {{ $article->created_at->toDateString() }}
     </div>
     <a href="{{ $url }}" class="blog-thumb__title">
         <?= t::getLocaleField($article, 'title') ?>

@@ -53,9 +53,9 @@ $menuProducts = Product::searchActive()
 
                 <div class="fw-bold main-menu__item">@lang('site.blog.materials')</div>
                 <ul class="">
-                    <a href="<?= BlogManager::getCategoryUrl(1) ?>" class="navigation-link main-menu__item"><?= BlogManager::getCategoryAlias(1, t::getLocale()) ?></a>
-                    <a href="<?= BlogManager::getCategoryUrl(2) ?>" class="navigation-link main-menu__item"><?= BlogManager::getCategoryAlias(2, t::getLocale()) ?></a>
-                    <a href="<?= BlogManager::getCategoryUrl(3) ?>" class="navigation-link main-menu__item"><?= BlogManager::getCategoryAlias(3, t::getLocale()) ?></a>
+                    <a href="<?= BlogManager::getCategoryUrl(1) ?>" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(1))</a>
+                    <a href="<?= BlogManager::getCategoryUrl(2) ?>" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(2))</a>
+                    <a href="<?= BlogManager::getCategoryUrl(3) ?>" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(3))</a>
                 </ul>
 
                 <a href="<?= fishLink('/contacts') ?>" class="navigation-link main-menu__item fw-bold">@lang('site.menu.contacts')</a>

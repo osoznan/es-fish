@@ -3,12 +3,13 @@
 namespace App\Components;
 
 use App\Models\BlogArticle;
+use App\Components\Translation as t;
 
 class BlogManager {
 
     const CATEGORY_ALIASES = [
         'ru' => [1 => 'Новости', 2 => 'Рецепты', 3 => 'Статьи'],
-        'ua' => [1 => 'novyny', 2 => 'recepty', 3 => 'statji'],
+        'ua' => [1 => 'Новини', 2 => 'Рецепти', 3 => 'Статті'],
         'en' => [1 => 'news', 2 => 'recipes', 3 => 'articles']
 
     ];
@@ -25,17 +26,13 @@ class BlogManager {
 
     public static function getCategoryAlias($id, $lang = null) {
         if (is_int((int)$id)) {
-            return static::CATEGORY_ALIASES[$lang ?? Translation::getLocale()][$id];
+            return static::CATEGORY_ALIASES['en'][$id];
         }
 
         throw new \Exception('wrong blog category id: ' . $id);
     }
 
     public static function getCategoryIdByAlias($alias) {
-        foreach (static::CATEGORY_ALIASES as $aliases) {
-            return array_search($alias, $aliases);
-        }
-
-        return null;
+        return array_search($alias, static::CATEGORY_ALIASES['en']);
     }
 }

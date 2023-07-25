@@ -127,7 +127,7 @@ class BlogArticleSection extends Section implements Initializable
                 AdminFormElement::checkbox('hidden', 'Hidden'),
                 AdminFormElement::datetime('created_at', 'Created At')->setReadonly(true),
             ], 'col-xs-12 col-sm-4')->addColumn([
-                AdminFormElement::textarea('text', 'Text'),
+                AdminFormElement::wysiwyg('text', 'Text'),
             ], 'col-xs-12 col-sm-8'),
 
             AdminFormElement::html('<hr>'),
@@ -135,7 +135,7 @@ class BlogArticleSection extends Section implements Initializable
             AdminFormElement::columns()->addColumn([
                 AdminFormElement::text('title_en', 'Title EN'),
             ], 'col-xs-12 col-sm-4')->addColumn([
-                AdminFormElement::textarea('text_en', 'Text EN'),
+                AdminFormElement::wysiwyg('text_en', 'Text EN'),
             ], 'col-xs-12 col-sm-8'),
 
             AdminFormElement::html('<hr>'),
@@ -145,7 +145,7 @@ class BlogArticleSection extends Section implements Initializable
                     ->required()
                 ,
             ], 'col-xs-12 col-sm-4')->addColumn([
-                AdminFormElement::textarea('text_ua', 'Text UA')
+                AdminFormElement::wysiwyg('text_ua', 'Text UA')
                     ->required()
                 ,
             ], 'col-xs-12 col-sm-8')
