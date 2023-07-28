@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 ?>
 
-<div class="category-thumb <?= isset($class) ? $class : 'col-6 col-lg-3' ?> bordered-child-cells">
+<div class="category-thumb <?= isset($class) ? $class : 'col-sm-12 col-md-6 col-lg-4 col-xl-3' ?> bordered-child-cells">
     <a href="<?= route('category', [
         'category' => $parentCategory->getLocaleAlias(),
         'subcategory' => $category->getLocaleAlias(),

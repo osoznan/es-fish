@@ -41,8 +41,8 @@ use App\Widgets\BreadCrumbs;
     <section class="sect-product container">
         <div>
             <?= BreadCrumbs::widget(['items' => [
-                ['url' => CategoryManager::getUrl($category->id), 'title' => t::getLocaleField($category, 'name')],
-                ['url' => CategoryManager::getUrl($subCategory->id), 'title' => t::getLocaleField($subCategory, 'name')],
+                ['url' => CategoryManager::getUrl($category), 'title' => t::getLocaleField($category, 'name')],
+                ['url' => CategoryManager::getUrl($subCategory), 'title' => t::getLocaleField($subCategory, 'name')],
                 ['url' => ProductManager::getUrl($product), 'title' => $product->locale('name')]
             ]]) ?>
         </div>
@@ -122,7 +122,7 @@ use App\Widgets\BreadCrumbs;
         <div class="row pt-4 mb-5">
             <?php
             foreach ($recommendedProducts as $product):
-                echo ProductItem::widget(['product' => $product, 'class' => 'col-4']);
+                echo ProductItem::widget(['product' => $product, 'class' => 'col-sm-6 col-lg-3']);
             endforeach;
             ?>
         </div>

@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Request;
 |
 */
 
+Route::middleware('auth')
+    ->get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
 if (!session_id()) {
     try {
         session_start();
@@ -35,23 +38,23 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'en|ua']], functio
         Route::get('/', [SiteController::class, 'index']);
     });
 
-    Route::prefix('/cart')->group(function () {
+    Route::name('cart')->prefix('/cart')->group(function () {
         Route::get('/', [SiteController::class, 'cart']);
     });
 
-    Route::prefix('/contacts')->group(function () {
+    Route::name('contacts')->prefix('/contacts')->group(function () {
         Route::get('/', [SiteController::class, 'contacts']);
     });
 
-    Route::prefix('/delivery-payment')->group(function () {
+    Route::name('delivery-payment')->prefix('/delivery-payment')->group(function () {
         Route::get('/', [SiteController::class, 'delivery']);
     });
 
-    Route::prefix('/guarantees')->group(function () {
+    Route::name('guarantees')->prefix('/guarantees')->group(function () {
         Route::get('/', [SiteController::class, 'guarantees']);
     });
 
-    Route::prefix('/faq')->group(function () {
+    Route::name('faq')->prefix('/faq')->group(function () {
         Route::get('/', [SiteController::class, 'faq']);
     });
 
@@ -63,7 +66,7 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'en|ua']], functio
         Route::get('/', [SiteController::class, 'about']);
     });
 
-    Route::prefix('/feedback')->group(function () {
+    Route::name('feedback')->prefix('/feedback')->group(function () {
         Route::get('/', [SiteController::class, 'feedback']);
     });
 
@@ -105,11 +108,11 @@ Route::prefix('/')->group(function () {
     Route::get('/', [SiteController::class, 'index']);
 });
 
-Route::prefix('/cart')->group(function () {
+Route::name('cart')->prefix('/cart')->group(function () {
     Route::get('/', [SiteController::class, 'cart']);
 });
 
-Route::prefix('/contacts')->group(function () {
+Route::name('contacts')->prefix('/contacts')->group(function () {
     Route::get('/', [SiteController::class, 'contacts']);
 });
 
@@ -117,7 +120,7 @@ Route::group(['prefix' => '{page}', 'where' => ['page' => 'guarantees|cooperatio
     Route::get('', [SiteController::class, 'page']);
 });
 
-Route::prefix('/feedback')->group(function () {
+Route::name('feedback')->prefix('/feedback')->group(function () {
     Route::get('/', [SiteController::class, 'feedback']);
 });
 
@@ -131,7 +134,8 @@ if (!Request::is('admin/*')) {
     });
 
     Route::prefix('/{category}/{subcategory?}')->group(function () {
-        Route::get('/', [CategoryController::class, 'category']);
+        Route::get('/', [CategoryController::class, 'category'])
+            ->name('category');
     });
 
     Route::prefix('/{cat}/{subcat}/{product}')->group(function () {

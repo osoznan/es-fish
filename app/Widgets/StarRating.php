@@ -2,10 +2,7 @@
 
 namespace App\Widgets;
 
-use App\Components\ViewInserter;
 use App\Components\Widget;
-use App\Models\Product;
-use Illuminate\Http\Request;
 
 class StarRating extends Widget {
 
@@ -15,7 +12,7 @@ class StarRating extends Widget {
     public $amount;
     public $total = 5;
 
-    public static function getAjaxHandlers() {
+    public static function getAjaxHandlers(): array {
         return ['ajaxAddStarRating'];
     }
 

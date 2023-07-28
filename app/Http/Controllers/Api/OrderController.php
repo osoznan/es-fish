@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Facades\BasketManager;
-use App\Components\helpers\Telegram;
+use App\Facades\Telegram;
 use App\Facades\OrderManager;
 use App\Http\Requests\OrderChangeStatusRequest;
 use App\Http\Requests\OrderCreateRequest;
@@ -26,7 +26,7 @@ class OrderController extends Controller {
         $result = OrderManager::addOrder($request->post(), $ids);
 
         if (isset($result['error'])) {
-            Telegram::send('Ошибка при заказе' . json_encode($request));
+            Telegram::sendToManager('Ошибка при заказе' . json_encode($request));
             return $this->error('Ошибка при заказе');
         }
 

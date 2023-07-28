@@ -60,26 +60,21 @@ class OrderSection extends Section implements Initializable
             AdminColumn::link('name', 'Name', 'created_at')
                 ->setSearchCallback(function($column, $query, $search){
                     return $query
-                        ->orWhere('name', 'like', '%'.$search.'%')
-                    ;
-                })
-                ->setOrderable(function($query, $direction) {
-                    $query->orderBy('created_at', $direction);
+                        ->orWhere('name', 'like', '%'.$search.'%');
                 })
             ,
             AdminColumn::text('total', 'Total'),
             AdminColumn::text('created_at', 'Created')
                 ->setWidth('160px')
                 ->setOrderable(function($query, $direction) {
-                    $query->orderBy('updated_at', $direction);
+                    $query->orderBy('created_at', $direction);
                 })
-                ->setSearchable(false)
             ,
         ];
 
         $display = AdminDisplay::datatables()
             ->setName('firstdatatables')
-            ->setOrder([[0, 'asc']])
+            ->setOrder([['created_at']])
             ->setDisplaySearch(true)
             ->paginate(25)
             ->setColumns($columns)
@@ -134,14 +129,6 @@ class OrderSection extends Section implements Initializable
         ]);
 
         return $form;
-    }
-
-    /**
-     * @return FormInterface
-     */
-    public function onCreate($payload = [])
-    {
-        return $this->onEdit(null, $payload);
     }
 
     /**

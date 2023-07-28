@@ -27,24 +27,38 @@ use App\Widgets\Pager;
 
     @include('_templates/top')
 
+    <?php
+    $categories = Category::searchActive()
+        ->with('image')->with('parent')
+        ->where('parent_category_id', $category->id)
+        ->get();
+    ?>
+
     <div class="sect-category-pane">
         @include('_templates/top-menu')
 
         <div class="sect-category-pane__title"><?= t::getLocaleField($category, 'name') ?></div>
 
         <div class="container-fluid">
-            <div class="container">
-                <div class="sect-category-pane__menu flex-wrap flex-md-nowrap">
-                    <?php
-                    $categories = Category::searchActive()
-                        ->where('parent_category_id', $category->id)
-                        ->get();
-                    ?>
 
-                    <a href="<?= CategoryManager::getUrl($category->id) ?>" class="{{ !$subCategory ? 'sect-category-pane__menu_active' : '' }}">@lang('site.category.all')</a>
+            <div class="container">
+<!--                <div class="sect-category-pane__accordion flex-column" data-bs-toggle="collapse" type="button" data-bs-target="#sect-category-pane__id">
+                    <div>Выбрать категорию</div>
+                    <div type="button" id="sect-category-pane__id" class="collapse pt-1">
+                        <?php foreach ($categories as $cat): ?>
+                        <a class="d-block" onclick="location.href='{{ CategoryManager::getUrl($cat) }}'"
+                                class="{{ $subCategory && $subCategory->id == $cat->id ? 'sect-category-pane__menu_active' : '' }}">
+                            <?= t::getLocaleField($cat, 'name') ?>
+                        </a>
+                        <?php endforeach; ?>
+                    </div>
+
+                </div>-->
+                <div class="sect-category-pane__menu flex-wrap flex-column flex-md-row d-lg-flex">
+                    <a href="<?= CategoryManager::getUrl($category) ?>" class="{{ !$subCategory ? 'sect-category-pane__menu_active' : '' }}">@lang('site.category.all')</a>
 
                     <?php foreach ($categories as $cat): ?>
-                        <a href="<?= CategoryManager::getUrl($cat->id) ?>" class="{{ $subCategory && $subCategory->id == $cat->id ? 'sect-category-pane__menu_active' : '' }}">
+                        <a href="<?= CategoryManager::getUrl($cat) ?>" class="{{ $subCategory && $subCategory->id == $cat->id ? 'sect-category-pane__menu_active' : '' }}">
                             <?= t::getLocaleField($cat, 'name') ?>
                         </a>
                     <?php endforeach; ?>
@@ -78,6 +92,7 @@ use App\Widgets\Pager;
             $productCount = $query[0]->count;
 
             $productList = Product::searchActive()
+                ->with('image')
                 ->whereRaw('hidden = 0 AND product.category_id in (' . join(',', $categoryIds) . ')')
                 ->offset(PER_PAGE * $curPage)
                 ->take(PER_PAGE)

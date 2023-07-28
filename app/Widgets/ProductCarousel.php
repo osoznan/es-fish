@@ -16,7 +16,8 @@ class ProductCarousel extends Widget {
 
         $mainImage = ['id' => 0, 'product_id' => $product->id, 'image_id' => $product->image_id, 'image' => $product->image];
 
-        $productImages = ProductImage::where('product_id', $product->id)->with('image')->get()->toArray();
+        $productImages = ProductImage::where('product_id', $product->id)
+            ->with('image')->get()->toArray();
         $productImages = array_merge([$mainImage], $productImages);
 
         echo view('widgets.product-carousel', [

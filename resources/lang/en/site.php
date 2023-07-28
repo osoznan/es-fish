@@ -38,10 +38,10 @@ return [
         ],
         'work-scheme' => [
             'title' => 'Working scheme',
-            'info1' => 'Вы оставляете заявку',
-            'info2' => 'Консультация с менеджером',
-            'info3' => 'Выбор системы оплаты',
-            'info4' => 'Доставка удобным Вам способом',
+            'info1' => 'You leave a request',
+            'info2' => 'Consultation with a manager',
+            'info3' => 'Choosing a payment system',
+            'info4' => 'Delivery in a convenient way for you',
         ],
         'seo-sect' => [
             'small-header' => 'About us',
@@ -87,7 +87,6 @@ return [
         'name' => 'Name',
         'phone' => 'Phone',
         'message' => 'Message',
-        '' => ''
     ],
 
     'category' => [
@@ -149,7 +148,8 @@ return [
         'contact-us' => 'Contact us',
         'title' => 'Contact us',
         'send' => 'Send',
-        'success' => 'Your message has been successfully sent. We contact you ASAP'
+        'success' => 'Your message has been successfully sent. We contact you ASAP',
+        'control-number' => 'Control number'
     ],
 
     'cooperation' => [

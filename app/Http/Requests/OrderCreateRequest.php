@@ -36,4 +36,14 @@ class OrderCreateRequest extends FormRequest
             'products.required' => 'Нет товаров в корзине'
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'name' => __('site.param.name'),
+            'phone' => __('site.param.phone'),
+            'payment_type_id' => __('site.cart.payment_type_id'),
+            'delivery_type_id' => __('site.cart.delivery_type_id'),
+        ];
+    }
 }

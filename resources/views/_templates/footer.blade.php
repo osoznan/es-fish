@@ -11,25 +11,25 @@ use App\Components\BasketManager;
 
 <div class="container-fluid">
     <div class="container">
-        <div class="footer row flex-column-reverse flex-lg-row text-left text-lg-left">
-            <div class="col-sm-12 col-lg">
+        <div class="footer flex-column flex-column-reverse flex-lg-row d-flex flex-grow-1 justify-content-between">
+            <div class="col">
                 @include('_templates/widgets/logo')
 
                 <div class="footer__copyright">© "Рыбный путь" - качественная рыба и морепродукты оптом и в розницу с доставкой по Украине. 2020 Все права защищены.</div>
             </div>
-            <div class="col-sm-12 col-lg d-none d-xl-block">
+            <div class="col d-none d-lg-block">
                 <div class="footer__item-list-header">@lang('site.menu.products')</div>
                 <div class="footer__item-list">
                     <?php
                     $topCategories = Category::searchTopMost()->get();
 
                     foreach ($topCategories as $category) {
-                        echo '<a href="' . CategoryManager::getUrl($category->id) . '" class="d-block">' . t::getLocaleField($category, 'name') . '</a>';
+                        echo '<a href="' . CategoryManager::getUrl($category) . '" class="d-block">' . t::getLocaleField($category, 'name') . '</a>';
                     }
                     ?>
                 </div>
             </div>
-            <div class="col-sm-12 col-lg pb-3">
+            <div class="col pb-4">
                 <div class="footer__item-list-header d-none d-lg-block">@lang('site.menu.fish-way')</div>
                 <div class="footer__item-list d-flex flex-column">
                     <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.delivery+pay')</a>
@@ -39,7 +39,7 @@ use App\Components\BasketManager;
                     <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.price')</a>
                 </div>
             </div>
-            <div class="col-sm-12 col-lg pb-3">
+            <div class="col pb-4">
                 <div class="footer__item-list-header d-none d-lg-block">@lang('site.menu.about-company')</div>
                 <div class="footer__item-list d-flex flex-column">
                     <a href="<?= fishLink('about') ?>">@lang('site.menu.about')</a>
@@ -47,7 +47,7 @@ use App\Components\BasketManager;
                     <a href="<?= fishLink('feedback') ?>">@lang('site.menu.feedback')</a>
                 </div>
             </div>
-            <div class="col-sm-12 col-lg pb-3">
+            <div class="col pb-4">
                 @include('_templates/widgets/phone')
                 <a href="mailto:<?= config('user.email') ?>"><?= config('user.email') ?></a>
                 <div class="mt-3">

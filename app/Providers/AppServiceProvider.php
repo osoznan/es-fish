@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Components\BasketManager;
+use App\Components\helpers\Telegram;
 use App\Components\OrderManager;
 use Illuminate\Support\ServiceProvider;
 use Yajra\DataTables\Html\Builder;
@@ -28,5 +29,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('order.service', function ($app) {
             return new OrderManager();
         });
+        $this->app->bind('telegram.service', function ($app) {
+            return new Telegram();
+        });
+
+        if ($this->app->environment('local')) {
+            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
+        }
     }
 }

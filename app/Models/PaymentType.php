@@ -32,7 +32,7 @@ class PaymentType extends GeneralModel {
                 static::CACHE_KEY,
                 PaymentType::searchActive()
                     ->get()->keyBy('id')->toArray(),
-                120
+                3600
             );
         }
 

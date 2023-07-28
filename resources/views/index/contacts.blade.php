@@ -31,9 +31,9 @@ use App\Widgets\ContactForm;
 
     <div class="container">
         <div class="display-5 contacts-pane">
-            <a href="tel:<?= config('user.phone.full') ?>" class="contacts-pane__link"><?= config('user.phone.full') ?></a>
+            <a href="tel:{{ config('user.phone.full')  }}" class="contacts-pane__link"><?= config('user.phone.full') ?></a>
             <P></P>
-            <a href="mailto:<?= config('user.email') ?>" class="contacts-pane__link"><?= config('user.email') ?></a>
+            <a href="mailto:{{ config('user.email') }}" class="contacts-pane__link"><?= config('user.email') ?></a>
             <P></P>
             <a href="{{ config('user.facebook') }}" class="contacts-pane__link"><img src="/img/facebook.svg" width="30" alt="facebook"></a>
             <P></P>
@@ -45,7 +45,7 @@ use App\Widgets\ContactForm;
             <div class="col-12 col-lg-8">
                 <h3><?= trans('site.contact-form.title') ?></h3>
 
-                <?= ContactForm::widget(); ?>
+                {!! ContactForm::widget() !!}
             </div>
         </div>
 

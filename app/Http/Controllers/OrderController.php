@@ -18,12 +18,11 @@ class OrderController extends TopController {
         // получаем данные по товарам заказа из сессии
         $ids = BasketManager::getAll();
 
-        Telegram::send(json_encode($request->all()));
-
-        $validatedData = $this->validate(
+        $this->validate(
             $request->merge(['products' => $ids]),
-            (new OrderCreateRequest())->rules(),
-            (new OrderCreateRequest())->messages()
+            ($orderRequest = new OrderCreateRequest())->rules(),
+            $orderRequest->messages(),
+            $orderRequest->attributes()
         );
 
         $result = OrderManager::addOrder($request->all());

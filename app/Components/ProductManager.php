@@ -3,12 +3,13 @@
 namespace App\Components;
 
 use App\Models\Comment;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class ProductManager {
 
     public static function getUrl($product) {
-        return CategoryManager::getUrl($product->category_id) . '/' . $product->getLocaleAlias();
+        return CategoryManager::getUrl($product->category) . '/' . $product->getLocaleAlias();
     }
 
     public static function calculateRate($productId) {

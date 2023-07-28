@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Category;
 use App\Models\DeliveryType;
+use App\Models\ModuleData;
 use App\Models\PaymentType;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -148,5 +149,48 @@ class SetInitialDbData extends Command
             ['id' => 3, 'name' => 'Новая почта', 'name_en' => 'Nova Poshta', 'name_ua' => 'Нова пошта'],
             ['id' => 4, 'name' => 'Другие способы доставки', 'name_en' => 'Other', 'name_ua' => 'Iншi способи доставки']
         ]);
+    }
+
+    function setModuleData() {
+        $data = [
+            [
+                'name' => 'seo-mainpage-module',
+                'module_title' => 'СЕО на главной',
+                'params' => '[{"name": "title", "label": "Заголовок", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content", "label": "Текст", "rules": "required|string|min:20|max:5000", "control": "textarea"}, {"name": "image", "label": "Картинка", "control": "image"}, {"name": "title_en", "label": "Заголовок EN", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_en", "label": "Текст EN", "rules": "required|string|min:20|max:5000", "control": "textarea"}, {"name": "title_ua", "label": "Заголовок UA", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_ua", "label": "Текст UA", "rules": "required|string|min:20|max:5000", "control": "textarea"}]',
+                'hidden' => 0
+            ],
+            [
+                'name' => 'about',
+                'module_title' => 'Страница "О нас"',
+                'params' => '[{"name": "title", "label": "Заголовок", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content", "label": "Текст", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_en", "label": "Заголовок EN", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_en", "label": "Текст EN", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_ua", "label": "Заголовок UA", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_ua", "label": "Текст UA", "rules": "required|string|min:50|max:20000", "control": "textarea"}]',
+                'hidden' => 0
+            ],
+            [
+                'name' => 'cooperation',
+                'module_title' => 'Страница "Сотрудничество"',
+                'params' => '[{"name": "title", "label": "Заголовок", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content", "label": "Текст", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_en", "label": "Заголовок EN", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_en", "label": "Текст EN", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_ua", "label": "Заголовок UA", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_ua", "label": "Текст UA", "rules": "required|string|min:50|max:20000", "control": "textarea"}]',
+                'hidden' => 0
+            ],
+            [
+                'name' => 'guarantees',
+                'module_title' => 'Страница "Гарантии"',
+                'params' => '[{"name": "title", "label": "Заголовок", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content", "label": "Текст", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_en", "label": "Заголовок EN", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_en", "label": "Текст EN", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_ua", "label": "Заголовок UA", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_ua", "label": "Текст UA", "rules": "required|string|min:50|max:20000", "control": "textarea"}]',
+                'hidden' => 0
+            ],
+            [
+                'name' => 'delivery-payment',
+                'module_title' => 'Страница "Доставка и оплата"',
+                'params' => '[{"name": "title", "label": "Заголовок", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content", "label": "Текст", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_en", "label": "Заголовок EN", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_en", "label": "Текст EN", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_ua", "label": "Заголовок UA", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_ua", "label": "Текст UA", "rules": "required|string|min:50|max:20000", "control": "textarea"}]',
+                'hidden' => 0
+            ],
+            [
+                'name' => 'faq',
+                'module_title' => 'Страница "FAQ"',
+                'params' => '[{"name": "title", "label": "Заголовок", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content", "label": "Текст", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_en", "label": "Заголовок EN", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_en", "label": "Текст EN", "rules": "required|string|min:50|max:20000", "control": "textarea"}, {"name": "title_ua", "label": "Заголовок UA", "rules": "required|string|min:5|max:50", "control": "text"}, {"name": "content_ua", "label": "Текст UA", "rules": "required|string|min:50|max:20000", "control": "textarea"}]',
+                'hidden' => 0
+            ],
+        ];
+
+        ModuleData::insert($data);
     }
 }

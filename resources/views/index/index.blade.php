@@ -37,14 +37,14 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
 
         <?php
         $productList = Product::searchActive()
-            ->limit(4)->get();
+            ->with('image')->limit(4)->get();
         ?>
 
         <div class="container-fluid">
             <div class="container">
-                <?= ProductItemList::widget([
-                    'productList' => $productList
-                ]) ?>
+                {!! ProductItemList::widget([
+                    'productList' => $productList,
+                ]) !!}
             </div>
         </div>
 
@@ -81,21 +81,21 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
         <h2>@lang('site.index.fish-&-sea-products')</h2>
 
         <div class="row mb-4">
-            <?php foreach ([329, 330, 331, 332] as $categoryId): ?>
-                <?= CategoryItem::widget([
+            @foreach ([329, 330, 331, 332] as $categoryId)
+                {!! CategoryItem::widget([
                     'category' => $categories->get($categoryId),
                     'parentCategory' => $categories->get(1),
-                    'class' => 'col-lg-3'
-                ]) ?>
-            <?php endforeach; ?>
+                    'class' => 'col-sm-12 col-xl-3'
+                ]) !!}
+            @endforeach
 
-            <?php foreach ([331, 332] as $categoryId): ?>
-                <?= (new CategoryItem([
+            @foreach ([333, 334] as $categoryId)
+                {!! CategoryItem::widget([
                     'category' => $categories->get($categoryId),
                     'parentCategory' => $categories->get(2),
-                    'class' => 'col-lg-6'
-                ]))->run() ?>
-            <?php endforeach; ?>
+                    'class' => 'col-sm-12 col-lg-6'
+                ]) !!}
+            @endforeach
         </div>
 
         <?php
@@ -108,44 +108,41 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
         ]
         ?>
 
-        <?php foreach ($catData as $category): ?>
-        <h2><?= $categories->get($category['main'])->localeFieldValue('name') ?></h2>
-        <div class="row mb-4">
-            <?php foreach ($category['list'] as $categoryId): ?>
-                <?= CategoryItem::widget([
+        @foreach ($catData as $category)
+        <h2>{{ $categories->get($category['main'])->localeFieldValue('name') }}</h2>
+        <div class="row mb-4"> ?>
+            @foreach ($category['list'] as $categoryId)
+                {!! CategoryItem::widget([
                     'category' => $categories->get($categoryId),
                     'parentCategory' => $categories->get($category['main']),
-                    'class' => 'col-lg-' . (12 / count($category['list']))
-            ])  ?>
-                <?php endforeach; ?>
+                    'class' => count($category['list']) >= 4 ?
+                        'col-sm-6 col-lg-4 col-xl-3' : 'col-sm-6 col-lg-' . (12 / count($category['list']))
+                ]) !!}
+            @endforeach; ?>
         </div>
-        <?php endforeach; ?>
+        @endforeach
     </div>
 
     <section class="sect-work-scheme container-fluid lightest-gray-background text-center pt-5 pb-5 mb-4">
         <div class="container">
             <h2 class="text-uppercase">@lang('site.index.work-scheme.title')</h2>
-            <div class="work-scheme">
-                <div>
+            <div class="work-scheme row">
+                <div class="work-scheme__col col-sm-6 col-lg-3">
                     <div class="work-scheme__circle">1</div>
                     <div class="work-scheme__text">@lang('site.index.work-scheme.info1')</div>
                 </div>
-                <div></div>
-                <div>
+                <div class="work-scheme__col col-sm-6 col-lg-3">
                     <div class="work-scheme__circle">2</div>
                     <div class="work-scheme__text">@lang('site.index.work-scheme.info2')</div>
                 </div>
-                <div></div>
-                <div>
+                <div class="work-scheme__col col-sm-6 col-lg-3">
                     <div class="work-scheme__circle">3</div>
                     <div class="work-scheme__text">@lang('site.index.work-scheme.info3')</div>
                 </div>
-                <div></div>
-                <div>
+                <div class="work-scheme__col col-sm-6 col-lg-3">
                     <div class="work-scheme__circle">4</div>
                     <div class="work-scheme__text">@lang('site.index.work-scheme.info4')</div>
                 </div>
-                <div ></div>
             </div>
         </div>
     </section>
@@ -154,33 +151,34 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
         <nav class="d-flex">
             <div class="sect-blog__header">@lang('site.blog.title')</div>
             <div class="sect-blog__tabs nav" id="nav-tab" role="tablist">
-                <?php foreach (BlogManager::CATEGORY_ALIASES['en'] as $key => $blogCategory): ?>
+                @foreach (BlogManager::CATEGORY_ALIASES['en'] as $key => $blogCategory)
                     <a class="<?= $key == 1 ? 'active' : '' ?>" id="nav-<?= $blogCategory ?>-tab" data-bs-toggle="tab" data-bs-target="#nav-<?= $blogCategory ?>" type="button" role="tab" aria-controls="nav-<?= $blogCategory ?>" aria-selected="<?= $key == 1 ? 'true' : 'false' ?>"> <?= trans('site.blog.' . $blogCategory) ?></a>
-                <?php endforeach ?>
+                @endforeach
             </div>
         </nav>
         <div class="tab-content mb-4" id="nav-tabContent">
-            <?php foreach (BlogManager::CATEGORY_ALIASES['en'] as $key => $blogCategory): ?>
+            @foreach (BlogManager::CATEGORY_ALIASES['en'] as $key => $blogCategory)
                 <div class="tab-pane fade <?= $key == 1 ? 'show active' : '' ?>" id="nav-<?= $blogCategory ?>" role="tabpanel" aria-labelledby="nav-<?= $blogCategory ?>-tab">
                     <div class="row pt-4">
-                        <?php
-                        $blogArticles = BlogArticle::query()
+                        <?php $blogArticles = BlogArticle::query()
+                            ->with('image')
                             ->where('blog_article.category_id', $key)
-                            ->limit(3)->get();
+                            ->limit(3)->get() ?>
 
-                        foreach ($blogArticles as $article):
-                            echo (BlogItem::widget(['article' => $article]));
-                        endforeach; ?>
+                        @foreach ($blogArticles as $article):
+                            {!! BlogItem::widget(['article' => $article]) !!};
+                        @endforeach
                     </div>
                 </div>
-            <?php endforeach; ?>
+            @endforeach
         </div>
     </section>
 
     <?php
     $seo = ModuleData::where('name', 'seo-mainpage-module')->first();
     $image = Image::find($seo->image);
-    $seoImage = ImageManager::getPhotosUrl($image->url)
+    $seoImage = ImageManager::getPhotosUrl($image->url);
+
     ?>
 
     @include('_templates/seo-text')

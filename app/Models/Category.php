@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
  * @property string name
  * @property string alias
  * @property int parent_category_id
+ * @property HasOne parent
  */
 class Category extends GeneralModel {
 
@@ -78,8 +79,8 @@ class Category extends GeneralModel {
         return $this->hasMany(Product::class, 'category_id');
     }
 
-    public function parent(): BelongsTo {
-        return $this->belongsTo(static::class, 'parent_category_id');
+    public function parent(): HasOne {
+        return $this->hasOne(static::class, 'id', 'parent_category_id');
     }
 
     public function image(): HasOne {

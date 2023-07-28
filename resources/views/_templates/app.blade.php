@@ -15,7 +15,7 @@ use App\Components\ViewInserter;
 
         @section('head-css')
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
         <link href="/css/common.css" rel="stylesheet">
         @show
 
@@ -54,5 +54,8 @@ use App\Components\ViewInserter;
             })
         </script>
 
+        @foreach(ViewInserter::getScriptFiles() as $file)
+            <script src="{{ $file }}"></script>
+        @endforeach
     </body>
 </html>

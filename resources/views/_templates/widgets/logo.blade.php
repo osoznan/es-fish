@@ -1,3 +1,3 @@
 <a href="/">
-    <img data-src="/img/logo.svg">
+    <img class="logo-image" data-src="/img/logo.svg">
 </a>

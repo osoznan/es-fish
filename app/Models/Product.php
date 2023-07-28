@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Components\Translit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use App\Components\Translation as t;
@@ -64,8 +65,6 @@ class Product extends GeneralModel {
             $model->alias_en = Translit::process($model->name_en, 'en');
 
             $model->imageIds ? $model->_saveImages($model) : null;
-
-            Log::info(json_encode($model->imageIds));
         });
     }
 
@@ -77,8 +76,8 @@ class Product extends GeneralModel {
         return Str::of($this->description)->limit(150);
     }
 
-    public function category() {
-        return $this->belongsTo(Category::class, 'category_id');
+    public function category(): HasOne {
+        return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
     public function image() {

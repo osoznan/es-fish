@@ -2,8 +2,8 @@
 
 namespace App\Components;
 
-use App\Components\helpers\Telegram;
 use App\Facades\BasketManager;
+use App\Facades\Telegram;
 use App\Http\Requests\OrderCreateRequest;
 use App\Mail\OrderShipped;
 use App\Models\Order;
@@ -14,6 +14,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Models\DeliveryType;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class OrderManager {
 
@@ -26,15 +27,15 @@ class OrderManager {
     public static function addOrder(array $orderData) {
         $idValues = array_keys($cartData = $orderData['products']);
 
-        \Validator::validate($orderData, (new OrderCreateRequest())->rules());
+        Validator::validate($orderData, (new OrderCreateRequest())->rules());
 
         $products = Product::searchActive()
+            ->with('image')
+            ->with('parent')
             ->whereIn('id', $idValues)
             ->get()->keyBy('id');
 
-        // Telegram::send(json_encode($products[38]));
-
-        // try {
+        try {
             DB::beginTransaction();
 
             $model = new Order($orderData);
@@ -65,7 +66,7 @@ class OrderManager {
 
                     $orderItem = new OrderItem($orderItem);
                     if (!$orderItem->save()) {
-                        Telegram::send('error');
+                        throw new \Exception('error saving order item');
                     }
                 }
             }
@@ -79,11 +80,11 @@ class OrderManager {
 
             return $model->id;
 
-        /*} catch(\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollBack();
 
-            return ['error' => true];
-        }*/
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
     }
 
     public static function addOrderStatus($order, int $statusId, string $description = null) {
@@ -140,8 +141,8 @@ class OrderManager {
     }
 
     public static function sendTelegramSuccessOrderMessage(Order $order): void {
-        Telegram::send("Произведён заказ товара. Клиент: $order->name ($order->phone). "
-            . "Ссылка заказа: " . env('APP_URL') . "/admin/orders/$order->id/edit");
+        Telegram::sendToManager("Произведён заказ товара!\nКлиент: $order->name ($order->phone). "
+            . "Ссылка на заказ: " . env('APP_URL') . "/admin/orders/$order->id/edit");
     }
 
     public static function sendOrderMailToVendor(Order $order) {

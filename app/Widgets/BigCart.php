@@ -6,7 +6,6 @@ use App\Components\BasketManager;
 use App\Components\ProductManager;
 use App\Components\ViewInserter;
 use App\Components\Widget;
-use App\Components\Translation as t;
 use App\Components\ImageManager;
 use App\Components\OrderManager;
 use App\Models\DeliveryType;
@@ -18,13 +17,13 @@ class BigCart extends Widget {
     use AjaxWidget;
 
     public $mode;
-    public $ids;
-    public $deliveryType;
-    public $paymentType;
+    public array $ids = [];
+    public ?int $deliveryType = null;
+    public ?int $paymentType = null;
     public \Countable $products;
     public \Countable $errors;
 
-    public static function getAjaxHandlers() {
+    public static function getAjaxHandlers(): array {
         return ['ajaxCartRefresh'];
     }
 
@@ -34,60 +33,16 @@ class BigCart extends Widget {
             return;
         }
 
-        ?>
-        <div class="cart">
-            <div class="container">
-                <?= $this->displayCartTable()['content'] ?>
-            </div>
-            <div class="cart__form container">
-                <?php if (isset($this->products)): ?>
-                    <div id="cart-send-errors" class="bg-info text-white"></div>
-                    <div class="row pb-sm-0 pb-lg-3">
-                        <div class="col-12 col-md-6">
-                            <?= trans('site.cart.name') ?>
-                            <div id="name-error" class="bg-danger text-white"></div>
-                            <input id="user_name" value="<?= $this->name ?? null ?>"
-                                   placeholder="<?= trans('site.cart.placeholders.name') ?>" class="form-control mr-2">
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <?= trans('site.cart.phone') ?>
-                            <div id="phone-error" class="bg-danger text-white"></div>
-                            <input id="user_phone" value="<?= $this->phone ?? null ?>"
-                                   placeholder="<?= trans('site.cart.placeholders.phone') ?>" class="form-control">
-                        </div>
-                        <div class="col-12 col-md-6 mt-3">
-                            <?= trans('site.cart.payment_type_id') ?>
-                            <div id="payment_type_id-error" class="bg-danger text-white"></div>
-                            <select id="payment_type_id" class="form-control mr-2">
-                                <option value="">[<?= trans('site.cart.placeholders.payment_type_id') ?>]
-                                    <?php foreach (PaymentType::getAllValues() as $type): ?>
-                                <option <?= $this->paymentType == $type['id'] ? 'selected' : '' ?> value="<?= $type['id'] ?>"><?= t::getLocaleField($type,'name') ?>
-                                    <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-6 mt-3">
-                            <?= trans('site.cart.delivery_type_id') ?>
-                            <div id="delivery_type_id-error" class="bg-danger text-white"></div>
-                            <select id="delivery_type_id" value="<?= $phone ?? null ?>" class="form-control">
-                                <option value="">[<?= trans('site.cart.placeholders.delivery_type_id') ?>]
-                                    <?php foreach (DeliveryType::getAllValues() as $type): ?>
-                                <option <?= $this->deliveryType == $type['id'] ? 'selected' : '' ?> value="<?= $type['id'] ?>"><?= t::getLocaleField($type,'name') ?>
-                                    <?php endforeach; ?>
-                            </select>
-
-                        </div>
-                    </div>
-                    <div class="row justify-content-center text-lg-left">
-                        <div class="col-md-7 col-lg-4 text-center text-lg-right">
-                            <button onclick="sendBigCartOrder()" class="button-orange mb-3">
-                                <?= trans('site.cart.do-order') ?>
-                            </button>
-                        </div>
-                    </div>
-                <?php endif ?>
-            </div>
-        </div>
-        <?php
+        echo view('widgets.big-cart', [
+            'cartItemsContent' => $this->displayCartTable()['content'],
+            'products' => $this->products,
+            'name' => $this->name ?? null,
+            'phone' => $this->phone ?? null,
+            'deliveryTypes' => DeliveryType::getAllValues(),
+            'paymentTypes' => PaymentType::getAllValues(),
+            'deliveryType' => $this->deliveryType ?? null,
+            'paymentType' => $this->paymentType ?? null,
+        ]);
 
         $this->script();
 
@@ -116,37 +71,41 @@ class BigCart extends Widget {
         $totalCost = OrderManager::getProductsTotalCost($this->ids);
         $deliveryCost = OrderManager::getDeliveryCost($totalCost, ['delivery_type_id' => $this->deliveryType ?? null])
         ?>
-        <table class="cart-table nano-content">
+        <div class="cart-table nano-content">
             <?php foreach ($this->products as $elem): ?>
-                <tr>
-                    <td>
-                        <div class="cart-table__image" style="background-image:url(<?= ImageManager::getPhotosUrl($elem->image->url) ?>)"></div>
-                    </td>
-                    <td>
-                        <a class="cart-table__title" href="<?= ProductManager::getUrl($elem) ?>"><?= $elem->locale('name') ?></a>
+            <div class="cart-table__item row">
+                <div class="col-sm-5 col-lg-3">
+                    <div class="cart-table__image" style="background-image:url(<?= ImageManager::getPhotosUrl($elem->image->url) ?>)"></div>
+                </div>
+                <div class="col-sm-7 col-lg-7">
+                    <a class="cart-table__title" href="<?= ProductManager::getUrl($elem) ?>">
+                        <?= $elem->locale('name') ?>
+                    </a>
 
-                        <div class=""><?= $elem->locale('description') ?></div>
+                    <div class=""><?= $elem->locale('description') ?></div>
 
-                        <div class="mb-0 mb-md-3">
-                        <span class="pr-5">
-                            <?= trans('site.cart.product-amount') ?>: <?= $this->ids[$elem->id] ?> <?= trans('site.abbr.items') ?>
-                        </span>
-                            <span
-                                class="text-danger"><?= trans('site.cart.price') ?>: <?= $elem->price * $this->ids[$elem->id] ?> <?= trans('site.abbr.hrivnas') ?></span>
-                        </div>
-                    </td>
-                    <td class="cart-table__amount">
-                        <a class="cart-table__amount__plus" onclick="sendBigCartData({product_id: <?= $elem->id ?>, delta: 1})">+</a>
-                        <input class="cart-table__amount__input" value="<?= $this->ids[$elem->id] ?>"
-                               data-id="<?= $elem->id ?>"
-                               data-start-value="<?= $this->ids[$elem->id] ?>"
-                               onblur="sendBigCartData({product_id: <?= $elem->id ?>, amount: this.value})">
-                        <a class="cart-table__amount__minus" onclick="sendBigCartData({product_id: <?= $elem->id ?>, delta: -1})">-</a>
-                    </td>
-                </tr>
+                    <div class="mb-0 mb-md-3">
+                    <span class="pr-5">
+                        <?= trans('site.cart.product-amount') ?>: <?= $this->ids[$elem->id] ?>
+                        <?= trans('site.abbr.items') ?>
+                    </span>
+                    <span class="text-danger"><?= trans('site.cart.price') ?>: <?= $elem->price * $this->ids[$elem->id] ?>
+                        <?= trans('site.abbr.hrivnas') ?>
+                    </span>
+                    </div>
+                </div>
+                <div class="cart-table__amount col-lg-2">
+                    <a class="cart-table__amount__plus" onclick="sendBigCartData({product_id: <?= $elem->id ?>, delta: 1})">+</a>
+                    <input class="cart-table__amount__input" value="<?= $this->ids[$elem->id] ?>"
+                           data-id="<?= $elem->id ?>"
+                           data-start-value="<?= $this->ids[$elem->id] ?>"
+                           onblur="sendBigCartData({product_id: <?= $elem->id ?>, amount: this.value})">
+                    <a class="cart-table__amount__minus" onclick="sendBigCartData({product_id: <?= $elem->id ?>, delta: -1})">-</a>
+                </div>
+            </div>
             <?php endforeach ?>
 
-         </table>
+         </div>
 
         <div class="d-flex align-items-center col-sm-12 col-lg-8 <?= $this->mode == 'order_success' ? 'd-none' : null ?>">
             <?= trans('site.cart.total') ?>:&nbsp;
@@ -165,48 +124,7 @@ class BigCart extends Widget {
     }
 
     public function script() {
-        ViewInserter::insertJs(<<< JS
-        sendBigCartData = function(data) {
-            const el = document.querySelector('.cart .container')
-            const newEl = document.createElement('div')
-
-            ajax('/ajax', {action: 'ajaxCartRefresh', data: data}, function(res) {
-                const data = JSON.parse(res).original;
-                el.innerHTML = data.content
-                if (!data.totalCost) {
-                    document.querySelector('.cart__form').innerHTML = '';
-                }
-
-                triggerEvent(document, 'cart-changed', {totalCost: data.totalCost})
-            })
-        }
-
-        sendBigCartOrder = function() {
-            const el = document.querySelector('.cart__form')
-
-            data = {
-                name: el.querySelector('#user_name').value,
-                phone: el.querySelector('#user_phone').value,
-                delivery_type_id: el.querySelector('#delivery_type_id').value,
-                payment_type_id: el.querySelector('#payment_type_id').value
-            }
-
-            ajax('order/order', data, function(res) {
-                document.querySelector('.cart>.container').innerHTML = ''
-                el.innerHTML = res
-
-                landing.updateCartIndicators(0)
-            }, function(res) {
-                el.querySelectorAll('[id*="-error"]').forEach((f) => f.innerHTML = '')
-
-                for (let [fld, err] of Object.entries(JSON.parse(res.responseText).errors)) {
-                    el.querySelector('#' + fld + '-error').innerHTML = err
-                }
-            })
-        }
-
-JS, static::class);
-        echo '</script>';
+        ViewInserter::insertJsFile('/js/widgets/big-cart.js', static::class);
     }
 
     public static function ajaxCartRefresh(Request $request, $data) {

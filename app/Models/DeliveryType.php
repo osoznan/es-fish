@@ -36,7 +36,7 @@ class DeliveryType extends GeneralModel {
             Cache::put(
                 static::CACHE_KEY,
                 DeliveryType::searchActive()->get(),
-                120
+                3600
             );
         }
 

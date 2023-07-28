@@ -26,9 +26,9 @@ class ProductItem extends Widget {
         $product = $this->product;
         ?>
 
-        <div class="product-thumb p-3 <?= $this->class ?>">
+        <div class="product-thumb p-3  <?= $this->class ?? 'col-sm-12 col-md-6 col-lg-4 col-xl-3' ?> bordered-child-cells">
             <a href="<?= ProductManager::getUrl($product) ?>">
-                <div style="background-image:url(<?= ImageManager::getPhotosUrl($product->image->url) ?>)" class="product-thumb__image div-image-thumb">
+                <div style="background-image:url(<?= ImageManager::getPhotosUrl($product->image->url) ?>)" class="product-thumb__image div-image-thumb bordered-child-cells">
 
                 </div>
             </a>
@@ -42,8 +42,12 @@ class ProductItem extends Widget {
         <?php
 
         ViewInserter::insertJs(<<< JS
-            productItemChange = function(el, productId, delta) {
-                ajaxLoad(el.closest('.product-thumb__ajax-space'), '/ajax', 'ajaxRefresh', {product_id: productId, delta: delta}, function(res) {
+            productItemChange = function(el, productId, delta, amount) {
+                ajaxLoad(
+                    el.closest('.product-thumb__ajax-space'),
+                    '/ajax',
+                    'ajaxRefresh',
+                    {product_id: productId, delta: delta, amount: amount}, function(res) {
                     triggerEvent(document, 'cart-changed', {totalCost: res.totalCost})
                 })
 
@@ -62,13 +66,13 @@ JS, 'productAmountSelector');
         <?php else: ?>
             <div class="tiny-font orange-color"><?= trans('site.product.not-present') ?></div>
         <?php endif ?>
-        <div class="tiny-font <?= $product->old_price ? 'text-decoration-line-through' : '' ?>"><?= $product->old_price ?? '&nbsp;' ?></div>
-        <div class="product-thumb__price tiny-font"><?= $amountInBasket ? $product->price * $amountInBasket : $product->price ?> <?= trans('site.abbr.hrivnas') ?></div>
+        <div class="product-thumb__old-price tiny-font <?= $product->old_price ? 'text-decoration-line-through' : '' ?>"><?= $product->old_price ?? '&nbsp;' ?></div>
+        <div class="product-thumb__price"><?= $amountInBasket ? $product->price * $amountInBasket : $product->price ?> <?= trans('site.abbr.hrivnas') ?></div>
         <div class="d-flex align-items-center text-center">
             <?php if ($amountInBasket): ?>
                 <div class="product-thumb__selector">
                     <button data-class="minus" onclick="productItemChange(this, <?= $product->id ?>, -1)" class="dark-text-anchor_bg">-</button>
-                    <input data-class="amount" value="<?= $amountInBasket ?>" onchange="productItemChange(this, <?= $product->id ?>, 1)" class="dark-text-anchor_bg">
+                    <input data-class="amount" value="<?= $amountInBasket ?>" onchange="productItemChange(this, <?= $product->id ?>, 1, this.value)" class="dark-text-anchor_bg">
                     <button data-class="plus" onclick="productItemChange(this, <?= $product->id ?>, 1)">+</button>
                 </div>
             <?php else: ?>

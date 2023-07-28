@@ -4,10 +4,23 @@ namespace App\Components\helpers;
 
 class Telegram {
 
-    public static function send($text) {
-        $ch = curl_init();
+    public function send(string $text): bool {
+        return $this->sendMessage(
+            config('user.site-name') . "\nEnv: "
+                . env('APP_ENV') . '(' . env('APP_URL') . ")\n" . $text,
+            env('TELEGRAM_CHAT_ID_DEVELOPER')
+        );
+    }
 
-        $text = config('user.site-name') . "\n" . $text;
+    public function sendToManager(string $text): bool {
+        return $this->sendMessage(
+            (env('APP_ENV') == 'dev' ? '!! Это тестовая байда с локального ресурса' : '') . "\n" . $text,
+            env('TELEGRAM_CHAT_ID_MANAGER')
+        );
+    }
+
+    protected function sendMessage($text, $chatId): bool {
+        $ch = curl_init();
 
         curl_setopt_array(
             $ch,
@@ -17,13 +30,15 @@ class Telegram {
                 CURLOPT_RETURNTRANSFER => TRUE,
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_POSTFIELDS => array(
-                    'chat_id' => env('TELEGRAM_CHAT_ID'),
+                    'chat_id' => $chatId,
                     'text' => $text,
                 ),
             )
         );
 
         curl_exec($ch);
+
+        return true;
     }
 
 }

@@ -23,7 +23,7 @@ define('INITIAL_TOTAL_COST', OrderManager::getProductsTotalCost());
             <a href="{{ config('user.linkedin') }}"><img src="/img/linkedin.svg" alt="LinkedIn"></a>
         </div>
         <div class="d-none d-md-flex">
-            <div><img src="" alt="phone"></div>
+            <div><img src="/img/phone.png" width="30" alt="phone"></div>
             <div class="text-left">
                 @include('_templates/widgets/phone')
                 <span class="tiny-font light-gray-color">@lang('site.index.cap.call-time')</span>
@@ -35,12 +35,12 @@ define('INITIAL_TOTAL_COST', OrderManager::getProductsTotalCost());
         <div class="d-none d-xl-block">
             <a href="<?= fishLink('cooperation') ?>" class="dotted-underline">@lang('site.cooperation.title')</a>
         </div>
-        <div class="language-select d-none d-md-block">
+        <div class="language-select d-none d-md-flex">
             <?php foreach (['ua', 'ru', 'en'] as $lang):
                 if ($lang != t::getLocale()):
-                    echo '<span><a href="/' . ($lang != 'ru' ? $lang : '') . '" class="dark-text-anchor">' . strtoupper($lang) . '</a></span> ';
+                    echo '<span class="language-select__thumb"><a href="/' . ($lang != 'ru' ? $lang : '') . '" class="dark-text-anchor">' . strtoupper($lang) . '</a></span> ';
                 else:
-                    echo '<span class="orange-color">' . strtoupper($lang) . '</span> ';
+                    echo '<span class="language-select__thumb orange-color">' . strtoupper($lang) . '</span> ';
                 endif;
             endforeach; ?>
         </div>

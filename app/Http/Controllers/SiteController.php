@@ -21,8 +21,14 @@ class SiteController extends TopController {
 
     public function index() {
         // dd(Category::searchActive()->get()->keyBy('id'));
+        $topMostCategories = Category::searchTopMost()->get();
+
         return view('index.index', [
-            'categories' => Category::searchActive()->get()->keyBy('id')
+            'categories' => Category::searchActive()
+                ->with('image')->with('parent')
+                ->whereIn('parent_category_id', $topMostCategories->pluck('id'))
+                ->orWhereNull('parent_category_id')
+                ->get()->keyBy('id')
         ]);
     }
 

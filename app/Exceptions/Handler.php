@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Components\helpers\Telegram;
+use App\Facades\Telegram;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -25,8 +25,7 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
-            Telegram::send('https://fishway.com.ua - ERROR - ' . $e->getMessage().": " . $e->getFile(). " line " . $e->getLine());
+            Telegram::send(env('APP_URL', 'FISHWAY') . ' - ERROR - ' . $e->getMessage().": " . $e->getFile(). " line " . $e->getLine());
         });
     }
 }

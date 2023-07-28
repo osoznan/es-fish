@@ -41,11 +41,13 @@ class ProductController extends TopController {
             ->get();
 
         $blogArticles = BlogArticle::query()
+            ->with('image')
             ->where('category_id', 2)
             ->limit(3)
             ->get();
 
         $recommendedProducts = Product::searchActive()
+            ->with('image')->with('category')
             ->where(['recommended' => 1])
             ->limit(4)
             ->get();
