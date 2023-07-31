@@ -1,9 +1,6 @@
 <?php
 
 use App\Models\Category;
-use App\Components\Translation as t;
-use App\Components\CategoryManager;
-use App\Models\Product;
 use App\Widgets\BigCart;
 
 /** @var $category Category */
@@ -21,8 +18,6 @@ use App\Widgets\BigCart;
 
 @section('top')
 
-@section('top')
-
     @include('_templates/top')
 
     <section class="sect-cart mb-4">
@@ -34,10 +29,8 @@ use App\Widgets\BigCart;
     </section>
 @endsection
 
-@endsection
-
 @section('content')
 
-    <?= (new BigCart())->run() ?>
+    {!! BigCart::widget() !!}
 
 @endsection

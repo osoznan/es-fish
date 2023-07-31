@@ -1,5 +1,5 @@
 ContactForm = function(id) {
-    const form = get(id)
+    const form = get(id);
     const self = this
 
     this.sendContactForm = function(){

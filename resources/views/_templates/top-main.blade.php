@@ -30,10 +30,10 @@ $carouselSeq = MainGallery::search()->get();
                             </div>
                             <div class="d-flex flex-column align-items-center flex-lg-row ">
                                 <div class="top-carousel__slide__button1 button-bordered">
-                                    <a href="<?= $it->link ?>">@lang('site.index.cap.detailed')</a>
+                                    <a class="text-gray-200" href="<?= $it->link ?>">@lang('site.index.cap.detailed')</a>
                                 </div>
                                 <div class="top-carousel__slide__button2 button-orange m-3">
-                                    <a href="" class="button" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="activateContactForm('со слайда <?= $it->locale("title") ?>')">@lang('site.index.cap.order-now')</a>
+                                    <a class="text-gray-200" href="" class="button" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="activateContactForm('со слайда <?= $it->locale("title") ?>')">@lang('site.index.cap.order-now')</a>
                                 </div>
                             </div>
                         </div>

@@ -40,7 +40,6 @@ class Category extends GeneralModel {
         'description',
         'description_en',
         'description_ua',
-        'image_name',
         'description_ua',
         'parent_category_id',
         'hidden',

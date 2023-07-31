@@ -44,4 +44,8 @@ class DeliveryType extends GeneralModel {
 
         return !$key ? $all : $all[$key];
     }
+
+    public static function getValue(int $key) {
+        return static::getAllValues($key);
+    }
 }

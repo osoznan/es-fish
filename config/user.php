@@ -28,4 +28,5 @@ return [
         5 => '/img/beer.svg',
         6 => '/img/chicken-wings.svg'
     ]
+
 ];

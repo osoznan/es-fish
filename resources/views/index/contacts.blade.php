@@ -28,17 +28,12 @@ use App\Widgets\ContactForm;
 @endsection
 
 @section('content')
-
     <div class="container">
-        <div class="display-5 contacts-pane">
-            <a href="tel:{{ config('user.phone.full')  }}" class="contacts-pane__link"><?= config('user.phone.full') ?></a>
-            <P></P>
-            <a href="mailto:{{ config('user.email') }}" class="contacts-pane__link"><?= config('user.email') ?></a>
-            <P></P>
-            <a href="{{ config('user.facebook') }}" class="contacts-pane__link"><img src="/img/facebook.svg" width="30" alt="facebook"></a>
-            <P></P>
-            <a href="{{ config('user.linkedin') }}" class="contacts-pane__link"><img src="/img/linkedin.svg" width="50" alt="LinkedIn"></a>
-            <P></P>
+        <div class="contacts-pane row align-items-baseline text-center p-4 bordered-child-cells">
+            <a class="col" href="tel:{{ config('user.phone.full')  }}" class="contacts-pane__link"><nobr><?= config('user.phone.full') ?></nobr></a>
+            <a class="col" href="mailto:{{ config('user.email') }}" class="contacts-pane__link"><?= config('user.email') ?></a>
+            <a class="col" href="{{ config('user.facebook') }}" class="contacts-pane__link"><img src="/img/facebook.svg" width="20" alt="facebook"></a>
+            <a class="col" href="{{ config('user.linkedin') }}" class="contacts-pane__link"><img src="/img/linkedin.svg" width="30" alt="LinkedIn"></a>
         </div>
 
         <div class="row">

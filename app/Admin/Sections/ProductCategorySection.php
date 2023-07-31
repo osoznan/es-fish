@@ -121,6 +121,7 @@ class ProductCategorySection extends Section implements Initializable
                 AdminFormElement::selectajax('parent_category_id', 'Parent Category')
                     ->setModelForOptions(Category::class)
                     ->setSearch('name')
+                    ->nullable()
                     ->setDisplay(function ($model) {
                         return $model->name;
                     }),

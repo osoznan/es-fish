@@ -25,7 +25,4 @@ class CategoryItem extends Widget {
         ]);
     }
 
-    public static function getHello() {
-        echo 111; die();
-    }
 }

@@ -15,8 +15,8 @@ class ListTest extends TestCase
     public function testIsEqualJson(): void
     {
         $this->actingAs(User::query()->whereKey(1)->first(), 'web');
-        $r = $this->withToken('1|CuGcYovMogmeG2unGnzhZPrPdBMbTQqlRiBWVvso')
-            ->json('get', '/api/blog');
+        // $r = $this->withToken('1|CuGcYovMogmeG2unGnzhZPrPdBMbTQqlRiBWVvso')
+        $r = $this->json('get', '/api/blog');
         $this->assertAuthenticated();
         $r->assertStatus(200);
         $r->assertSeeText('success');

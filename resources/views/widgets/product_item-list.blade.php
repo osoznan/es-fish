@@ -12,9 +12,9 @@ use App\Widgets\ProductItem;
 
 foreach ($productList as $product): ?>
     <div class="col col-md-6 col-lg-3">
-        <?= ProductItem::widget([
+        {!! ProductItem::widget([
             'product' => $product,
-        ]) ?>
+        ]) !!} ?>
     </div>
 <?php endforeach ?>
 </div>

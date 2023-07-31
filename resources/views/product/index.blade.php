@@ -49,10 +49,10 @@ use App\Widgets\BreadCrumbs;
         <div class="row mb-3">
             <div class="col-12 col-lg-7">
                 {{--<div class="sect-product__image" data-src="/img/photos/<?= $product->url ?>"></div>--}}
-                <?= ProductCarousel::widget(['product' => $product]) ?>
+                {!! ProductCarousel::widget(['product' => $product])  !!}
             </div>
             <div class="col-12 col-lg-5">
-                <h2 class="sect-product__title"><?= $product->locale('name') ?></h2>
+                <h2 class="sect-product__title">{{ $product->locale('name') }}</h2>
                 <span class="tiny-font light-gray-color">@lang('site.product.artikul')</span>
 
                 <?php if ($product->present): ?>
@@ -62,15 +62,15 @@ use App\Widgets\BreadCrumbs;
                 <?php endif ?>
 
                 <div class="sect-product__feedback">
-                    <span class="mr-2"><?= $feedbacks->count() ?>&nbsp;<?= t::inPlace('отзывов|вiдгукiв|feedbacks') ?></span>
-                    <div class="w-100"><?= StarRating::widget(['product_id' => $product->id, 'amount' => $product->rating ]) ?></div>
+                    <span class="mr-2">{{ $feedbacks->count() }}&nbsp;{{ t::inPlace('отзывов|вiдгукiв|feedbacks') }}</span>
+                    <div class="w-100">{!! StarRating::widget(['product_id' => $product->id, 'amount' => $product->rating ]) !!}</div>
                     <a class="sect-product__add-feedback dark-text-anchor scroll-link" href="#nav-feedback-tab" onclick="activateFeedback({{ $product->id }})">
                         @lang('site.product.feedback.add')
                     </a>
                 </div>
 
                 <div>
-                    <?= ProductAmountSelector::widget(['product' => $product]) ?>
+                    {!! ProductAmountSelector::widget(['product' => $product]) !!}
                 </div>
             </div>
 
@@ -102,14 +102,14 @@ use App\Widgets\BreadCrumbs;
             <div class="sect-product__tabs nav row" id="nav-tab" role="tablist">
                 <button class="col active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true"><div>@lang('site.product.description')</div></button>
                 <button class="col" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false"><div>@lang('site.product.properties')</div></button>
-                <button class="col" id="nav-feedback-tab" data-bs-toggle="tab" data-bs-target="#nav-feedback" type="button" role="tab" aria-controls="nav-feedback" aria-selected="false" onclick="activateFeedback(<?= $product->id ?>)">
+                <button class="col" id="nav-feedback-tab" data-bs-toggle="tab" data-bs-target="#nav-feedback" type="button" role="tab" aria-controls="nav-feedback" aria-selected="false" onclick="activateFeedback({{ $product->id }})">
                     <div>@lang('site.feedback.feedbacks')</div>
                 </button>
             </div>
         </nav>
         <div class="tab-content mb-5" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                <?= $product->description ?>
+                {{ $product->description }}
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 

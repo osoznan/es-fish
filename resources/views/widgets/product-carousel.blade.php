@@ -8,18 +8,18 @@
         @php $i = -1 @endphp
         @foreach ($images as $image)
             @php $i++ @endphp
-            <div data-src="<?= ImageManager::getThumbsUrl(isset($image['image']) ? $image['image']['url'] : '') ?>"
+            <div data-src="{{ ImageManager::getThumbsUrl(isset($image['image']) ? $image['image']['url'] : '') }}"
                 type="button" data-bs-target="#product_carousel"
-                data-bs-slide-to="<?= $i ?>" class="<?= !$i ? 'active' : '' ?>" aria-current="<?= $i ? 'true' : 'false' ?>" aria-label="Slide 1"></div>
+                data-bs-slide-to="{{ $i }}" class="{{ !$i ? 'active' : '' }}" aria-current="{{ $i ? 'true' : 'false' }}" aria-label="Slide 1"></div>
         @endforeach
     </div>
     <div class="carousel-inner">
         @php $i = 0 @endphp
         @foreach ($images as $image)
             @php $i++ @endphp
-            <div class="carousel-item <?= $i == 1 ? 'active' : '' ?>">
+            <div class="carousel-item {{ $i == 1 ? 'active' : '' }}">
                 <div class="product-carousel__image sect-product__image"
-                     data-src="<?= ImageManager::getPhotosUrl(isset($image['image']) ? $image['image']['url'] : '') ?>"></div>
+                     data-src="{{ ImageManager::getPhotosUrl(isset($image['image']) ? $image['image']['url'] : '') }}"></div>
             </div>
         @endforeach
     </div>

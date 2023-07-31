@@ -12,6 +12,9 @@ class CategoryController extends TopController {
         $subCategoryAlias = Route::current()->parameter('subcategory');
 
         $catInfo = CategoryManager::getCategoryInfo($categoryAlias, $subCategoryAlias);
+        if (!$catInfo) {
+            return;
+        }
 
         return view('category.index', [
             'category' => $catInfo[0],

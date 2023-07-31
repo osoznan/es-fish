@@ -53,7 +53,7 @@ $title = BlogManager::getCategoryAlias($categoryId);
                     </div>
                     <div class="blog-category__thumb__text col-sm-12 col-xl-7">
                         <h2 class="blog-category__thumb__header">
-                            <a href="<?= BlogManager::getUrl($article) ?>">{{ $article->locale('title') }}</a>
+                            <a href="{{ BlogManager::getUrl($article) }}">{{ $article->locale('title') }}</a>
                         </h2>
 
                         <div class="blog-category-thumb__description mb-3">

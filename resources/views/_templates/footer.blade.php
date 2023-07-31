@@ -51,8 +51,8 @@ use App\Components\BasketManager;
                 @include('_templates/widgets/phone')
                 <a href="mailto:<?= config('user.email') ?>"><?= config('user.email') ?></a>
                 <div class="mt-3">
-                    <a href="{{ config('user.viber') }}"><img src="/img/telegram.svg" alt="telegram"></a>
-                    <a href="{{ config('user.instagram') }}"><img src="/img/viber.svg" alt="viber"></a>
+                    <a href="{{ config('user.viber') }}"><img class="footer__social-image" src="/img/telegram.svg" alt="telegram"></a>
+                    <a href="{{ config('user.instagram') }}"><img class="footer__social-image" src="/img/viber.svg" alt="viber"></a>
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@ use App\Components\BasketManager;
 @if (defined('INITIAL_TOTAL_COST'))
     <div class="float-cart {{ BasketManager::isBasketEmpty() ? 'd-none' : '' }}">
         <a class="d-flex" href="<?= fishLink('cart') ?>">
-            <div><img src="/img/shopping-bag.svg" class="m-2" alt=basket></div>
+            <div class="p-1"><img class="float-cart__image" src="/img/shopping-bag.svg" class="m-2" alt=basket></div>
             <div>
                 <div><span class="float-cart__price"><?= INITIAL_TOTAL_COST ?></span> @lang('site.abbr.hrivnas')</div>
                 <span class="orange-color tiny-font">@lang("site.to-basket")</span>
@@ -91,7 +91,9 @@ use App\Components\BasketManager;
 </button>
 
 
-<a id="scroll-to-top" href="#page-start" class="scroll-link" title="В начало страницы" style="opacity: 0.816369; display: block;"><img data-src="/images/slider-nav-button.png" src="/img/slider-nav-button.png" style="animation: 286.289ms ease-in 0s 1 normal none running fadein;"></a>
+<a class="scroll-to-top scroll-link" href="#page-start" title="В начало страницы" style="opacity: 0.816369; display: block;">
+    <img class="scroll-to-top__image" data-src="/images/slider-nav-button.png" src="/img/slider-nav-button.png" style="animation: 286.289ms ease-in 0s 1 normal none running fadein;">
+</a>
 
 <div class="progress-indicator" style="display: none">
     <img src="/img/progress.gif">

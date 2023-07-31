@@ -26,4 +26,10 @@ class CategoryRepository extends Repository implements IReadRepository, IWriteRe
         return $new->save();
     }
 
+    public function paginate($page, $perPage)
+    {
+        return $this->modelClass::with('image')->with('parent')
+            ->all()->forPage($page, $perPage);
+    }
+
 }

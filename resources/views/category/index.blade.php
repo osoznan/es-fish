@@ -55,10 +55,10 @@ use App\Widgets\Pager;
 
                 </div>-->
                 <div class="sect-category-pane__menu flex-wrap flex-column flex-md-row d-lg-flex">
-                    <a href="<?= CategoryManager::getUrl($category) ?>" class="{{ !$subCategory ? 'sect-category-pane__menu_active' : '' }}">@lang('site.category.all')</a>
+                    <a href="<?= CategoryManager::getUrl($category) ?>" class="text-gray-200 {{ !$subCategory ? 'sect-category-pane__menu_active' : '' }}">@lang('site.category.all')</a>
 
                     <?php foreach ($categories as $cat): ?>
-                        <a href="<?= CategoryManager::getUrl($cat) ?>" class="{{ $subCategory && $subCategory->id == $cat->id ? 'sect-category-pane__menu_active' : '' }}">
+                        <a href="<?= CategoryManager::getUrl($cat) ?>" class="text-gray-200 {{ $subCategory && $subCategory->id == $cat->id ? 'sect-category-pane__menu_active' : '' }}">
                             <?= t::getLocaleField($cat, 'name') ?>
                         </a>
                     <?php endforeach; ?>

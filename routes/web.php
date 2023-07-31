@@ -124,7 +124,7 @@ Route::name('feedback')->prefix('/feedback')->group(function () {
     Route::get('/', [SiteController::class, 'feedback']);
 });
 
-if (!Request::is('admin/*')) {
+if (!Request::is('admin/*', 'telescope*')) {
     Route::prefix('/blog/{cat}/')->group(function () {
         Route::get('/', [BlogController::class, 'category']);
     });

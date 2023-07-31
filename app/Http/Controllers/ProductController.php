@@ -35,6 +35,9 @@ class ProductController extends TopController {
         abort_if(!$product, 404, 'Данный продукт не существует');
 
         $catInfo = CategoryManager::getCategoryInfo($categoryAlias, $subCategoryAlias);
+        if (!$catInfo) {
+            return;
+        }
 
         $feedbacks = Comment::searchActive()
             ->where(['product_id' => $product->id])

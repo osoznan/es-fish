@@ -2,7 +2,6 @@
 
 namespace App\Components;
 
-use App\Facades\Telegram;
 use App\Models\Category;
 use App\Components\Translation as t;
 use Illuminate\Support\Facades\Cache;
@@ -55,14 +54,21 @@ class CategoryManager {
         return (t::getLocale() != 'ru' ? ('/' . t::getLocale()) : null) . ($categoryAlias  ? ('/' . $categoryAlias) : '') . ($subCategoryAlias ? ('/' .$subCategoryAlias) : '');
     }
 
-    public static function getCategoryInfo(string $catAlias, ?string $subCatAlias): array {
+    public static function getCategoryInfo(string $catAlias, ?string $subCatAlias): array|bool {
         $category = Category::searchActive()
             ->where(t::getLocaleFieldName('alias'), $catAlias)
             ->first();
 
-        if ($subCatAlias) {
-            Log::debug('category alias ' . $catAlias . $_SERVER['REQUEST_URI']);
+        if (!$category) {
+            Log::debug('Wrong category alias for ' . $catAlias . $_SERVER['REQUEST_URI']);
+            return false;
+        }
 
+        if (!$category) {
+            return [null, null];
+        }
+
+        if ($subCatAlias) {
             $subCategory = Category::searchActive()->where([
                 t::getLocaleFieldName('alias') => $subCatAlias,
                 'parent_category_id' => $category->id

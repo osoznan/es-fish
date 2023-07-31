@@ -25,7 +25,7 @@ $menuProducts = Product::searchActive()
 <section class="leftmenu container-fluid">
 <div class="container">
     <div class="row">
-        <div class="col-3">
+        <div class="col-3 d-lg-block">
             <nav class="navbar navbar-light d-none d-lg-block">
                 <div class="container">
                     <button class="navbar-toggler" onclick="landing.showMainMenu()">
@@ -54,16 +54,16 @@ $menuProducts = Product::searchActive()
 
                 <div class="fw-bold main-menu__item">@lang('site.blog.materials')</div>
                 <ul class="">
-                    <a href="<?= BlogManager::getCategoryUrl(1) ?>" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(1))</a>
-                    <a href="<?= BlogManager::getCategoryUrl(2) ?>" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(2))</a>
-                    <a href="<?= BlogManager::getCategoryUrl(3) ?>" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(3))</a>
+                    <a href="{{ BlogManager::getCategoryUrl(1) }}" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(1))</a>
+                    <a href="{{ BlogManager::getCategoryUrl(2) }}" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(2))</a>
+                    <a href="{{ BlogManager::getCategoryUrl(3) }}" class="navigation-link main-menu__item">@lang('site.blog.' . BlogManager::getCategoryAlias(3))</a>
                 </ul>
 
-                <a href="<?= fishLink('/contacts') ?>" class="navigation-link main-menu__item fw-bold">@lang('site.menu.contacts')</a>
+                <a href="{{ fishLink('/contacts') }}" class="navigation-link main-menu__item fw-bold">@lang('site.menu.contacts')</a>
 
                 <div class="d-block d-lg-none text-center">
-                    <a href=""><img src="/img/facebook.svg"></a>&nbsp;
-                    <a href=""><img src="/img/linkedin.svg"></a>
+                    <a href="{{ config('user.facebook') }}"><img src="/img/facebook.svg"></a>&nbsp;
+                    <a href="{{ config('user.linkedin') }}"><img src="/img/linkedin.svg"></a>
 
                     @include('_templates/widgets/phone')
                     <span class="light-gray-color">@lang('site.index.cap.call-time')</span>
@@ -74,11 +74,11 @@ $menuProducts = Product::searchActive()
             <nav class="mainmenu__categories navbar navbar-expand-md overflow-hidden">
                 <div class="container-fluid">
                     <div class="collapse navbar-collapse d-flex">
-                        <ul class="navbar-nav mr-auto mb-2 mb-lg-0 flex-row">
+                        <ul class="navbar-nav mr-auto mb-2 mb-lg-0 flex-row justify-content-center w-100">
                             @foreach ($topCategories as $category)
                             <li class="mainmenu__categories__item nav-item text-center">
                                 <a class="mainmenu__categories__anchor nav-link active" href="#toggle{{ $category['id'] }} ?>"
-                                        data-bs-toggle="collapse" aria-controls="#toggle<?= $category['id'] ?>"
+                                        data-bs-toggle="collapse" aria-controls="#toggle{{ $category['id'] }}"
                                         data-bs-target="#toggle{{ $category['id'] }}" data-bs-toggle="dropdown" role="button">
                                     <img class="mainmenu__categories__image" src="{{ config('user.top-category-pictures')[$category['id']] ?? '' }}">
                                     <div class="mainmenu__categories__title">{{ t::getLocaleField($category, 'name') }}</div>
@@ -99,23 +99,23 @@ $menuProducts = Product::searchActive()
         @foreach ($topCategories as $top)
         <?php $subCategories = $subCategoriesSet[$top['id']] ?>
 
-        <div id="toggle<?= $top['id'] ?>" class="mainmenu__subcategories__toggle row collapse ignore-on-doc-click">
+        <div id="toggle{{ $top['id'] }}" class="mainmenu__subcategories__toggle row collapse ignore-on-doc-click">
 
-            <?= !count($subCategories) ? trans('site.category.no-subcategory-products') : '' ?>
+            {{ !count($subCategories) ? trans('site.category.no-subcategory-products') : '' }}
 
             @foreach ($subCategories as $category)
             <div class="col-12 col-lg-6 col-xl-3 d-flex">
-                <a href="<?= CategoryManager::getUrl($category) ?>" style="display: contents">
-                    <div class="mainmenu__subcategories__image m-2 div-image-thumb" data-src="<?= ImageManager::getPhotosUrl($category->image->url) ?>"></div>
+                <a href="{{ CategoryManager::getUrl($category) }}" style="display: contents">
+                    <div class="mainmenu__subcategories__image m-2 div-image-thumb" data-src="{{ ImageManager::getPhotosUrl($category->image->url) }}"></div>
                 </a>
                 <div class="mainmenu__subcategories__text">
                     <div class="mainmenu__subcategories__title">
-                        <a href="<?= CategoryManager::getUrl($category) ?>" class="dark-text-anchor"><?= t::getLocaleField($category, 'name') ?></a>
+                        <a href="{{ CategoryManager::getUrl($category) }}" class="dark-text-anchor">{{ t::getLocaleField($category, 'name') }}</a>
                     </div>
                     <div class="mainmenu__subcategories__product-list">
                         @foreach ($menuProducts as $menuProduct)
                             @if ($menuProduct['category_id'] == $category['id'])
-                                <a href="<?= ProductManager::getUrl($menuProduct) ?>" class="dark-text-anchor"><?= $menuProduct->locale('name') ?></a>
+                                <a href="{{ ProductManager::getUrl($menuProduct) }}" class="dark-text-anchor">{{ $menuProduct->locale('name') }}</a>
                             @endif
                         @endforeach
                     </div>

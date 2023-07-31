@@ -5,9 +5,9 @@ sendBigCartData = function(data) {
     ajax('/ajax', {action: 'ajaxCartRefresh', data: data}, function(res) {
         const data = JSON.parse(res).original;
         el.innerHTML = data.content
-        if (!data.totalCost) {
+/*        if (!data.totalCost) {
             document.querySelector('.cart__form').innerHTML = '';
-        }
+        }*/
 
         triggerEvent(document, 'cart-changed', {totalCost: data.totalCost})
     })

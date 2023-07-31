@@ -24,7 +24,9 @@ class BlogArticleRepository extends Repository implements IReadRepository, IWrit
 
     public function paginate($page, $perPage)
     {
-        return BlogArticleCollection::collection($this->modelClass::all()->forPage($page, $perPage));
+        return BlogArticleCollection::collection(
+            $this->modelClass::with('image')->all()->forPage($page, $perPage)
+        );
     }
 
 }

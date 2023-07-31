@@ -85,7 +85,7 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
                 {!! CategoryItem::widget([
                     'category' => $categories->get($categoryId),
                     'parentCategory' => $categories->get(1),
-                    'class' => 'col-sm-12 col-xl-3'
+                    'class' => 'col-sm-12 col-md-6 col-xl-3'
                 ]) !!}
             @endforeach
 
@@ -93,7 +93,7 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
                 {!! CategoryItem::widget([
                     'category' => $categories->get($categoryId),
                     'parentCategory' => $categories->get(2),
-                    'class' => 'col-sm-12 col-lg-6'
+                    'class' => 'col-sm-12 col-md-6 col-lg-6'
                 ]) !!}
             @endforeach
         </div>
@@ -110,15 +110,15 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
 
         @foreach ($catData as $category)
         <h2>{{ $categories->get($category['main'])->localeFieldValue('name') }}</h2>
-        <div class="row mb-4"> ?>
+        <div class="row mb-4">
             @foreach ($category['list'] as $categoryId)
                 {!! CategoryItem::widget([
                     'category' => $categories->get($categoryId),
                     'parentCategory' => $categories->get($category['main']),
                     'class' => count($category['list']) >= 4 ?
-                        'col-sm-6 col-lg-4 col-xl-3' : 'col-sm-6 col-lg-' . (12 / count($category['list']))
+                        'col-sm-12 col-md-6 col-lg-4 col-xl-3' : 'col-sm-12 col-md-6 col-lg-' . (12 / count($category['list']))
                 ]) !!}
-            @endforeach; ?>
+            @endforeach
         </div>
         @endforeach
     </div>
@@ -152,21 +152,23 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
             <div class="sect-blog__header">@lang('site.blog.title')</div>
             <div class="sect-blog__tabs nav" id="nav-tab" role="tablist">
                 @foreach (BlogManager::CATEGORY_ALIASES['en'] as $key => $blogCategory)
-                    <a class="<?= $key == 1 ? 'active' : '' ?>" id="nav-<?= $blogCategory ?>-tab" data-bs-toggle="tab" data-bs-target="#nav-<?= $blogCategory ?>" type="button" role="tab" aria-controls="nav-<?= $blogCategory ?>" aria-selected="<?= $key == 1 ? 'true' : 'false' ?>"> <?= trans('site.blog.' . $blogCategory) ?></a>
+                    <a class="{{ $key == 1 ? 'active' : '' }}" id="nav-{{ $blogCategory }}-tab" data-bs-toggle="tab" data-bs-target="#nav-{{ $blogCategory }}" type="button" role="tab" aria-controls="nav-{{ $blogCategory }}" aria-selected="{{ $key == 1 ? 'true' : 'false' }}">
+                        {{ trans('site.blog.' . $blogCategory) }}
+                    </a>
                 @endforeach
             </div>
         </nav>
         <div class="tab-content mb-4" id="nav-tabContent">
             @foreach (BlogManager::CATEGORY_ALIASES['en'] as $key => $blogCategory)
-                <div class="tab-pane fade <?= $key == 1 ? 'show active' : '' ?>" id="nav-<?= $blogCategory ?>" role="tabpanel" aria-labelledby="nav-<?= $blogCategory ?>-tab">
+                <div class="tab-pane fade {{ $key == 1 ? 'show active' : '' }}" id="nav-{{ $blogCategory }}" role="tabpanel" aria-labelledby="nav-{{ $blogCategory }}-tab">
                     <div class="row pt-4">
                         <?php $blogArticles = BlogArticle::query()
                             ->with('image')
                             ->where('blog_article.category_id', $key)
                             ->limit(3)->get() ?>
 
-                        @foreach ($blogArticles as $article):
-                            {!! BlogItem::widget(['article' => $article]) !!};
+                        @foreach ($blogArticles as $article)
+                            {!! BlogItem::widget(['article' => $article]) !!}
                         @endforeach
                     </div>
                 </div>

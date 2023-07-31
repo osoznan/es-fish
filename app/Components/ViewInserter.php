@@ -25,7 +25,7 @@ class ViewInserter {
     }
 
     public static function insertCssFile($css, $key = null) {
-        static::$_cssFiles[$key] = $css;
+        static::$_cssFiles[$key ?? $css] = $css;
     }
 
     public static function insertJsFile($js) {
