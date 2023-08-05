@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static set($id, $amount)
  * @method static get($id)
  * @method static getAll()
- * @method static isBasketEmpty()
+ * @method static isCartEmpty()
  * @method static getProducts($idValues = null)
+ * @method static getTotalCost()
  */
 class BasketManager extends Facade
 {

@@ -3,18 +3,19 @@
 namespace App\Components;
 
 use App\Models\Product;
+use Illuminate\Support\Collection;
 
 class BasketManager {
 
     const SESSION_VAR = 'basket-products';
 
-    public static function add($id) {
+    public function add($id) {
         $data = $_SESSION[static::SESSION_VAR] ?? [];
         $data[$id] = ($data[$id] ?? 0) + 1;
         $_SESSION[static::SESSION_VAR] = $data;
     }
 
-    public static function remove($id) {
+    public function remove($id) {
         $data = $_SESSION[static::SESSION_VAR] ?? [];
         if (!isset($data[$id])) {
             return;
@@ -29,7 +30,7 @@ class BasketManager {
         $_SESSION[static::SESSION_VAR] = $data;
     }
 
-    public static function removeAll($id = null) {
+    public function removeAll($id = null) {
         $data = $_SESSION[static::SESSION_VAR] ?? [];
         if ($id) {
             unset($data[$id]);
@@ -40,7 +41,7 @@ class BasketManager {
         $_SESSION[static::SESSION_VAR] = $data;
     }
 
-    public static function set($id, $amount) {
+    public function set($id, $amount) {
         $data = $_SESSION[static::SESSION_VAR] ?? [];
         if ($amount > 0) {
             $data[$id] = $amount;
@@ -51,19 +52,36 @@ class BasketManager {
         $_SESSION[static::SESSION_VAR] = $data;
     }
 
-    public static function get($id) {
+    public function get($id) {
         return $_SESSION[static::SESSION_VAR][$id] ?? null;
     }
-
-    public static function getAll() {
-        return $_SESSION[static::SESSION_VAR] ?? [];
+    public function getAll(): Collection {
+        return new Collection($_SESSION[static::SESSION_VAR] ?? []);
     }
 
-    public static function isBasketEmpty() {
-        return empty(static::getAll());
+    public function isCartEmpty() {
+        return static::getAll()->isEmpty();
     }
 
-    public static function getProducts($idValues = null) {
+    public function getTotalCost() {
+        $amounts = $this->getAll();
+        if (empty($amounts)) {
+            return 0;
+        }
+
+        $products = $this->getProducts($amounts->keys());
+
+        $total = 0;
+        foreach ($products as $product) {
+            if (isset($amounts[$product['id']])) {
+                $total += $product['price'] * $amounts[$product->id];
+            }
+        }
+
+        return $total;
+    }
+
+    public function getProducts($idValues = null) {
         $idValues = $idValues ?? BasketManager::getAll();
 
         return Product::searchActive()

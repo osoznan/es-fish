@@ -101,7 +101,7 @@ use App\Widgets\BreadCrumbs;
         <nav>
             <div class="sect-product__tabs nav row" id="nav-tab" role="tablist">
                 <button class="col active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true"><div>@lang('site.product.description')</div></button>
-                <button class="col" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false"><div>@lang('site.product.properties')</div></button>
+                <button class="col" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-properties" type="button" role="tab" aria-controls="nav-profile" aria-selected="false"><div>@lang('site.product.properties')</div></button>
                 <button class="col" id="nav-feedback-tab" data-bs-toggle="tab" data-bs-target="#nav-feedback" type="button" role="tab" aria-controls="nav-feedback" aria-selected="false" onclick="activateFeedback({{ $product->id }})">
                     <div>@lang('site.feedback.feedbacks')</div>
                 </button>
@@ -109,10 +109,10 @@ use App\Widgets\BreadCrumbs;
         </nav>
         <div class="tab-content mb-5" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                {{ $product->description }}
+                {!! $product->locale('description') !!}
             </div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-
+            <div class="tab-pane fade" id="nav-properties" role="tabpanel" aria-labelledby="nav-profile-tab">
+                {!! $product->locale('properties') !!}
             </div>
             <div class="tab-pane fade" id="nav-feedback" role="tabpanel" aria-labelledby="nav-feedback-tab">
             </div>

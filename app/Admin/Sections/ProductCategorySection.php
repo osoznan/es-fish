@@ -121,7 +121,6 @@ class ProductCategorySection extends Section implements Initializable
                 AdminFormElement::selectajax('parent_category_id', 'Parent Category')
                     ->setModelForOptions(Category::class)
                     ->setSearch('name')
-                    ->nullable()
                     ->setDisplay(function ($model) {
                         return $model->name;
                     }),
@@ -130,7 +129,7 @@ class ProductCategorySection extends Section implements Initializable
                 AdminFormElement::text('seo_description', 'Seo Description'),
 
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
-                AdminFormElement::textarea('description', 'Description'),
+                AdminFormElement::wysiwyg('description', 'Description'),
                 AdminFormElement::selectajax('image_id', 'Image')
                     ->setModelForOptions(Image::class)
                     ->setSearch('name')
@@ -151,7 +150,7 @@ class ProductCategorySection extends Section implements Initializable
                 AdminFormElement::text('seo_keywords_en', 'Seo Keywords EN'),
                 AdminFormElement::text('seo_description_en', 'Seo Description EN'),
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
-                AdminFormElement::textarea('description', 'Description EN')
+                AdminFormElement::wysiwyg('description_en', 'Description EN')
             ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
 
             AdminFormElement::html('<hr>'),
@@ -162,7 +161,7 @@ class ProductCategorySection extends Section implements Initializable
                 AdminFormElement::text('seo_keywords_ua', 'Seo Keywords UA'),
                 AdminFormElement::text('seo_description_ua', 'Seo Description UA'),
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
-                AdminFormElement::textarea('description', 'Description UA')
+                AdminFormElement::wysiwyg('description_ua', 'Description UA')
             ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
         ]);
 

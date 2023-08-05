@@ -9,7 +9,10 @@ use AdminForm;
 use AdminFormElement;
 use App\Components\ImageManager;
 use App\Http\Requests\CreateImageRequest;
+use App\Http\Requests\MainGalleryCreateRequest;
+use App\Http\Requests\MainGalleryUpdateRequest;
 use App\Http\Requests\UpdateImageRequest;
+use App\Models\Image;
 use App\Widgets\Admin\ImageColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -103,6 +106,15 @@ class MainGallerySection extends Section implements Initializable
                 AdminFormElement::text('link', 'Link'),
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
                 AdminFormElement::textarea('text', 'Text')->setRows(3),
+                AdminFormElement::selectajax('image_id', 'Image')
+                    ->setModelForOptions(Image::class)
+                    ->setSearch('name')
+                    ->setDisplay(function ($model) {
+                        return '<a href="'.ImageManager::getPhotosUrl($model->url).'" data-toggle="lightbox">
+                                <img src="'.ImageManager::getThumbsUrl($model->url).'" width="60" height="50">
+                            </a>
+                            <span style="cursor: pointer">'.$model->name.'</span>';
+                    }),
             ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
 
             AdminFormElement::html('<hr>'),
@@ -131,16 +143,9 @@ class MainGallerySection extends Section implements Initializable
             'cancel'  => (new Cancel()),
         ]);
 
-        $this->attachValidators($form, [
-            'title' => $validName = 'required|string|min:10|max:80',
-            'title_en' => $validName,
-            'title_ua' => $validName,
-            'text' => $validName = 'required|string|min:10|max:1000',
-            'text_en' => $validName,
-            'text_ua' => $validName,
-            'link' => 'url',
-            'hidden' => 'bool'
-        ]);
+        $this->attachValidators($form,
+            ($id > 0 ? (new MainGalleryUpdateRequest()) : (new MainGalleryCreateRequest()))->rules()
+        );
 
         return $form;
     }

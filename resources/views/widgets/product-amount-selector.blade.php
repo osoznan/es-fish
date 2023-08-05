@@ -10,8 +10,10 @@ use App\Components\Translation as t;
 </div>
 @endif
 
-<span class="sect-product__price">{{ $product->price * ($amountInBasket ?? 1) }} {{ trans('site.abbr.hrivnas') }}</span>&nbsp;
-<span class="font-weight-bold">{{ $product->weight }} {{ t::inPlace('за|за|for') }} {{ (100 * ($amountInBasket ?? 1)) . ' ' . trans('site.abbr.gramm') }}</span>
+
+
+<span class="sect-product__price">{{ $product->price * ($amountInBasket > 0 ?: 1) }} {{ trans('site.abbr.hrivnas') }}</span>&nbsp;
+<span class="font-weight-bold">{{ $product->weight }} {{ t::inPlace('за|за|for') }} {{ (100 * ($amountInBasket > 0 ?: 1)) . ' ' . trans('site.abbr.gramm') }}</span>
 
 <div class="mb-3"></div>
 

@@ -7,13 +7,14 @@ use phpDocumentor\Reflection\Types\Static_;
 
 class ImageManager {
 
-    const DEFAULT_THUMB_WIDTH = 50;
+    const DEFAULT_THUMB_WIDTH = 100;
 
     public static function getCategories() {
         return [
             '1' => 'Товары',
             '2' => 'Категории',
-            '3' => 'Блог'
+            '3' => 'Блог',
+            '4' => 'Галерея'
         ];
     }
 
@@ -88,13 +89,13 @@ class ImageManager {
         switch($fileExt){
             case 'jpg':
             case 'jpeg':
-                return imagejpeg($thumb_create, $dest,100);
+                return imagejpeg($thumb_create, $dest,70);
                 break;
             case 'png':
-                return imagepng($thumb_create, $dest,9);
+                return imagepng($thumb_create, $dest,3);
                 break;
             default:
-                return imagejpeg($thumb_create, $dest,100);
+                return imagejpeg($thumb_create, $dest,70);
         }
     }
 

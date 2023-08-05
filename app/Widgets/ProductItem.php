@@ -2,7 +2,7 @@
 
 namespace App\Widgets;
 
-use App\Components\BasketManager;
+use App\Facades\BasketManager;
 use App\Components\ImageManager;
 use App\Components\OrderManager;
 use App\Components\ProductManager;
@@ -100,7 +100,7 @@ JS, 'productAmountSelector');
         }
 
         $product = Product::searchActive()
-            ->where(['product.id' => $data['product_id']])
+            ->where(['id' => $data['product_id']])
             ->first();
 
         return response()->json([

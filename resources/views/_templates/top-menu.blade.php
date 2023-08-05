@@ -77,7 +77,7 @@ $menuProducts = Product::searchActive()
                         <ul class="navbar-nav mr-auto mb-2 mb-lg-0 flex-row justify-content-center w-100">
                             @foreach ($topCategories as $category)
                             <li class="mainmenu__categories__item nav-item text-center">
-                                <a class="mainmenu__categories__anchor nav-link active" href="#toggle{{ $category['id'] }} ?>"
+                                <a class="mainmenu__categories__anchor nav-link active" href="#toggle{{ $category['id'] }}"
                                         data-bs-toggle="collapse" aria-controls="#toggle{{ $category['id'] }}"
                                         data-bs-target="#toggle{{ $category['id'] }}" data-bs-toggle="dropdown" role="button">
                                     <img class="mainmenu__categories__image" src="{{ config('user.top-category-pictures')[$category['id']] ?? '' }}">
@@ -85,6 +85,13 @@ $menuProducts = Product::searchActive()
                                 </a>
                             </li>
                             @endforeach
+
+                            <li class="mainmenu__categories__item nav-item text-center">
+                                <a class="mainmenu__categories__anchor nav-link active" href="{{ fishLink('/promotions') }}">
+                                    <img class="mainmenu__categories__image" src="/img/promotions.svg">
+                                    <div class="mainmenu__categories__title">@lang('site.promotions.title')</div>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -99,12 +106,12 @@ $menuProducts = Product::searchActive()
         @foreach ($topCategories as $top)
         <?php $subCategories = $subCategoriesSet[$top['id']] ?>
 
-        <div id="toggle{{ $top['id'] }}" class="mainmenu__subcategories__toggle row collapse ignore-on-doc-click">
+        <div id="toggle{{ $top['id'] }}" class="mainmenu__subcategories__toggle row collapse justify-content-around ignore-on-doc-click">
 
             {{ !count($subCategories) ? trans('site.category.no-subcategory-products') : '' }}
 
             @foreach ($subCategories as $category)
-            <div class="col-12 col-lg-6 col-xl-3 d-flex">
+            <div class="col-12 col-lg-6 col-xl-4 d-flex flex-grow-1">
                 <a href="{{ CategoryManager::getUrl($category) }}" style="display: contents">
                     <div class="mainmenu__subcategories__image m-2 div-image-thumb" data-src="{{ ImageManager::getPhotosUrl($category->image->url) }}"></div>
                 </a>

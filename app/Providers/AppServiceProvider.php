@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 use App\Components\BasketManager;
+use App\Components\CartManagerAuth;
 use App\Components\helpers\Telegram;
 use App\Components\OrderManager;
 use Illuminate\Support\ServiceProvider;
-use Yajra\DataTables\Html\Builder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->bind('basket.service', function ($app) {
-            return new BasketManager();
+            return auth()->user() ? new CartManagerAuth() : new BasketManager();
         });
         $this->app->bind('order.service', function ($app) {
             return new OrderManager();

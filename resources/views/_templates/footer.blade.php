@@ -5,7 +5,7 @@ use App\Components\Translation as t;
 use App\Components\CategoryManager;
 use App\Widgets\ContactForm;
 use App\Components\ViewInserter;
-use App\Components\BasketManager;
+use App\Facades\BasketManager;
 
 ?>
 
@@ -15,7 +15,7 @@ use App\Components\BasketManager;
             <div class="col">
                 @include('_templates/widgets/logo')
 
-                <div class="footer__copyright">© "Рыбный путь" - качественная рыба и морепродукты оптом и в розницу с доставкой по Украине. 2020 Все права защищены.</div>
+                <div class="footer__copyright">@lang('site.copyright', ['date' => date('Y')])</div>
             </div>
             <div class="col d-none d-lg-block">
                 <div class="footer__item-list-header">@lang('site.menu.products')</div>
@@ -36,7 +36,6 @@ use App\Components\BasketManager;
                     <a href="<?= fishLink('guarantees') ?>">@lang('site.menu.guarantees')</a>
                     <a href="<?= fishLink('product-return') ?>">@lang('site.menu.return')</a>
                     <a href="<?= fishLink('faq') ?>">@lang('site.menu.faq')</a>
-                    <a href="<?= fishLink('delivery-payment') ?>">@lang('site.menu.price')</a>
                 </div>
             </div>
             <div class="col pb-4">
@@ -60,7 +59,7 @@ use App\Components\BasketManager;
 </div>
 
 @if (defined('INITIAL_TOTAL_COST'))
-    <div class="float-cart {{ BasketManager::isBasketEmpty() ? 'd-none' : '' }}">
+    <div class="float-cart {{ BasketManager::isCartEmpty() ? 'd-none' : '' }}">
         <a class="d-flex" href="<?= fishLink('cart') ?>">
             <div class="p-1"><img class="float-cart__image" src="/img/shopping-bag.svg" class="m-2" alt=basket></div>
             <div>

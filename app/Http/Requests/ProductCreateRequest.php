@@ -31,6 +31,9 @@ class ProductCreateRequest extends \Illuminate\Foundation\Http\FormRequest {
             'seo_title_ua' => $seo,
             'seo_keywords_ua' => $seo,
             'seo_description_ua' => $seo,
+            'promotion_price' => 'nullable|integer|min:1',
+            'promotion_start_date' => 'date|nullable',
+            'promotion_finish_date' => 'date|nullable',
         ];
     }
 

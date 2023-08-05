@@ -18,12 +18,13 @@ class MainGalleryCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:3|max:50',
-            'title_ua' => 'required|min:3|max:30',
-            'title_en' => 'required|min:3|max:30',
-            'text' => 'required|min:|max:1000',
-            'text_ua' => 'required|min:3|max:1000',
-            'text_en' => 'required|min:3|max:1000',
+            'title' => 'required|string|min:3|max:50',
+            'title_ua' => 'required|string|min:3|max:30',
+            'image_id' => 'exists:image,id|required',
+            'title_en' => 'required|string|min:3|max:30',
+            'text' => 'required|string|min:3|max:300',
+            'text_ua' => 'required|string|min:3|max:300',
+            'text_en' => 'required|string|min:3|max:300',
         ];
 
     }

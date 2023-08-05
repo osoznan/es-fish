@@ -152,11 +152,17 @@ return [
         'control-number' => 'Control number'
     ],
 
+    'copyright' => '"Fish Way" - high-quality fish and seafood wholesale and retail with delivery throughout Ukraine. :date All rights reserved.',
+
     'cooperation' => [
         'title' => 'Cooperation'
     ],
 
     'detailed' => 'In detail',
     'send-it' => 'Send',
+
+    'promotions' => [
+        'title' => 'Promotions'
+    ]
 
 ];

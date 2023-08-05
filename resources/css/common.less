@@ -4,6 +4,10 @@ body {
   color: @darkGray;
 }
 
+img {
+    transition: opacity 3s;
+}
+
 a {
   text-decoration: none;
   color: @darkGray;
@@ -323,7 +327,7 @@ h2 {
 
       @media all and (max-width: @res-lg-max) {
           &__item {
-              padding: 4vw;
+              padding: 2vw;
           }
 
           &__anchor {
@@ -353,7 +357,7 @@ h2 {
 
     &__image {
       display: block;
-      min-width: 80px;
+      min-width: 112px;
       max-width: 112px;
       height: 100px;
       background-size: @defaultBackgroundScale;
@@ -362,7 +366,7 @@ h2 {
 
     &__text {
       text-align: left;
-      min-height: 210px;
+      min-height: 150px;
     }
 
     &__title {
@@ -693,11 +697,12 @@ h2 {
   }
 
   &__detailed {
-    display: block;
+    display: inline-block;
     border: @orange solid 1px;
     border-radius: 5px;
     background: #fff;
     padding: 8px 24px;
+    color: @gray
   }
 
   &__image {

@@ -42,7 +42,7 @@ class ImageRepository extends Repository implements IReadRepository, IWriteRepos
         return false;
     }
 
-    public function remove(Model $model): bool
+    public function remove($model): bool
     {
         if (ImageManager::deleteImageFile($model->url)) {
             return $model->delete();

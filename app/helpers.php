@@ -4,7 +4,7 @@ use App\Components\Translation as t;
 
 if (!function_exists('fishLink')) {
     function fishLink($url) {
-        if (t::getLocale() != 'ru') {
+        if (app()->getLocale() != 'ru') {
             return '/' . t::getLocale() . '/' . trim($url, '/');
         }
 

@@ -136,6 +136,16 @@ class ProductSection extends Section implements Initializable
             AdminFormElement::html('<hr>'),
 
             AdminFormElement::columns()->addColumn([
+                AdminFormElement::number('promotion_price', 'Promotion Price'),
+            ], 'col-xs-12 col-sm-6 col-md-4')->addCOlumn([
+                AdminFormElement::date('promotion_start_date', 'Promotion Start'),
+            ], 'col-xs-12 col-sm-6 col-md-4')->addCOlumn([
+                AdminFormElement::date('promotion_finish_date', 'Promotion Finish'),
+            ], 'col-xs-12 col-sm-6 col-md-4'),
+
+            AdminFormElement::html('<hr>'),
+
+            AdminFormElement::columns()->addColumn([
                 AdminFormElement::text('name_en', 'Name EN'),
                 AdminFormElement::text('seo_title_en', 'Seo Title EN'),
                 AdminFormElement::text('seo_keywords_en', 'Seo Keywords EN'),

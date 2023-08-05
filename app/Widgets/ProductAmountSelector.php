@@ -7,7 +7,7 @@ use App\Components\OrderManager;
 use App\Components\ViewInserter;
 use App\Components\Widget;
 use App\Components\Translation as t;
-use App\Components\BasketManager;
+use App\Facades\BasketManager;
 use App\Models\Product;
 use Illuminate\Http\Request;
 

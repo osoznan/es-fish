@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PromotionController;
 use Illuminate\Support\Facades\Request;
 
 /*
@@ -20,14 +22,16 @@ use Illuminate\Support\Facades\Request;
 |
 */
 
-Route::middleware('auth')
-    ->get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+Route::withoutMiddleware('auth')->group(function() {
+    Route::as('register')->get('register', [RegisterController::class, 'showRegistrationForm']);
+    Route::post('register', [RegisterController::class, 'register']);
+    Route::as('login')->get('login', [LoginController::class, 'showLoginForm']);
+    Route::as('login')->post('login', [LoginController::class, 'login']);
+});
 
-if (!session_id()) {
-    try {
-        session_start();
-    } catch (Exception $e) {}
-}
+Route::middleware('auth')->group(function () {
+    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+});
 
 Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'en|ua']], function() {
     Route::prefix('order')->group(function() {
@@ -68,6 +72,10 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'en|ua']], functio
 
     Route::name('feedback')->prefix('/feedback')->group(function () {
         Route::get('/', [SiteController::class, 'feedback']);
+    });
+
+    Route::name('promotions')->prefix('/promotions')->group(function () {
+        Route::get('/', [PromotionController::class, 'index']);
     });
 
     Route::prefix('/blog/{cat}/')->group(function () {
@@ -124,6 +132,10 @@ Route::name('feedback')->prefix('/feedback')->group(function () {
     Route::get('/', [SiteController::class, 'feedback']);
 });
 
+Route::name('promotions')->prefix('/promotions')->group(function () {
+    Route::get('/', [PromotionController::class, 'index']);
+});
+
 if (!Request::is('admin/*', 'telescope*')) {
     Route::prefix('/blog/{cat}/')->group(function () {
         Route::get('/', [BlogController::class, 'category']);
@@ -147,3 +159,8 @@ if (!Request::is('admin/*', 'telescope*')) {
     });*/
 }
 
+if (!session_id()) {
+    try {
+        session_start();
+    } catch (Exception $e) {}
+}

@@ -4,7 +4,7 @@
 
 @extends('_templates/app')
 
-@section('page-title', trans('site.cooperation.title'))
+@section('page-title', trans($model->locale('title')))
 
 @section('head-css')
 @parent

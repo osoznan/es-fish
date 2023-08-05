@@ -2,7 +2,7 @@
 
 namespace App\Widgets;
 
-use App\Components\BasketManager;
+use App\Facades\BasketManager;
 use App\Components\ProductManager;
 use App\Components\ViewInserter;
 use App\Components\Widget;
@@ -11,13 +11,15 @@ use App\Components\OrderManager;
 use App\Models\DeliveryType;
 use App\Models\PaymentType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class BigCart extends Widget {
 
     use AjaxWidget;
 
     public $mode;
-    public array $ids = [];
+    public Collection $ids;
     public ?int $deliveryType = null;
     public ?int $paymentType = null;
     public \Countable $products;
@@ -28,7 +30,7 @@ class BigCart extends Widget {
     }
 
     public function run() {
-        if (BasketManager::isBasketEmpty()) { ?>
+        if (BasketManager::isCartEmpty()) { ?>
             <div class="container"><?= trans('site.cart.empty-text') ?></div><?php
             return;
         }
@@ -51,24 +53,26 @@ class BigCart extends Widget {
     public function displayCartTable() {
         ob_start();
 
-        $this->ids = BasketManager::getAll();
-
-        if (BasketManager::isBasketEmpty()) {
+        if (BasketManager::isCartEmpty()) {
             return ['content' => '<div class="container">'.trans('site.cart.empty-text').'</div>'];
         }
 
         $emptyBasketContent = '<div class="display-3 text-center">' . trans('site.cart.basket-empty') . '</div>';
 
-        if (is_array($this->ids) && count($this->ids)) {
-            $idValues = array_keys($this->ids);
-
-            $this->products = BasketManager::getProducts($idValues);
+        if (!BasketManager::isCartEmpty()) {
+            $this->ids = BasketManager::getAll();
+            if (Auth::user()) {
+                $this->ids = $this->ids->pluck('amount', 'product_id');
+                $this->products = BasketManager::getProducts($this->ids);
+            } else {
+                $this->products = BasketManager::getProducts($this->ids->keys());
+            }
         } else {
             echo $emptyBasketContent;
             return;
         }
 
-        $totalCost = OrderManager::getProductsTotalCost($this->ids);
+        $totalCost = BasketManager::getTotalCost();
         $deliveryCost = OrderManager::getDeliveryCost($totalCost, ['delivery_type_id' => $this->deliveryType ?? null])
         ?>
         <div class="cart-table nano-content">

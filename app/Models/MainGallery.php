@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -22,9 +23,8 @@ class MainGallery extends GeneralModel {
 
     protected $table = 'main_gallery';
 
-    /** @return Builder */
-    public static function search() {
-        return MainGallery::select(DB::raw('*'));
+    public function image(): HasOne {
+        return $this->hasOne(Image::class, 'id', 'image_id');
     }
 
 }

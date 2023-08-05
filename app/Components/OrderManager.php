@@ -155,27 +155,8 @@ class OrderManager {
         }
     }
 
-    public static function getProductsTotalCost($amounts = null) : float {
-        $amounts = $amounts ?? BasketManager::getAll();
-
-        if (empty($amounts)) {
-            return 0;
-        }
-
-        $idValues = array_keys($amounts);
-
-        $products = Product::searchActive()
-            ->whereIn('product.id', $idValues)
-            ->get();
-
-        $total = 0;
-        foreach ($products as $product) {
-            if (isset($amounts[$product['id']])) {
-                $total += $product['price'] * $amounts[$product->id];
-            }
-        }
-
-        return $total;
+    public static function getProductsTotalCost() : float {
+        return BasketManager::getTotalCost();
     }
 
     public static function getOrderUnseenCount() {

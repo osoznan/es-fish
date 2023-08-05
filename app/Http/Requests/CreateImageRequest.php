@@ -16,7 +16,7 @@ class CreateImageRequest extends FormRequest
         return [
             'name' => 'required|nullable|min:3|max:20',
             'description' => 'nullable|min:10|max:10000',
-            'parent_category_id' => 'nullable|integer|min:1|max:3',
+            'parent_category_id' => 'nullable|integer|min:1|max:4',
         ];
 
     }

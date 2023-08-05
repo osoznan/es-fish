@@ -2,8 +2,7 @@
 
 use App\Models\MainGallery;
 
-$carouselSeq = MainGallery::search()->get();
-
+$carouselSeq = MainGallery::all();
 ?>
 
 @extends('_templates/top')
@@ -20,8 +19,8 @@ $carouselSeq = MainGallery::search()->get();
         <div class="carousel-inner">
             @foreach ($carouselSeq as $key => $it)
 
-            <div class="carousel-item <?= $key == 0? 'active': '' ?> top-carousel__slide">
-                <div class="container">
+            <div class="carousel-item <?= $key == 0? 'active': '' ?> top-carousel__slide" data-src="{{ $it->image?->fullUrl }}">
+                <div class="container top-carousel__container">
                     <div class="row">
                         <div class="col-12 col-lg-6 text-white text-xl-start text-center ">
                             <h1 class="top-carousel__slide__title"><?= $it->locale('title') ?></h1>

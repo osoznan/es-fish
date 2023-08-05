@@ -1,11 +1,10 @@
-<?php
+@php
 
-use App\Components\Translation as t;
 use App\Components\OrderManager;
 
 define('INITIAL_TOTAL_COST', OrderManager::getProductsTotalCost());
 
-?>
+@endphp
 
 <section class="container">
     <div class="sect-top-panel">
@@ -33,23 +32,30 @@ define('INITIAL_TOTAL_COST', OrderManager::getProductsTotalCost());
             @include('_templates/widgets/logo')
         </div>
         <div class="d-none d-xl-block">
-            <a href="<?= fishLink('cooperation') ?>" class="dotted-underline">@lang('site.cooperation.title')</a>
+            <a href="{{ fishLink('cooperation') }}" class="dotted-underline">@lang('site.cooperation.title')</a>
         </div>
         <div class="language-select d-none d-md-flex">
-            <?php foreach (['ua', 'ru', 'en'] as $lang):
-                if ($lang != t::getLocale()):
-                    echo '<span class="language-select__thumb"><a href="/' . ($lang != 'ru' ? $lang : '') . '" class="dark-text-anchor">' . strtoupper($lang) . '</a></span> ';
-                else:
-                    echo '<span class="language-select__thumb orange-color">' . strtoupper($lang) . '</span> ';
-                endif;
-            endforeach; ?>
+            @foreach (['ua', 'ru', 'en'] as $lang)
+                @if ($lang != app()->getLocale())
+                    <span class="language-select__thumb"><a href="/{{ $lang != 'ru' ? $lang : '' }}" class="dark-text-anchor">{{ strtoupper($lang) }}</a></span>
+                @else
+                    <span class="language-select__thumb orange-color">{{ strtoupper($lang) }}</span>
+                @endif
+            @endforeach
         </div>
-        <a class="sect-top-panel__cart d-flex" href="<?= fishLink('cart') ?>">
+        <a class="sect-top-panel__cart d-flex" href="{{ fishLink('cart') }}">
             <div><img class="sect-top-panel__cart__image" src="/img/shopping-bag.svg" class="m-2" alt="cart"></div>
             <div>
-                <div class="text-left"><span class="top-cart__price"><?= INITIAL_TOTAL_COST ?></span> @lang('site.abbr.hrivnas')</div>
+                <div class="text-left"><span class="top-cart__price">{{ INITIAL_TOTAL_COST }}</span> @lang('site.abbr.hrivnas')</div>
                 <span class="orange-color tiny-font text-nowrap">@lang("site.to-basket")</span>
             </div>
         </a>
+        <div class="d-inline-block p-2">
+            @if (!Auth::user())
+                <a href="/login" class="alert-link">@lang('Вход')</a>
+            @else
+                <a href="/logout">@lang('Выйти')</a>
+            @endif
+        </div>
     </div>
 </section>

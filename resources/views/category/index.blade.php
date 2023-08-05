@@ -112,7 +112,7 @@ use App\Widgets\Pager;
     </section>
 
     {!! CategoryInfo::widget([
-        'category' => $category
+        'category' => $subCategory
     ]) !!}
 
 @endsection

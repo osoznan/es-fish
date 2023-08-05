@@ -12,19 +12,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property int text_en
  * @property int text_ua
  */
-class MainGalleryUpdateRequest extends FormRequest
+class MainGalleryUpdateRequest extends MainGalleryCreateRequest
 {
 
-    public function rules(): array
-    {
-        return [
-            'title' => 'nullable|min:3|max:50',
-            'title_ua' => 'nullable|min:3|max:30',
-            'title_en' => 'nullable|min:3|max:30',
-            'text' => 'nullable|min:|max:1000',
-            'text_ua' => 'nullable|min:3|max:1000',
-            'text_en' => 'nullable|min:3|max:1000',
-        ];
-
-    }
 }

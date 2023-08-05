@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 /**
  * @property string modelClass
  */
-class Repository {
+class Repository implements IReadRepository {
 
     const MAX_READ_COUNT = 10000;
 
@@ -37,11 +37,11 @@ class Repository {
         return $this->modelClass::all()->forPage($page, $perPage);
     }
 
-    public function store(Model $model, array $attributes): bool {
+    public function store(Model|int $model, array $attributes): bool {
         return $model::update($attributes);
     }
 
-    public function remove(Model $model): bool
+    public function remove(mixed $model): bool
     {
         return $model::delete();
     }
