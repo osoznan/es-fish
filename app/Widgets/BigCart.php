@@ -63,10 +63,9 @@ class BigCart extends Widget {
             $this->ids = BasketManager::getAll();
             if (Auth::user()) {
                 $this->ids = $this->ids->pluck('amount', 'product_id');
-                $this->products = BasketManager::getProducts($this->ids);
-            } else {
-                $this->products = BasketManager::getProducts($this->ids->keys());
             }
+            $this->products = BasketManager::getProducts($this->ids->keys());
+
         } else {
             echo $emptyBasketContent;
             return;

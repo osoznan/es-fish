@@ -26,7 +26,7 @@ class BlogArticleCreateRequest extends FormRequest
             'text' => $text = 'required|min:3|max:50000',
             'text_ua' => $text,
             'text_en' => $text,
-            'image_id' => 'required|min:1|exists:image',
+            'image_id' => 'required|integer|min:1|exists:image,id',
             'category_id' => 'required|min:1'
         ];
 

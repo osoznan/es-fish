@@ -2,15 +2,20 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Image;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class OrderCollection
 {
-    /**
-     * Присоединяем одним запросом все картинки для статей блога
-     */
+
     public static function collection($collection)
     {
-        return $collection;
+        $data = new Collection();
+
+        foreach ($collection as $item) {
+            $data->add((new OrderResource($item))->toArray(new Request()));
+        }
+
+        return $data;
     }
 }

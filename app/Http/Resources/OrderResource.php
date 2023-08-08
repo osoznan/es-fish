@@ -16,8 +16,10 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
-        $deliveryType = DeliveryType::getValue($this->payment_type_id);
-        $paymentType = DeliveryType::getValue($this->paymentType);
+        $deliveryType = DeliveryType::getValue($this->delivery_type_id);
+        $paymentType = DeliveryType::getValue($this->payment_type_id);
+
+
 
         return [
             'id' => $this->id,

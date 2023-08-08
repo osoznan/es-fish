@@ -5,7 +5,6 @@ namespace App\Components;
 use App\Models\Product;
 use App\Repositories\CartRepository;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 
 class CartManagerAuth {
 
@@ -101,7 +100,7 @@ class CartManagerAuth {
     }
 
     public function isCartEmpty(): bool {
-        return empty($this->cart->all());
+        return !count($this->cart->all());
     }
 
     public function getProducts($idValues = null) {

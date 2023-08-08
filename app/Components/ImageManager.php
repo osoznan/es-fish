@@ -7,7 +7,7 @@ use phpDocumentor\Reflection\Types\Static_;
 
 class ImageManager {
 
-    const DEFAULT_THUMB_WIDTH = 100;
+    const DEFAULT_THUMB_WIDTH = 150;
 
     public static function getCategories() {
         return [
@@ -90,10 +90,8 @@ class ImageManager {
             case 'jpg':
             case 'jpeg':
                 return imagejpeg($thumb_create, $dest,70);
-                break;
             case 'png':
                 return imagepng($thumb_create, $dest,3);
-                break;
             default:
                 return imagejpeg($thumb_create, $dest,70);
         }

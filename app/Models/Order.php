@@ -55,7 +55,7 @@ class Order extends GeneralModel
     }
 
     public function items() {
-        return $this->hasMany(OrderItem::class, 'order_id');
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
     public function payment_type() {

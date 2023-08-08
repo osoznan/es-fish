@@ -111,7 +111,7 @@ class ProductSection extends Section implements Initializable
                 AdminFormElement::wysiwyg('description', 'Description'),
                 AdminFormElement::selectajax('image_id', 'Image')
                     ->setModelForOptions(Image::class)
-                    ->setSearch('name')
+                    ->setSearch(['name' => 'contains', 'description' => 'contains'])
                     ->setDisplay(function ($model) {
                         return '<a href="'.ImageManager::getPhotosUrl($model->url).'" data-toggle="lightbox">
                                 <img src="'.ImageManager::getThumbsUrl($model->url).'" width="60" height="50">
@@ -120,7 +120,7 @@ class ProductSection extends Section implements Initializable
                     }),
                 AdminFormElement::multiselectajax('images', 'Image Gallery')
                     ->setModelForOptions(Image::class)
-                    ->setSearch(['name' => 'contains'])
+                    ->setSearch(['name' => 'contains', 'description' => 'contains'])
                     ->setDisplay(function ($model) {
                         return '<a href="'.ImageManager::getPhotosUrl($model->url).'" data-toggle="lightbox">
                                 <img src="'.ImageManager::getThumbsUrl($model->url).'" width="60" height="50">

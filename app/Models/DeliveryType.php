@@ -35,10 +35,10 @@ class DeliveryType extends GeneralModel {
         if (!Cache::has(static::CACHE_KEY)) {
             Cache::put(
                 static::CACHE_KEY,
-                DeliveryType::searchActive()->get(),
-                3600
+                DeliveryType::searchActive()->get()->keyBy('id'),
+                1111110
             );
-        }
+       }
 
         $all = Cache::get(static::CACHE_KEY);
 

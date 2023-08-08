@@ -120,7 +120,7 @@ class ProductCategorySection extends Section implements Initializable
                 AdminFormElement::text('name', 'Name'),
                 AdminFormElement::selectajax('parent_category_id', 'Parent Category')
                     ->setModelForOptions(Category::class)
-                    ->setSearch('name')
+                    ->setSearch(['name' => 'contains', 'description' => 'contains'])
                     ->setDisplay(function ($model) {
                         return $model->name;
                     }),
@@ -132,7 +132,7 @@ class ProductCategorySection extends Section implements Initializable
                 AdminFormElement::wysiwyg('description', 'Description'),
                 AdminFormElement::selectajax('image_id', 'Image')
                     ->setModelForOptions(Image::class)
-                    ->setSearch('name')
+                    ->setSearch(['name' => 'contains', 'description' => 'contains'])
                     ->setDisplay(function ($model) {
                         return '<a href="'.ImageManager::getPhotosUrl($model->url).'" data-toggle="lightbox">
                                 <img src="'.ImageManager::getThumbsUrl($model->url).'" width="60" height="50">

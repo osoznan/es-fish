@@ -26,6 +26,8 @@
 
 <div class="container">
     {!! htmlspecialchars_decode($model->locale('content')) !!}
+
+    {{ dd(\App\Models\ImageCategory::whereKey(1)->first())  }}
 </div>
 
 @endsection

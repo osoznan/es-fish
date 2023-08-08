@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\CategoryController;
@@ -10,6 +11,9 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PromotionController;
 use Illuminate\Support\Facades\Request;
+
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\Auth\ConfirmPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +31,23 @@ Route::withoutMiddleware('auth')->group(function() {
     Route::post('register', [RegisterController::class, 'register']);
     Route::as('login')->get('login', [LoginController::class, 'showLoginForm']);
     Route::as('login')->post('login', [LoginController::class, 'login']);
+    Route::as('verify')->get('verification', [VerificationController::class, 'show']);
+    Route::as('verification.verify')->post('verify', [VerificationController::class, 'resend']);
+    Route::as('verification.resend')
+        ->post('verify/resend', [VerificationController::class, 'resend']);
 });
 
 Route::middleware('auth')->group(function () {
+    Route::as('verify')->get('verify', [VerificationController::class, 'verify']);
+
+    Route::as('logout')->get('logout', [LoginController::class, 'logout']);
+
+    Route::prefix('user')->group(function() {
+        Route::as('profile')->get('profile', [ProfileController::class, 'show']);
+        Route::as('confirm')->get('confirm', [ConfirmPasswordController::class, 'showConfirmForm']);
+        Route::as('password.confirm')->post('confirm', [ConfirmPasswordController::class, 'confirm']);
+    });
+
     Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 });
 

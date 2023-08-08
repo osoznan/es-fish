@@ -46,16 +46,19 @@ define('INITIAL_TOTAL_COST', OrderManager::getProductsTotalCost());
         <a class="sect-top-panel__cart d-flex" href="{{ fishLink('cart') }}">
             <div><img class="sect-top-panel__cart__image" src="/img/shopping-bag.svg" class="m-2" alt="cart"></div>
             <div>
-                <div class="text-left"><span class="top-cart__price">{{ INITIAL_TOTAL_COST }}</span> @lang('site.abbr.hrivnas')</div>
-                <span class="orange-color tiny-font text-nowrap">@lang("site.to-basket")</span>
+                <div class="text-left"><span class="top-cart__price p-1">{{ INITIAL_TOTAL_COST }}</span>&nbsp;@lang('site.abbr.hrivnas')</div>
+                <div class="orange-color tiny-font text-nowrap ml-2">@lang("site.to-basket")</div>
             </div>
         </a>
+        @if (env('APP_ENV') == 'local')
         <div class="d-inline-block p-2">
             @if (!Auth::user())
                 <a href="/login" class="alert-link">@lang('Вход')</a>
             @else
-                <a href="/logout">@lang('Выйти')</a>
+                <a href="{{ route('profile') }}" class="d-block">@lang('Профиль')</a>
+                <a href="{{ route('logout') }}" class="d-block">@lang('Выйти')</a>
             @endif
         </div>
+        @endif
     </div>
 </section>

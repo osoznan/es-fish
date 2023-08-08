@@ -6,6 +6,7 @@ use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property Order modelClass
@@ -25,6 +26,12 @@ class OrderRepository extends Repository implements IReadRepository, IWriteRepos
     public function paginate($page, $perPage)
     {
         return OrderCollection::collection($this->modelClass::all()->forPage($page, $perPage));
+    }
+
+    public function forUser($page, $perPage)
+    {
+        return OrderCollection::collection(
+            $this->modelClass::all()->/*where('user_id', Auth::user()->id)->*/forPage($page, $perPage))->toArray();
     }
 
     public function remove($model): bool {

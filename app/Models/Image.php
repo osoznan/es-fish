@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Components\ImageManager;
+use App\Facades\Telegram;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -51,6 +52,19 @@ class Image extends GeneralModel
 
     public function getFullThumbPathAttribute(): string {
         return ImageManager::getThumbsUrl($this->url);
+    }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::saving(function (self $model) {
+            $result = ImageManager::thumbCreate(
+                ImageManager::imagePath($model->url),
+                ImageManager::thumbPath($model->url)
+            );
+
+            Telegram::send($result ? 'image created ok' : 'image error create');
+        });
     }
 
 }

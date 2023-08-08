@@ -8,8 +8,10 @@ use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
 use App\Components\BlogManager;
+use App\Components\ImageManager;
 use App\Http\Requests\BlogArticleCreateRequest;
 use App\Http\Requests\BlogArticleUpdateRequest;
+use App\Models\Image;
 use App\Widgets\Admin\ImageColumn;
 use Illuminate\Database\Eloquent\Model;
 use SleepingOwl\Admin\Contracts\Display\DisplayInterface;
@@ -124,6 +126,15 @@ class BlogArticleSection extends Section implements Initializable
             AdminFormElement::columns()->addColumn([
                 AdminFormElement::text('title', 'Name'),
                 AdminFormElement::select('category_id', 'Category Id', BlogManager::CATEGORY_ALIASES['ru']),
+                AdminFormElement::selectajax('image_id', 'Image')
+                    ->setModelForOptions(Image::class)
+                    ->setSearch(['name' => 'contains', 'description' => 'contains'])
+                    ->setDisplay(function ($model) {
+                        return '<a href="'.ImageManager::getPhotosUrl($model->url).'" data-toggle="lightbox">
+                                <img src="'.ImageManager::getThumbsUrl($model->url).'" width="60" height="50">
+                            </a>
+                            <span style="cursor: pointer">'.$model->name.'</span>';
+                    }),
                 AdminFormElement::checkbox('hidden', 'Hidden'),
                 AdminFormElement::datetime('created_at', 'Created At')->setReadonly(true),
             ], 'col-xs-12 col-sm-4')->addColumn([

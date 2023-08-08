@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\MainGallery;
+use App\Components\ViewInserter;
 
 $carouselSeq = MainGallery::all();
 ?>
@@ -43,7 +44,10 @@ $carouselSeq = MainGallery::all();
             </div>
             @endforeach
         </div>
-        <div class="top-carousel__nav-buttons d-none d-lg-inline">
+        <div class="top-carousel__nav-buttons d-none d-lg-inline-flex align-items-end">
+            <div class="top-carousel__slide-no">
+                <span data-slide-no="1">1</span> \ <span class="display-5"><b>{{count($carouselSeq)}}</b></span>
+            </div>
             <button class="top-carousel__nav-prev" type="button" data-bs-target="#top-carousel" data-bs-slide="prev">
                 <div data-src="/img/slider-nav-button.png"></div>
             </button>
@@ -54,3 +58,17 @@ $carouselSeq = MainGallery::all();
     </div>
 
 @endsection
+
+@php
+
+ViewInserter::insertJs(<<< JS
+    var myCarousel = document.getElementById('top-carousel')
+
+    myCarousel.addEventListener('slide.bs.carousel', function (slide) {
+        get('.top-carousel__slide-no [data-slide-no]').innerHTML = slide.to + 1
+        console.log(slide.to)
+    })
+JS
+, 'carousel')
+
+@endphp

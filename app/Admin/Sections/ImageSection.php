@@ -8,6 +8,7 @@ use AdminDisplay;
 use AdminForm;
 use AdminFormElement;
 use App\Components\ImageManager;
+use App\Facades\Telegram;
 use App\Http\Requests\CreateImageRequest;
 use App\Http\Requests\UpdateImageRequest;
 use App\Widgets\Admin\ImageColumn;
@@ -69,20 +70,21 @@ class ImageSection extends Section implements Initializable
                 ->setSearchCallback(function($column, $query, $search){
                     return $query
                         ->orWhere('name', 'like', '%'.$search.'%')
+                        ->orWhere('description', 'like', '%'.$search.'%')
                     ;
-                })
-                ->setOrderable(function($query, $direction) {
+                })->setOrderable(function($query, $direction) {
                     $query->orderBy('created_at', $direction);
                 })
             ,
             AdminColumn::custom('url', function($model) {
                 return ImageColumn::widget(['filename' => $model->url]);
             }),
-            AdminColumn::text('categoryName', 'Category')
-                ->setOrderable(function($query, $direction) {
-                    $query->orderBy('category_id', $direction);
-                })
-            ,
+            AdminColumn::text('description', 'description'),
+            AdminColumn::custom('category', function($model) {
+                return $model->categoryName;
+            })->setOrderable(function($query, $direction) {
+                $query->orderBy('category_id', $direction);
+            }),
         ];
 
         $display = AdminDisplay::datatables()
@@ -106,22 +108,18 @@ class ImageSection extends Section implements Initializable
     public function onEdit($id = null, $payload = [])
     {
         $image = AdminFormElement::image('fullUrl', 'Image');
-        $image = $id ? $image->setReadonly(true) : $image;
+        $imageFilename = date('Y-m-d_H-i-s') . '.jpg';
 
         $form = AdminForm::card()->addBody([
             AdminFormElement::columns()->addColumn([
                 AdminFormElement::text('name', 'Name'),
                 AdminFormElement::select('category_id', 'Category')
                     ->setOptions(ImageManager::getCategories()),
-/*                AdminFormElement::datetime('created_at')
-                    ->setVisible(true)
-                    ->setReadonly(false)
-                ,*/
                 AdminFormElement::text('description', 'Description'),
             ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
-                $image->setSaveCallback(function (UploadedFile $file) {
-                    ImageManager::saveImageFile($file->path(), $filename = date('Y-m-d_H-i-s') . '.jpg');
-                    return ['value' => ImageManager::getPhotosUrl($filename)];
+                $image->setSaveCallback(function (UploadedFile $file) use ($imageFilename) {
+                    copy($file->path(), ImageManager::imagePath( $imageFilename));
+                    return ['value' => ImageManager::getPhotosUrl($imageFilename)];
                 })
             ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
         ]);

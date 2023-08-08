@@ -16,6 +16,6 @@ use App\Components\CategoryManager;
         {{ t::getLocaleField($category, 'name') }}
     </a>
     <a href="" class="category-thumb__description">
-        {!! Str::limit(t::getLocaleField($category, 'description'), 100) !!}
+        {!! Str::limit(strip_tags(t::getLocaleField($category, 'description')), 120) !!}
     </a>
 </div>

@@ -18,6 +18,7 @@ class BlogArticle extends GeneralModel {
     protected $fillable = [
         'title',
         'text',
+        'image_id',
         'created_at',
         'hidden',
         'title_ua',

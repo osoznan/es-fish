@@ -34,11 +34,12 @@ function ajax(url, data, onOK, onError) {
 
     xhr.open('POST', url);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('Accept', 'application/json');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content)
 
     xhr.onload = function () {
-        if (xhr.status === 200) {
+        if (xhr.status - 200 < 100) {
             if (onOK) {
                 triggerEvent(document, 'ajax_success', queryStr);
                 onOK(xhr.response);
@@ -155,4 +156,51 @@ function shortenWithDots(s, maxLen) {
         return s
     }
     return s.substring(0, maxLen - 1) + '...'
+}
+
+FormSender = function(id, successHandler, errorHandler) {
+    const form = get(id)
+    const self = this
+    let onSuccess = successHandler ? successHandler : () => {}
+    let onError = errorHandler ? errorHandler : () => {}
+
+    this.send = function(){
+        const formData = new FormData(form);
+        const data = {}
+
+        for (let [k, v] of formData.entries()) {
+            data[k] = v
+        }
+
+        getAll('.form__error-label', form).forEach((el) => {
+            el.innerHTML = ''
+        });
+
+        ajax(
+            form.action,
+            data,
+            function (response) {
+                onSuccess(response)
+            },
+            function (err) {
+                onError()
+                for (let [k, v] of Object.entries(JSON.parse(err.responseText).errors)) {
+                    let fErr = get('.form__error-label[data-name="' + k + '"]', form)
+                    fErr.innerHTML = v
+                }
+            }
+        )
+    }
+
+    this.attachEvent = function(name, event, fn) {
+        attachEvent(get(`[name="${name}"]`, form), event, fn)
+    }
+
+    this.addEventListener = function(e, f) {
+        form.addEventListener(e, f)
+    }
+
+    attachEvent(get('[type="submit"]', form), 'click', function() {
+        self.send(onSuccess)
+    })
 }
