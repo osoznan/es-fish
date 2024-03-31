@@ -16,9 +16,11 @@ class CategoryController extends TopController {
             return;
         }
 
+    //    var_dump($subCategoryAlias); die();
+
         return view('category.index', [
             'category' => $catInfo[0],
-            'subCategory' => $catInfo[1]
+            'subCategory' => $catInfo[1],
         ]);
     }
 

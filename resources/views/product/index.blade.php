@@ -27,9 +27,14 @@ use App\Widgets\BreadCrumbs;
 
 @section('page-title', 'Title')
 
+@section('meta-tags')
+    <title><?= $product->locale('seo_title') ?></title>
+    <meta keywords="<?= $product->locale('seo_keywords') ?>">
+    <meta description="<?= $product->locale('seo_description') ?>">
+@endsection
+
 @section('head-css')
     @parent
-    <link rel="stylesheet" href="/css/site/product/index.css">
 @endsection
 
 @section('top')

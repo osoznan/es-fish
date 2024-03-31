@@ -11,8 +11,6 @@ use App\Components\ViewInserter;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @yield('meta-tags')
 
-    <title>@yield('page-title')</title>
-
     <?php
     $cssUnion = (new AssetUnion(['/css/app.css', '/css/bootstrap.min.css', '/css/common.css', '/css/font.css']))
         ->setOutput(public_path('/css/union.css'))->rebuildIfNeeded();

@@ -23,12 +23,15 @@ class SiteController extends TopController {
         // dd(Category::searchActive()->get()->keyBy('id'));
         $topMostCategories = Category::searchTopMost()->get();
 
+        $mainPageModule = ModuleData::where('name', 'seo-mainpage-module')->first();
+
         return view('index.index', [
             'categories' => Category::searchActive()
                 ->with('image')->with('parent')
                 ->whereIn('parent_category_id', $topMostCategories->pluck('id'))
                 ->orWhereNull('parent_category_id')
-                ->get()->keyBy('id')
+                ->get()->keyBy('id'),
+            'mainPageModule' => $mainPageModule
         ]);
     }
 

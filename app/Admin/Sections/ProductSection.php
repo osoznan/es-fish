@@ -10,9 +10,11 @@ use AdminFormElement;
 use App\Components\ImageManager;
 use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Models\Category;
 use App\Models\Image;
 use App\Widgets\Admin\ImageColumn;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use SleepingOwl\Admin\Contracts\Display\DisplayInterface;
 use SleepingOwl\Admin\Contracts\Form\FormInterface;
 use SleepingOwl\Admin\Contracts\Initializable;
@@ -21,6 +23,7 @@ use SleepingOwl\Admin\Form\Buttons\Save;
 use SleepingOwl\Admin\Form\Buttons\SaveAndClose;
 use SleepingOwl\Admin\Form\Buttons\SaveAndCreate;
 use SleepingOwl\Admin\Section;
+use function Laravel\Prompts\select;
 
 /**
  * Class ProductSection
@@ -64,17 +67,20 @@ class ProductSection extends Section implements Initializable
     public function onDisplay($payload = [])
     {
         $columns = [
-            AdminColumn::text('id', '#')->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
+            AdminColumn::text('id', '#')->setSearchable(false)
+                ->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
             AdminColumn::link('name', 'Name', 'descriptionShort')
-                ->setSearchCallback(function($column, $query, $search){
-                    return $query
-                        ->orWhere('name', 'like', '%'.$search.'%');
+                ->setSearchCallback(function($column, \Illuminate\Database\Eloquent\Builder $query, $search){
+                    return $query->leftJoin('product_category', 'product.category_id', 'product_category.id')
+                        ->orWhere('product.name', 'like', '%'.$search.'%')
+                        ->orWhere('product_category.name', 'like', '%'.$search.'%');
                 }),
+            AdminColumn::text('category.name', 'Category')->setSearchable(false),
             AdminColumnEditable::checkbox('hidden', 'Hidden'),
             AdminColumn::custom('Image', function($model) {
                 return ImageColumn::widget(['filename' => $model->image->url]);
             }),
-            AdminColumn::text('created_at', 'Created')
+            AdminColumn::text('created_at', 'Created')->setSearchable(false)
         ];
 
         $display = AdminDisplay::datatables()
@@ -100,6 +106,12 @@ class ProductSection extends Section implements Initializable
         $form = AdminForm::card()->addBody([
             AdminFormElement::columns()->addColumn([
                 AdminFormElement::text('name', 'Name'),
+                AdminFormElement::selectajax('category_id', 'Category')
+                    ->setModelForOptions(Category::class)
+                    ->setSearch(['name' => 'contains', 'description' => 'contains'])
+                    ->setDisplay(function ($model) {
+                        return $model['name'];
+                    }),
                 AdminFormElement::number('price', 'Price'),
                 AdminFormElement::number('old_price', 'Old Price'),
                 AdminFormElement::number('weight', 'Weight'),
@@ -127,6 +139,8 @@ class ProductSection extends Section implements Initializable
                             </a>
                             <span style="cursor: pointer">'.$model->name.'</span>';
                     }),
+
+
                 AdminFormElement::checkbox('hidden', 'Hidden'),
                 AdminFormElement::checkbox('present', 'Present'),
                 AdminFormElement::checkbox('recommended', 'Recommended'),

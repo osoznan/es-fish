@@ -87,8 +87,7 @@ return [
     'param' => [
         'name' => 'Имя',
         'phone' => 'Телефон',
-        'message' => 'Сообщение',
-        '' => ''
+        'message' => 'Сообщение'
     ],
 
     'category' => [

@@ -24,6 +24,7 @@ class BlogController extends TopController {
 
         $articles = BlogArticle::search()
             ->where('blog_article.category_id', $categoryId)
+            ->orderByDesc('created_at')
             ->forPage($request->page, $PER_PAGE)->get();
 
         $totalCount = BlogArticle::search()

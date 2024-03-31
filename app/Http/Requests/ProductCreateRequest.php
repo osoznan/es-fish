@@ -16,7 +16,7 @@ class ProductCreateRequest extends \Illuminate\Foundation\Http\FormRequest {
             'description' => $descriptionRule = 'required|min:10|max:10000',
             'description_ua' => $descriptionRule,
             'description_en' => $descriptionRule,
-            'category_id' => 'required|exists:product_category',
+            'category_id' => 'required|exists:product_category,id',
             'price' => 'integer|min:1',
             'old_price' => 'nullable|integer|min:1',
             'weight' => 'nullable|integer|min:1',

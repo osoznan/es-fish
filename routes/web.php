@@ -37,21 +37,15 @@ Route::withoutMiddleware('auth')->group(function() {
         ->post('verify/resend', [VerificationController::class, 'resend']);
 });
 
-Route::middleware('auth')->group(function () {
-    Route::as('verify')->get('verify', [VerificationController::class, 'verify']);
 
-    Route::as('logout')->get('logout', [LoginController::class, 'logout']);
 
+Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'en|ua']], function() {
     Route::prefix('user')->group(function() {
         Route::as('profile')->get('profile', [ProfileController::class, 'show']);
         Route::as('confirm')->get('confirm', [ConfirmPasswordController::class, 'showConfirmForm']);
         Route::as('password.confirm')->post('confirm', [ConfirmPasswordController::class, 'confirm']);
     });
 
-    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
-});
-
-Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'en|ua']], function() {
     Route::prefix('order')->group(function() {
         Route::post('/order', [OrderController::class, 'order']);
     });
@@ -176,6 +170,20 @@ if (!Request::is('admin/*', 'telescope*')) {
         return $request->user();
     });*/
 }
+
+Route::middleware('auth')->group(function () {
+    Route::as('verify')->get('verify', [VerificationController::class, 'verify']);
+
+    Route::as('logout')->get('logout', [LoginController::class, 'logout']);
+
+    Route::prefix('user')->group(function() {
+        Route::as('profile')->get('profile', [ProfileController::class, 'show']);
+        Route::as('confirm')->get('confirm', [ConfirmPasswordController::class, 'showConfirmForm']);
+        Route::as('password.confirm')->post('confirm', [ConfirmPasswordController::class, 'confirm']);
+    });
+
+    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+});
 
 if (!session_id()) {
     try {

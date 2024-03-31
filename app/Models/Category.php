@@ -54,13 +54,6 @@ class Category extends GeneralModel {
         'seo_description_ua',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [];
-
     protected $table = 'product_category';
 
     public $timestamps = false;

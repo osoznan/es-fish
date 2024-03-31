@@ -1,7 +1,7 @@
 <?php
 
 $code = '044';
-$number = '494-00-00';
+$number = '221-2637';
 
 return [
     'site-name' => 'FISH',
@@ -10,7 +10,7 @@ return [
         'code' => $code,
         'number' => $number
     ],
-    'email' => 'test@fish.com',
+    'email' => 'sale@fish-way.com.ua',
     'admin-email' => 'admin@fish.com',
 
     'viber' => 'https://viber',
@@ -27,6 +27,10 @@ return [
         4 => '/img/cheese.svg',
         5 => '/img/beer.svg',
         6 => '/img/chicken-wings.svg'
+    ],
+
+    'available_locales' => [
+        'ru', 'ua', 'en'
     ]
 
 ];

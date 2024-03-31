@@ -12,6 +12,7 @@ use App\Components\ImageManager;
 use App\Models\Image;
 
 /** @var $categories Collection */
+/** @var $mainPageModule */
 
 $title = config('user.site-name') . ' - ' . trans('site.main-page')
 
@@ -28,6 +29,12 @@ $title = config('user.site-name') . ' - ' . trans('site.main-page')
 
 @section('top')
     @include('_templates/top-main')
+@endsection
+
+@section('meta-tags')
+    <title><?= $mainPageModule->locale('seo_title') ?></title>
+    <meta keywords="<?= $mainPageModule->locale('seo_keywords') ?>">
+    <meta description="<?= $mainPageModule->locale('seo_description') ?>">
 @endsection
 
 @section('content')

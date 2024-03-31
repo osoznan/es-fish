@@ -116,4 +116,8 @@ class CartManagerAuth {
         return $this->cart->forProduct($id);
     }
 
+    public function moveToCart(array $items) {
+
+    }
+
 }

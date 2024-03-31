@@ -55,7 +55,7 @@ define('INITIAL_TOTAL_COST', OrderManager::getProductsTotalCost());
             @if (!Auth::user())
                 <a href="/login" class="alert-link">@lang('Вход')</a>
             @else
-                <a href="{{ route('profile') }}" class="d-block">@lang('Профиль')</a>
+                <a href="{{ fishLink('profile') }}" class="d-block">@lang('Профиль')</a>
                 <a href="{{ route('logout') }}" class="d-block">@lang('Выйти')</a>
             @endif
         </div>

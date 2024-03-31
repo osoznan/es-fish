@@ -18,6 +18,12 @@ $title = $article->locale("title");
     <link rel="stylesheet" href="/css/site/blog/index.css">
 @endsection
 
+@section('meta-tags')
+    <title><?= $article->locale('seo_title') ?></title>
+    <meta keywords="<?= $article->locale('seo_keywords') ?>">
+    <meta description="<?= $article->locale('seo_description') ?>">
+@endsection
+
 @section('top')
 
     @include('_templates/top')
@@ -36,10 +42,9 @@ $title = $article->locale("title");
             ]]) !!}
         </div>
 
-        <div class="blog__thumb">
-            <div class="d-flex justify-content-center mb-4">
-                <div class="blog__thumb__image" data-src="{{ ImageManager::getPhotosUrl($article->image->url) }}" alt="картинка статьи"></div>
-            </div>
+        <div class="blog__thumb d-flex">
+            <div class="blog__thumb__image" data-src="{{ ImageManager::getPhotosUrl($article->image->url) }}" alt="картинка статьи"></div>
+
             <div class="blog__thumb__text">
                 <div class="blog-thumb__description mb-3">{!! $article->locale('text') !!}</div>
             </div>

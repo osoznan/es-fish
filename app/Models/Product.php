@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 class Product extends GeneralModel {
 
     use HasFactory;
-    use HelperTrait;
     use LocaleTrait;
 
     /**
@@ -76,8 +75,8 @@ class Product extends GeneralModel {
         return Str::of($this->description)->limit(150);
     }
 
-    public function category(): HasOne {
-        return $this->hasOne(Category::class, 'id', 'category_id');
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function image() {

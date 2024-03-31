@@ -57,7 +57,7 @@ $title = BlogManager::getCategoryAlias($categoryId);
                         </h2>
 
                         <div class="blog-category-thumb__description mb-3">
-                            {!! Str::of($article->locale('text'))->limit(200) !!}
+                            {!! Str::of(html_entity_decode(strip_tags($article->locale('text'))))->limit(200) !!}
                         </div>
 
                        <a class="button-orange mb-3" href="{{ $href }}">Подробнее</a>

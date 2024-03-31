@@ -22,6 +22,6 @@ use App\Components\Translation as t;
         {{ t::getLocaleField($article, 'title') }}
     </a>
     <a href="{{ $url }}" class="blog-thumb__text">
-        {{ Str::limit(t::getLocaleField($article, 'text'), 200) }}
+        {{ html_entity_decode(Str::limit(strip_tags(t::getLocaleField($article, 'text'), 200))) }}
     </a>
 </div>

@@ -13,8 +13,12 @@ use App\Widgets\Pager;
 ?>
 
 @extends('_templates/app')
-
-@section('page-title', 'Title')
+<? //var_dump($category); ?>
+@section('meta-tags')
+    <title><?= $category->locale('seo_title') ?></title>
+    <meta keywords="<?= $category->locale('seo_keywords') ?>">
+    <meta description="<?= $category->locale('seo_description') ?>">
+@endsection
 
 @section('head-css')
     @parent
@@ -28,13 +32,17 @@ use App\Widgets\Pager;
     @include('_templates/top')
 
     <?php
+
     $categories = Category::searchActive()
         ->with('image')->with('parent')
         ->where('parent_category_id', $category->id)
         ->get();
+
+
+    $image = \App\Models\Image::query()->find($category->image_id);
     ?>
 
-    <div class="sect-category-pane">
+    <div class="sect-category-pane" style="background-image:url(<?= \App\Components\ImageManager::getPhotosUrl($image->url) ?>)">
         @include('_templates/top-menu')
 
         <div class="sect-category-pane__title"><?= t::getLocaleField($category, 'name') ?></div>
@@ -112,7 +120,7 @@ use App\Widgets\Pager;
     </section>
 
     {!! CategoryInfo::widget([
-        'category' => $subCategory
+        'category' => $subCategory ?? $category
     ]) !!}
 
 @endsection
